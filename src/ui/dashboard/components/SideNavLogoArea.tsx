@@ -10,7 +10,7 @@ export default async function SideNavLogoArea() {
             className="w-full flex gap-2 items-center px-0 md:px-0 md:py-4 md:border-b md:border-[#e0e0e0] dark:border-gray-900 "
             href="/dashboard"
         >
-            <div className='w-12 h-12 ml-4 rounded-md bg-primary overflow-hidden'>
+            <div className='w-12 h-12 ml-4 rounded-md  overflow-hidden'>
                 <Image
                     src={logo}
                     alt='company logo'
@@ -20,7 +20,7 @@ export default async function SideNavLogoArea() {
                 />
             </div>
             <div className='flex-1 overflow-hidden text-gray-900 dark:text-gray-50'>
-                <p className='font-[500] hidden md:block text-ellipsis whitespace-nowrap text-sm'>Tilawe Meat Merchants</p>
+                <p className='font-[500] hidden md:block text-ellipsis whitespace-nowrap text-sm'>Alawe Meat Merchants</p>
             </div>
             {/* <DoubleCaret {...{ strokeWidth: 0.1 }} /> */}
         </Link>

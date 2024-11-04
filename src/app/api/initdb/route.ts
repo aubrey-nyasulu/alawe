@@ -86,7 +86,6 @@ export async function POST(req: NextRequest) {
 }
 
 async function SeedDataBase() {
-    console.log('including temp user')
     try {
         let res = await populateUserRoles()
         if (!res) throw new Error('failed to populate user roles')
@@ -202,6 +201,7 @@ async function populateUserRoles() {
 
         return true
     } catch (error) {
+        console.log('populate user roles error', { error })
 
         return false
     }
@@ -244,6 +244,7 @@ async function populateInventory() {
     try {
         const branches: Branch[] = await BranchModel.find()
         const products: Product[] = await ProductModel.find()
+        const inventoryToInset = []
 
         for (let branch of branches) {
             for (let product of products) {
@@ -251,11 +252,12 @@ async function populateInventory() {
 
                 const newInventoryItem = { product_id: new ObjectId(product._id), quantity: randomQuantity, branch_id: new ObjectId(branch._id), }
 
-                const res = await InventoryModel.create(newInventoryItem)
+                inventoryToInset.push(newInventoryItem)
             }
 
         }
 
+        await InventoryModel.insertMany(inventoryToInset)
         return true
     } catch (error) {
         return false
@@ -264,17 +266,20 @@ async function populateInventory() {
 
 async function populateSalesTransactions() {
     try {
+        const branches = await BranchModel.find()
+        const salesTransactionsToInsert = []
         for (let salesTransaction of salesTransactions) {
 
             const { purchase_total } = salesTransaction
 
-            const branch_id = await randomID(BranchModel)
+            const branch_id = await randomID(branches)
 
             const newSalesTransaction = { branch_id, purchase_total }
 
-            const res = await SalesTransactionModel.create(newSalesTransaction)
+            salesTransactionsToInsert.push(newSalesTransaction)
         }
 
+        await SalesTransactionModel.insertMany(salesTransactionsToInsert)
         return true
     } catch (error) {
 
@@ -284,18 +289,23 @@ async function populateSalesTransactions() {
 
 async function populateProductsSold() {
     try {
+        const products = await ProductModel.find()
+        const salesTransactions = await SalesTransactionModel.find()
+        const productsSoldToInsert = []
+
         for (let productSold of productsSold) {
 
             const { quantity, unit_price } = productSold
 
-            const product_id = await randomID(ProductModel)
-            const sales_transaction_id = await randomID(SalesTransactionModel)
+            const product_id = await randomID(products)
+            const sales_transaction_id = await randomID(salesTransactions)
 
             const newSalesTransaction = { product_id, quantity, sales_transaction_id, unit_price }
 
-            const res = await ProductSoldModel.create(newSalesTransaction)
+            productsSoldToInsert.push(newSalesTransaction)
         }
 
+        await ProductSoldModel.insertMany(productsSoldToInsert)
         return true
     } catch (error) {
 
@@ -305,18 +315,21 @@ async function populateProductsSold() {
 
 async function populatePurchaseTransactions() {
     try {
+        const suppliers = await SupplierModel.find()
+        const purchaseTransactionsToInsert = []
+
         for (let purchaseTransaction of purchaseTransactions) {
 
             const { purchase_total } = purchaseTransaction
 
-            const supplier_id = await randomID(SupplierModel)
+            const supplier_id = await randomID(suppliers)
 
             const newPurchaseTransaction = { purchase_total, supplier_id }
 
-            const res = await PurchaseTransactionModel.create(newPurchaseTransaction)
-
+            purchaseTransactionsToInsert.push(newPurchaseTransaction)
         }
 
+        await PurchaseTransactionModel.insertMany(purchaseTransactionsToInsert)
         return true
     } catch (error) {
 
@@ -326,9 +339,9 @@ async function populatePurchaseTransactions() {
 
 async function populatePurchaseItems() {
     try {
-        // const Items: Item[] = await PurchasedItemsModel.find()
+        const purchaseTransactions = await PurchaseTransactionModel.find()
+        const purchaseItemsToInsert = []
 
-        // for (let year of years) {
         for (let month of months) {
             for (let Item of items) {
                 const { _id } = await ItemModel.findOne().where({ name: Item.name })
@@ -342,32 +355,23 @@ async function populatePurchaseItems() {
                         ? generateRandomNumber(15, 30)
                         : generateRandomNumber(5, 10)
 
-                const purchase_transaction_id = await randomID(PurchaseTransactionModel)
+                const purchase_transaction_id = await randomID(purchaseTransactions)
 
-                // const purchasedItem: PurchasedItem = {
-                //     item_id: _id  as string,
-                //     unit_price: ranPrice,
-                //     month,
-                //     purchase_transaction_id,
-                //     quantity
-                // }
-
-                const item_id = await randomID(ItemModel)
-
-                const res = await PurchasedItemsModel.create({
+                const newPurchasedItem = {
                     item_id: _id as string,
                     unit_price: ranPrice,
                     month,
                     purchase_transaction_id,
                     quantity,
                     year: "2024"
-                })
+                }
 
+                purchaseItemsToInsert.push(newPurchasedItem)
             }
 
         }
-        // }
 
+        await PurchasedItemsModel.insertMany(purchaseItemsToInsert)
         return true
     } catch (error) {
 
@@ -377,20 +381,25 @@ async function populatePurchaseItems() {
 
 async function populatePayments() {
     try {
+        const clients = await ClientModel.find()
+        const invoices = await InvoiceModel.find()
+        const paymentModels = await PaymentMethodModel.find()
+        const paymentsToInsert = []
+
         for (let payment of payments) {
 
             const { amount, payments } = payment
 
-            const client_id = await randomID(ClientModel)
-            const invoice_id = await randomID(InvoiceModel)
-            const payment_method_id = await randomID(PaymentMethodModel)
+            const client_id = await randomID(clients)
+            const invoice_id = await randomID(invoices)
+            const payment_method_id = await randomID(paymentModels)
 
             const newPayment = { amount, payments, client_id, invoice_id, payment_method_id }
 
-            const res = await PaymentModel.create(newPayment)
-
+            paymentsToInsert.push(newPayment)
         }
 
+        await PaymentModel.insertMany(paymentsToInsert)
         return true
     } catch (error) {
 
@@ -401,13 +410,15 @@ async function populatePayments() {
 async function populateEmployees() {
     try {
         const UserRoles = await UserRoleModel.find()
+        const branches = await BranchModel.find()
+        const employeesToInsert = []
 
         let i = 0
         for (let employee of employees) {
 
             const { firstname, lastname, email } = employee
 
-            const branch_id = await randomID(BranchModel)
+            const branch_id = await randomID(branches)
 
             type SchemaEmployeeType = {
                 [K in keyof Employee]: K extends "branch_id" ? ObjectId : Employee[K]
@@ -427,11 +438,11 @@ async function populateEmployees() {
                 newEmployee.job_title = UserRoles[i]._id
             }
 
-            const res = await EmployeeModel.create(newEmployee)
-
+            employeesToInsert.push(newEmployee)
             i++
         }
 
+        await EmployeeModel.insertMany(employeesToInsert)
         return true
     } catch (error) {
         console.log('error in populate employees:', error)
@@ -440,31 +451,26 @@ async function populateEmployees() {
     }
 }
 
-// branch_id
-// month
-// year
-// amount
-
 
 async function populateRevenue() {
     try {
         const branches: Branch[] = await BranchModel.find()
         const currentYear = new Date().getFullYear()
         const currentMonth = new Date().getMonth()
+        const revenueToInsert = []
 
         for (let year of years) {
             for (let branch of branches) {
-
                 for (let month of months) {
                     if (currentYear === Number(year) && currentMonth === months.findIndex(mon => mon === month)) break
-
                     const amount = generateRandomNumber(100000000, 1000000000)
                     const revenue: Revenue = { branch_id: branch._id as string, year, month, amount }
-                    const data = await RevenueModel.insertMany(revenue)
+                    revenueToInsert.push(revenue)
                 }
             }
         }
 
+        await RevenueModel.insertMany(revenueToInsert)
         return true
     } catch (error) {
 
@@ -475,6 +481,7 @@ async function populateRevenue() {
 async function populateInvoices() {
     try {
         const clients: Client[] = await ClientModel.find()
+        const invoicesToInsert = []
 
         for (let i = 0; i <= 3; i++) {
             for (let client of clients) {
@@ -485,11 +492,11 @@ async function populateInvoices() {
 
                 const newInvoice = { client_id: client._id, amount, due_date, status }
 
-
-                const res = await InvoiceModel.create(newInvoice)
+                invoicesToInsert.push(newInvoice)
             }
         }
 
+        await InvoiceModel.insertMany(invoicesToInsert)
         return true
     } catch (error) {
 
@@ -498,8 +505,7 @@ async function populateInvoices() {
 }
 
 type ModelProp = Model<any, {}, {}, {}, any, any>
-async function randomID(Model: ModelProp) {
-    const data = await Model.find()
+async function randomID(data: any[]) {
     let id: ObjectId | null = null
     if (data.length) {
         let randomIndex = Math.floor(Math.random() * data.length)

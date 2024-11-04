@@ -19,7 +19,7 @@ export default function SectionOne() {
 
             <div className='w-full flex-[2] flex flex-col gap-2'>
                 <h2 className='text-xl md:text-3xl font-extrabold'>About Us</h2>
-                <p>We are a family-owned meat processing company dedicated to providing the highest quality, ethically sourced meat products. At Tilawe Meat Merchants, we are committed to providing the highest quality halal meat products. Our dedication to excellence begins with sourcing live animals from trusted farms, ensuring that every step of our processing meets strict halal standards.</p>
+                <p>We are a family-owned meat processing company dedicated to providing the highest quality, ethically sourced meat products. At Alawe Meat Merchants, we are committed to providing the highest quality halal meat products. Our dedication to excellence begins with sourcing live animals from trusted farms, ensuring that every step of our processing meets strict halal standards.</p>
             </div>
         </section>
     )

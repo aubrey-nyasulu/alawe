@@ -6,8 +6,8 @@ import { Toaster } from "@/ui/dashboard/components/Toaster";
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | Tilawe Dashboard',
-    default: 'Tilawe Dashboard',
+    template: '%s | Alawe Dashboard',
+    default: 'Alawe Dashboard',
   },
   description: 'Database for tilawe meat merchants',
 };

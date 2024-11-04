@@ -13,7 +13,7 @@ export default function StoreAi() {
 
             {/* Custom Botpress Script */}
             <Script
-                src="https://files.bpcontent.cloud/2024/10/22/06/20241022064509-9DPZW87Z.js"
+                src="https://files.bpcontent.cloud/2024/11/04/14/20241104141203-LGLWNNRV.js"
                 strategy="afterInteractive"  // Loads the script after the page becomes interactive
             />
         </>

@@ -1,7 +1,7 @@
 'use server';
 
 import { z } from 'zod'
-import { put } from '@vercel/blob';
+// import { put } from '@vercel/blob';
 import { revalidatePath } from 'next/cache';
 import ReportModel from '@/db/models/ReportModel';
 import { Report, } from '@/types';
@@ -60,9 +60,15 @@ export async function uploadImage(prev: createReport, formData: FormData) {
 
     if (from.toString() === to.toString()) return { message: `you can not send to yourself`, success: false }
 
-    const blob = await put(File.name, File, {
-        access: 'public',
-    });
+    // const blob = await put(File.name, File, {
+    //     access: 'public',
+    // });
+
+    const blob = {
+        title: 'title',
+        pathname: 'pathname',
+        downloadUrl: 'downloadUrl'
+    }
 
     const report: Report = {
         title,

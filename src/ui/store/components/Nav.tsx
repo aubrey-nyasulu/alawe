@@ -17,7 +17,7 @@ export default function Nav() {
                 href={"/"}
                 className='text-primary font-semibold text-xl flex gap-2 items-center justify-start'
             >
-                <div className='w-12 h-12 rounded-md bg-primary overflow-hidden'>
+                <div className='w-12 h-12 rounded-md overflow-hidden'>
                     <Image
                         src={logo}
                         alt='company logo'
@@ -27,7 +27,7 @@ export default function Nav() {
                     />
                 </div>
                 <div className='flex-1 overflow-hidden text-gray-900 dark:text-gray-50 text-wrap'>
-                    <p className='font-[500] hidden md:block text-ellipsis whitespace-nowrap text-sm'>Tilawe Meat Merchants</p>
+                    <p className='font-[500] hidden md:block text-ellipsis whitespace-nowrap text-sm'>Alawe Meat Merchants</p>
                 </div>
             </Link>
 

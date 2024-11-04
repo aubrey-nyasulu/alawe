@@ -12,8 +12,8 @@ export default function StoreLayout({ children }: { children: React.ReactNode })
         <Nav />
         <section className='w-full mt-20 flex flex-col md:flex-row items-center justify-between gap-8'>
           <div className='w-full flex-1 flex flex-col gap-2'>
-            <h1 className='text-3xl md:text-4xl font-extrabold'>Welcome to Tilawe Meat Merchants</h1>
-            <p className='text-gray-600'>At Tilawe Meat Merchants, we are committed to providing the highest quality halal meat products.</p>
+            <h1 className='text-3xl md:text-4xl font-extrabold'>Welcome to Alawe Meat Merchants</h1>
+            <p className='text-gray-600'>At Alawe Meat Merchants, we are committed to providing the highest quality halal meat products.</p>
             {/* <div className=' flex gap-4 flex-col'> */}
             <a href="#bulk-order">
               <Button className=' px-8 py-4 w-fit h-fit mt-8'>
@@ -45,7 +45,7 @@ export default function StoreLayout({ children }: { children: React.ReactNode })
             <a href="#bulk-order" className="mx-3 text-gray-300 hover:underline">Discounts</a>
           </div>
           <div className="mt-4 text-gray-600">
-            <p>&copy; 2024 Tilawe Meat Processing Company. All Rights Reserved.</p>
+            <p>&copy; 2024 Alawe Meat Processing Company. All Rights Reserved.</p>
           </div>
         </div>
         <StoreAi />
