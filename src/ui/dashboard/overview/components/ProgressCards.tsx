@@ -99,7 +99,7 @@ export const ProgressCards = ({ data }: { data: { cardTitle: string, percentValu
                                 ref={cardsRef}
                             >
                                 <div
-                                    className="flex w-fit items-center justify-center gap-x-5 text-nowrap"
+                                    className="flex h-full w-fit items-center justify-center gap-x-5 text-nowrap"
                                 >
                                     {
                                         (percentValue && variant) &&
@@ -119,13 +119,19 @@ export const ProgressCards = ({ data }: { data: { cardTitle: string, percentValu
                                                 {numalator}/{denominator}
                                             </p>
                                         }
-                                        <p className="text-sm text-gray-500 dark:text-gray-500">
+                                        {
+                                            (numalator && !denominator) &&
+                                            <p className="text-sm font-medium text-gray-900 dark:text-gray-50 pb-2">
+                                                {numalator}
+                                            </p>
+                                        }
+                                        <p className={cx("text-sm text-gray-500 dark:text-gray-500", (!numalator || !denominator) && 'text-xl font-semibold')}>
                                             {cardTitle}
                                         </p>
                                         {
-                                            (!numalator || !denominator) &&
-                                            <p className="text-sm text-gray-500 dark:text-gray-500">
-                                                {numalator ?? denominator}
+                                            (!numalator && denominator) &&
+                                            <p className="text-sm font-medium text-gray-900 dark:text-gray-50 pt-2">
+                                                {denominator}
                                             </p>
                                         }
                                     </div>

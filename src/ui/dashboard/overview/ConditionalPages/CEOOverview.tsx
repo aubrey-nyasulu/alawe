@@ -6,7 +6,7 @@ import { OverviewBarChart } from '@/ui/dashboard/overview/components/OverviewBar
 import { ProgressCards } from '@/ui/dashboard/overview/components/ProgressCards';
 import { Card } from '@/tremorComponents/Card';
 import { SelectComponent } from '@/ui/dashboard/components/SelectComponent';
-import { fetchCardData, fetchCities, getMonthlyRevenueByCity, getTotalRevenueByCity, MonthlyRevenuByMonth } from '@/lib/data';
+import { fetchCardData, fetchCities, getMonthlyRevenueByCity, getTotalRevenueByCity, MonthlyRevenuByMonth, someFecth } from '@/lib/data';
 import { fetchRevenue } from '@/lib/data';
 import { Revenue } from '@/types';
 import { formatCurrency } from '@/lib/utils';
@@ -23,34 +23,33 @@ export default async function CEOOverview({
         year?: string
     };
 }) {
+    const query = searchParams?.city || '';
+    const city = searchParams?.city || ''
+    const year = searchParams?.year || '2024'
+
     let data = await fetchCardData()
+    let data2 = await someFecth({ year, city })
 
     const cardData = [
         {
-            cardTitle: "Invoices Collected",
-            percentValue: data.paidPercentage,
-            numalator: data.totalPaidInvoices,
-            denominator: data.total
+            cardTitle: "Budget",
+            denominator: formatCurrency(data2?.budget)
         },
         {
-            cardTitle: "Invoices Pending",
-            percentValue: data.pendingPercentage,
-            numalator: data.totalPendingInvoices,
-            denominator: data.total,
-            invert: true
+            cardTitle: "Expenditure",
+            denominator: formatCurrency(data2?.expenditure)
+        },
+        {
+            cardTitle: "Revenue",
+            denominator: formatCurrency(data2?.revenue)
         },
         {
             cardTitle: "Profit Margin",
-            percentValue: 20,
-            numalator: formatCurrency(2000000000),
-            denominator: formatCurrency(10000000000),
+            percentValue: Number((((data2.revenue - data2.expenditure) / data2.revenue) * 100).toFixed(2)),
             fair: true
         },
     ]
 
-    const query = searchParams?.city || '';
-    const city = searchParams?.city || ''
-    const year = searchParams?.year || '2024'
     // const revenue = await fetchRevenue(query)
     // const revenue = await getTotalRevenueByCity({ city, year: Number(year) })
     const revenue = await getMonthlyRevenueByCity({ city, year: Number(year) })
@@ -183,7 +182,6 @@ export const transformData = (data: MonthlyRevenuByMonth[]): { date: string, Lil
     //     }
     // }
 
-    console.log({ transformedData })
 
     // return []
     return transformedData

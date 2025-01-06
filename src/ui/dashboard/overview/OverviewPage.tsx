@@ -31,7 +31,7 @@ export default async function OverviewPage({
             {isCEO && <CEOOverview {...{ searchParams }} />}
             {isAdmin && <AdminOverview />}
             {isBranchManager && <BranchManagerOverView {...{ searchParams }} />}
-            {isProcurementManager && <ProcurementManagerOverView />}
+            {isProcurementManager && <ProcurementManagerOverView {...{ searchParams }} />}
             {isSupplyChainManager && <SupplyChainManagerManagerOverView {...{ searchParams }} />}
         </>
     )

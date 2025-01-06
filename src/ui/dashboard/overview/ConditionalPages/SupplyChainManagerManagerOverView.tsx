@@ -5,7 +5,7 @@ import { Suspense } from 'react';
 import { ProgressCards } from '@/ui/dashboard/overview/components/ProgressCards';
 import { Card } from '@/tremorComponents/Card';
 import { SelectComponent } from '@/ui/dashboard/components/SelectComponent';
-import { fetchCities, fetchRevenue, fetchShopManagerAnalytics, getMonthlyRevenueByCity, supplyChainCards } from '@/lib/data';
+import { fetchCardData, fetchCities, fetchRevenue, fetchShopManagerAnalytics, getMonthlyRevenueByCity, supplyChainCards } from '@/lib/data';
 import { fetchBranches } from '@/lib/dbdirect';
 import { AdminTrackerChart } from '../components/AdminTrackerChart';
 import { OverviewBarChart } from '../components/OverviewBarChart';
@@ -30,15 +30,32 @@ export default async function SupplyChainManagerManagerOverView({
     const cardData = [
         {
             cardTitle: "Total Meat Products",
-            numalator: totalMeatProducts.toLocaleString(),
+            denominator: totalMeatProducts.toLocaleString(),
         },
         {
             cardTitle: "Other Products Total",
-            numalator: totalGroceries.toLocaleString(),
+            denominator: totalGroceries.toLocaleString(),
         },
         {
             cardTitle: "Total in Value",
-            numalator: totalAmount.toLocaleString(),
+            denominator: totalAmount.toLocaleString(),
+        },
+    ]
+
+    let data2 = await fetchCardData()
+    const cardData2 = [
+        {
+            cardTitle: "Invoices Collected",
+            percentValue: data2.paidPercentage,
+            numalator: data2.totalPaidInvoices,
+            denominator: data2.total
+        },
+        {
+            cardTitle: "Invoices Pending",
+            percentValue: data2.pendingPercentage,
+            numalator: data2.totalPendingInvoices,
+            denominator: data2.total,
+            invert: true
         },
     ]
 
@@ -102,7 +119,7 @@ export default async function SupplyChainManagerManagerOverView({
                 </Card>
                 <div className="flex gap-4 mt-4">
                     <Suspense fallback={<CardsSkeleton />}>
-                        <ProgressCards {...{ data: cardData }} />
+                        <ProgressCards {...{ data: cardData2 }} />
                     </Suspense>
                 </div>
                 <div className='mt-4'>

@@ -3,9 +3,12 @@ import { fetchFilteredInventory, fetchLatestPurchasedItems, } from '@/lib/data';
 import { Card } from '@/tremorComponents/Card';
 import { fetchSuppliers } from '@/lib/dbdirect';
 
-export default async function TopSuppliersTable({ title }: { title: string }) {
-
-    let suppliers = await fetchSuppliers();
+export default async function TopSuppliersTable({ title, topSuppliers }: {
+    title: string, topSuppliers: {
+        totalTransactions: string,
+        name: string
+    }[]
+}) {
 
     return (
         <div className="flow-root w-full ">
@@ -28,9 +31,9 @@ export default async function TopSuppliersTable({ title }: { title: string }) {
                             </tr>
                         </thead>
                         <tbody className=" rounded-lg bg-[#f5f6f9] dark:bg-gray-900 text-gray-900 dark:text-gray-50">
-                            {suppliers?.map((supplier, i) => (
+                            {topSuppliers?.map((supplier, i) => (
                                 <tr
-                                    key={supplier._id}
+                                    key={supplier.name + i}
                                     className="w-full border-b-2 border-b-white dark:border-b-gray-950 py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg   "
                                 >
                                     <td className="whitespace-nowrap py-3 pl-6 pr-3 ">
@@ -41,7 +44,7 @@ export default async function TopSuppliersTable({ title }: { title: string }) {
                                         </div>
                                     </td>
                                     <td className="whitespace-nowrap px-3 py-3">
-                                        {97 - (i * 6)}
+                                        {supplier.totalTransactions}
                                     </td>
                                 </tr>
                             ))}

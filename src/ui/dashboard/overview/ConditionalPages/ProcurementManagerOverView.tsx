@@ -15,25 +15,32 @@ import { AdminTrackerChart } from '../components/AdminTrackerChart';
 import SuppliersTable from '../../suppliers/components/table';
 import LatestInvoicesTable from '../components/LatestInvoicesTable';
 import TopSuppliersTable from '../components/TopSuppliersTable';
+import { SelectYearFilter } from '../components/OverviewFilters';
 
-export default async function ProcurementManagerOverView() {
-    // return <p>Admin Overview</p>
-    let { totalInvoices, totalPurchaseTransactions } = await fetchProcurementManagerAnalytics()
+export default async function ProcurementManagerOverView({
+    searchParams,
+}: {
+    searchParams?: {
+        quert?: '',
+        branch_id?: string,
+        year?: string
+    };
+}) {
+    const year = searchParams?.year || '2024'
 
-    const cardData = [
-        {
-            cardTitle: "Total Purchase Transactions",
-            numalator: 674,
-        },
-        {
-            cardTitle: "Total Items Purchased",
-            numalator: 2373,
-        },
-        {
-            cardTitle: "Total Clients",
-            numalator: 30,
-        },
-    ]
+    let { expenditures, topSuppliers, topItems } = await fetchProcurementManagerAnalytics({ year })
+
+    const total_expenditure = expenditures.reduce((acc, expenditures) => acc + expenditures.total_spent, 0)
+
+    const cardData = expenditures.map(expenditure => {
+        return {
+            cardTitle: expenditure._id,
+            numalator: formatCurrency(expenditure.total_spent),
+            denominator: formatCurrency(total_expenditure),
+            percentValue: Number((expenditure.total_spent * 100 / total_expenditure).toFixed(2)),
+            invert: true
+        }
+    })
 
     let cities = await fetchCities()
     cities = cities.map(city => (
@@ -57,7 +64,31 @@ export default async function ProcurementManagerOverView() {
                 <Card className="flex gap-12 items-center justify-start p-4 px-8  sticky top-0 z-40">
                     {/* <h1 className={`${lusitana.className} text-2xl font-bold`}>Inventory</h1> */}
                     <div className="max-w-40">
-                        <SelectComponent {...{ data: cities, placeholder: 'Select City' }} />
+                        <SelectYearFilter {...{
+                            data: [
+                                {
+                                    label: '2024',
+                                    value: '2024'
+                                },
+                                {
+                                    label: '2023',
+                                    value: '2023'
+                                },
+                                {
+                                    label: '2022',
+                                    value: '2022'
+                                },
+                                {
+                                    label: '2021',
+                                    value: '2021'
+                                },
+                                {
+                                    label: '2020',
+                                    value: '2020'
+                                },
+                            ],
+                            defaultValue: year
+                        }} />
                     </div>
                     <div className="max-w-40">
                         <SelectComponent {...{ data: branches, placeholder: 'Select Branch' }} />
@@ -66,6 +97,7 @@ export default async function ProcurementManagerOverView() {
                         <SelectComponent {...{ data: [], placeholder: 'Select Filter' }} />
                     </div>
                 </Card>
+                <p className='p-6 pb-0 font-semibold'>Expenditures</p>
                 <div className="flex gap-4 mt-4">
                     <Suspense fallback={<CardsSkeleton />}>
                         <ProgressCards {...{ data: cardData }} />
@@ -75,12 +107,12 @@ export default async function ProcurementManagerOverView() {
                     <div className='flex gap-4 flex-col md:flex-row items-start w-full '>
                         <div className='md:flex-[3] w-full'>
                             <Suspense fallback={<CardsSkeleton />}>
-                                <LatestInvoicesTable {...{ currentPage: 1, query: '', title: 'Recent Purchase Transactions' }} />
+                                <LatestInvoicesTable {...{ currentPage: 1, query: '', title: 'Top Items', topItems }} />
                             </Suspense>
                         </div>
                         <div className='md:flex-[2] w-full'>
                             <Suspense fallback={<CardsSkeleton />}>
-                                <TopSuppliersTable {...{ title: "Top Suppliers" }} />
+                                <TopSuppliersTable {...{ title: "Top Suppliers", topSuppliers }} />
                             </Suspense>
                         </div>
                     </div>

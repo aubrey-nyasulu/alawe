@@ -5,12 +5,13 @@ import { Suspense } from 'react';
 import { ProgressCards } from '@/ui/dashboard/overview/components/ProgressCards';
 import { Card } from '@/tremorComponents/Card';
 import { SelectComponent } from '@/ui/dashboard/components/SelectComponent';
-import { fetchCities, fetchRevenue, fetchShopManagerAnalytics, getMonthlyRevenueByCity } from '@/lib/data';
+import { fetchCardData, fetchCities, fetchRevenue, fetchShopManagerAnalytics, getMonthlyRevenueByCity, someFecth } from '@/lib/data';
 import { fetchBranches } from '@/lib/dbdirect';
 import { AdminTrackerChart } from '../components/AdminTrackerChart';
 import { OverviewBarChart } from '../components/OverviewBarChart';
 import { transformData } from './CEOOverview';
 import { ResetFilters, SelectCityFilter, SelectYearFilter } from '../components/OverviewFilters';
+import { formatCurrency } from '@/lib/utils';
 
 export default async function BranchManagerOverView({
     searchParams,
@@ -24,23 +25,49 @@ export default async function BranchManagerOverView({
     let { totalInvoices, totalSalesTransactions } = await fetchShopManagerAnalytics()
 
     const year = searchParams?.year || '2024'
+    const city = 'Lilongwe'
     const revenue = await getMonthlyRevenueByCity({ city: "Lilongwe", year: Number(year) })
     const data = transformData(revenue)
 
+    let data3 = await fetchCardData()
     const cardData = [
         {
-            cardTitle: "Total Invoices",
-            numalator: totalInvoices,
+            cardTitle: "Invoices Collected",
+            percentValue: data3.paidPercentage,
+            numalator: data3.totalPaidInvoices,
+            denominator: data3.total
         },
         {
-            cardTitle: "Total Sales Transactions",
-            numalator: 123,
-        },
-        {
-            cardTitle: "Total Employees",
-            numalator: 9,
+            cardTitle: "Invoices Pending",
+            percentValue: data3.pendingPercentage,
+            numalator: data3.totalPendingInvoices,
+            denominator: data3.total,
+            invert: true
         },
     ]
+
+    let data2 = await someFecth({ year, city })
+    const cardData2 = [
+        {
+            cardTitle: "Budget",
+            denominator: formatCurrency(data2?.budget)
+        },
+        {
+            cardTitle: "Expenditure",
+            denominator: formatCurrency(data2?.expenditure)
+        },
+        {
+            cardTitle: "Revenue",
+            denominator: formatCurrency(data2?.revenue)
+        },
+        {
+            cardTitle: "Profit Margin",
+            percentValue: Number((((data2.revenue - data2.expenditure) / data2.revenue) * 100).toFixed(2)),
+            fair: true
+        },
+    ]
+
+
 
     let cities = await fetchCities()
     cities = cities.map(city => (
@@ -91,6 +118,11 @@ export default async function BranchManagerOverView({
                     <ResetFilters />
                     {/* <SelectBranchFilter {...{ data: branches }} /> */}
                 </Card>
+                <div className="mt-4 w-full">
+                    <Suspense fallback={<CardsSkeleton />}>
+                        <ProgressCards {...{ data: cardData2 }} />
+                    </Suspense>
+                </div>
                 <div className="flex gap-4 mt-4">
                     <Suspense fallback={<CardsSkeleton />}>
                         <ProgressCards {...{ data: cardData }} />

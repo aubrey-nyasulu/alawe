@@ -30,12 +30,17 @@ import {
 import UserModel from "@/db/models/UserModel";
 import TempEmployeeModel from "@/db/models/TempEmployeeModel";
 import { months, years } from "@/lib/utils";
+import BudgetModel from "@/db/models/BudgetModel";
+import ExpenditureModel from "@/db/models/ExpenditureModel";
+import ProcurementExpenditureModel from "@/db/models/ProcurementExpenditureModel";
 
 
 export async function GET(req: NextRequest) {
 
     try {
         connectDB()
+
+        return NextResponse.json({ message: 'eary return. no seeding happened' })
 
         const res = await SeedDataBase()
 
@@ -64,6 +69,8 @@ export async function POST(req: NextRequest) {
     try {
         connectDB()
 
+        return NextResponse.json({ message: 'eary return. no seeding happened' })
+
         const res = await SeedDataBase()
 
         if (res.ok) {
@@ -85,6 +92,33 @@ export async function POST(req: NextRequest) {
 
 }
 
+export async function PUT(req: NextRequest) {
+    return NextResponse.json({ message: 'eary return. no seeding happened' })
+
+    try {
+        connectDB()
+
+        // const res = await populateProcurementExpenditures()
+
+        // if (res) {
+        //     return NextResponse.json(res)
+        // } else {
+        //     return NextResponse.json({ message: 'failed' }, { status: 303 })
+        // }
+
+        return NextResponse.json('fallback response')
+    } catch (error) {
+        errorHandler(error, '', '', '',)
+        console.log('error in API text route', error)
+
+        return NextResponse.json(
+            { error: 'some server error' },
+            { status: 500 }
+        )
+    }
+
+}
+
 async function SeedDataBase() {
     try {
         let res = await populateUserRoles()
@@ -92,6 +126,12 @@ async function SeedDataBase() {
 
         res = await populateBranches()
         if (!res) throw new Error('failed to populate branches')
+
+        res = await populateBudgets()
+        if (!res) throw new Error('failed to populate budgets')
+
+        res = await populateExpenditures()
+        if (!res) throw new Error('failed to populate budgets')
 
         res = await populateSalaries()
         if (!res) throw new Error('failed to populate salaries')
@@ -126,6 +166,9 @@ async function SeedDataBase() {
         res = await populatePurchaseItems()
         if (!res) throw new Error('failed to populate purchased items')
 
+        res = await populateProcurementExpenditures()
+        if (!res) throw new Error('failed to populate purchase ProcurementExpenditures')
+
         res = await populatePayments()
         if (!res) throw new Error('failed to populate payments')
 
@@ -154,6 +197,56 @@ const { branches, salaries, clients, employees, inventory, invoices, items, paym
 async function populateBranches() {
     try {
         const data = await BranchModel.insertMany(branches)
+
+        return true
+    } catch (error) {
+
+        return false
+    }
+}
+
+async function populateBudgets() {
+    try {
+        const branches: Branch[] = await BranchModel.find().distinct('city')
+        const currentYear = new Date().getFullYear()
+        const budgetsToInsert = []
+        console.log({ branches })
+
+        for (let year of years) {
+            for (let branch of branches) {
+                if (currentYear === Number(year)) break
+                const amount = generateRandomNumber(5497458099, 8797458099)
+                const budget = { branch, year, amount }
+                budgetsToInsert.push(budget)
+            }
+        }
+
+        await BudgetModel.insertMany(budgetsToInsert)
+
+        return true
+    } catch (error) {
+
+        return false
+    }
+}
+
+async function populateExpenditures() {
+    try {
+        const branches: Branch[] = await BranchModel.find().distinct('city')
+        const currentYear = new Date().getFullYear()
+        const expendituresToInsert = []
+        console.log({ branches })
+
+        for (let year of years) {
+            for (let branch of branches) {
+                if (currentYear === Number(year)) break
+                const amount = generateRandomNumber(5497458099, 8797458099)
+                const budget = { branch, year, amount }
+                expendituresToInsert.push(budget)
+            }
+        }
+
+        await ExpenditureModel.insertMany(expendituresToInsert)
 
         return true
     } catch (error) {
@@ -318,15 +411,19 @@ async function populatePurchaseTransactions() {
         const suppliers = await SupplierModel.find()
         const purchaseTransactionsToInsert = []
 
-        for (let purchaseTransaction of purchaseTransactions) {
+        for (let year of years) {
+            for (let month of months) {
+                for (let i = 0; i < 3; i++) {
 
-            const { purchase_total } = purchaseTransaction
+                    const purchase_total = generateRandomNumber(3, 20)
 
-            const supplier_id = await randomID(suppliers)
+                    const supplier_id = await randomID(suppliers)
 
-            const newPurchaseTransaction = { purchase_total, supplier_id }
+                    const newPurchaseTransaction = { purchase_total, supplier_id, year, month }
 
-            purchaseTransactionsToInsert.push(newPurchaseTransaction)
+                    purchaseTransactionsToInsert.push(newPurchaseTransaction)
+                }
+            }
         }
 
         await PurchaseTransactionModel.insertMany(purchaseTransactionsToInsert)
@@ -341,12 +438,18 @@ async function populatePurchaseItems() {
     try {
         const purchaseTransactions = await PurchaseTransactionModel.find()
         const purchaseItemsToInsert = []
+        const Items = await ItemModel.find()
 
-        for (let month of months) {
-            for (let Item of items) {
-                const { _id } = await ItemModel.findOne().where({ name: Item.name })
+        for (let purchaseTransaction of purchaseTransactions) {
+            for (let i = 0; i < purchaseTransaction.purchase_total; i++) {
 
-                const { price } = Item
+                const _id = await randomID(Items)
+                const { name } = Items.find(Itm => Itm._id === _id)
+                const item = items.find(itm => itm.name === name)
+                const price = item?.price
+
+                if (!price) return false
+
                 const ranPrice = generateRandomNumber((price - (price * 0.1)), price + (price * 0.1))
 
                 const quantity = price < 1000000
@@ -358,20 +461,46 @@ async function populatePurchaseItems() {
                 const purchase_transaction_id = await randomID(purchaseTransactions)
 
                 const newPurchasedItem = {
-                    item_id: _id as string,
+                    item_id: _id,
                     unit_price: ranPrice,
-                    month,
                     purchase_transaction_id,
-                    quantity,
-                    year: "2024"
+                    quantity
                 }
 
                 purchaseItemsToInsert.push(newPurchasedItem)
             }
-
         }
 
         await PurchasedItemsModel.insertMany(purchaseItemsToInsert)
+        return true
+    } catch (error) {
+        console.log(error)
+
+        return false
+    }
+}
+
+async function populateProcurementExpenditures() {
+    try {
+        const suppliers = await SupplierModel.find()
+        const purchaseTransactionsToInsert = []
+
+        for (let year of years) {
+            for (let month of months) {
+                for (let i = 0; i < 3; i++) {
+
+                    const amount = generateRandomNumber(5000000, 50000000)
+
+                    const supplier_id = await randomID(suppliers)
+
+                    const newPurchaseTransaction = { amount, year, month, on: 'transportation' }
+
+                    purchaseTransactionsToInsert.push(newPurchaseTransaction)
+                }
+            }
+        }
+
+        await ProcurementExpenditureModel.insertMany(purchaseTransactionsToInsert)
         return true
     } catch (error) {
 
@@ -451,10 +580,9 @@ async function populateEmployees() {
     }
 }
 
-
 async function populateRevenue() {
     try {
-        const branches: Branch[] = await BranchModel.find()
+        const branches: Branch[] = await BranchModel.find().distinct('city')
         const currentYear = new Date().getFullYear()
         const currentMonth = new Date().getMonth()
         const revenueToInsert = []

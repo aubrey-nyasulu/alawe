@@ -6,8 +6,16 @@ const PurchaseTransactionSchema = new Schema({
         required: true,
         default: 0.00
     },
-    supplier_id: {
+    year: {
+        type: Date,
+        required: true
+    },
+    month: {
         type: String,
+        required: true
+    },
+    supplier_id: {
+        type: Schema.Types.ObjectId,
         ref: 'Supplier',
         required: true
     },

@@ -15,6 +15,9 @@ import SalaryModel from '../db/models/SalaryModel'
 import connectDB from '../db/config/connectDB'
 import UserModel from '@/db/models/UserModel'
 import ReportModel from '@/db/models/ReportModel'
+import BudgetModel from '@/db/models/BudgetModel'
+import ExpenditureModel from '@/db/models/ExpenditureModel'
+import ProcurementExpenditureModel from '@/db/models/ProcurementExpenditureModel'
 
 export type FetchRevenueReturnType = {
     [K in keyof Revenue]: K extends 'revenue' ? string : Revenue[K]
@@ -32,15 +35,6 @@ export async function fetchRevenue(query: string, year = "2024",): Promise<any[]
             $expr: { $eq: [{ $year: "$year" }, year] }
         }))
 
-        console.log({ data })
-
-        // return []
-
-        //     _id: new ObjectId('67154cfe2e25f876fee6c802'),
-        //   branch_id: new ObjectId('67154cb42e25f876fee6c37e'),
-        //   month: 'Aug',
-        //   year: 2024-01-01T00:00:00.000Z,
-        //   amount: 667680523,
         return data.map(({ _id, month, amount, city }) => (
             {
                 _id: _id?.toString(),
@@ -147,6 +141,90 @@ export async function fetchCardData() {
     }
 }
 
+export async function someFecth({ year, city }: { city?: string, year: string }) {
+    noStore()
+
+    city = city || ''
+
+    const regex = new RegExp(city, 'i')
+
+    try {
+        connectDB()
+
+        const revenue = await RevenueModel.aggregate([
+            {
+                $addFields: {
+                    year: { $dateToString: { format: "%Y", date: "$year" } },
+                }
+            },
+            { $match: { year } },
+            {
+                $lookup: {
+                    from: 'branches',  // The name of the Branch collection
+                    localField: 'branch_id',
+                    foreignField: '_id',
+                    as: 'branch_info'
+                }
+            },
+            { $unwind: '$branch_info' },
+            { $project: { city: '$branch_info.city', amount: 1, year: 1 } },
+            {
+                $match: {
+                    $or: [
+                        { city: { $regex: regex } },
+                    ]
+                }
+            },
+            { $group: { _id: null, amount: { $sum: '$amount' } } },
+        ])
+
+        const budget = await BudgetModel.aggregate([
+            {
+                $addFields: {
+                    year: { $dateToString: { format: "%Y", date: "$year" } },
+                }
+            },
+            { $match: { year } },
+            { $project: { city: '$branch', amount: 1 } },
+            {
+                $match: {
+                    $or: [
+                        { city: { $regex: regex } },
+                    ]
+                }
+            },
+            { $group: { _id: null, amount: { $sum: '$amount' } } },
+        ])
+
+        const expenditure = await ExpenditureModel.aggregate([
+            {
+                $addFields: {
+                    year: { $dateToString: { format: "%Y", date: "$year" } },
+                }
+            },
+            { $match: { year } },
+            { $project: { city: '$branch', amount: 1 } },
+            {
+                $match: {
+                    $or: [
+                        { city: { $regex: regex } },
+                    ]
+                }
+            },
+            { $group: { _id: null, amount: { $sum: '$amount' } } },
+        ])
+
+        return {
+            budget: Number(budget[0].amount || 0),
+            expenditure: Number(expenditure[0].amount || 0),
+            revenue: Number(revenue[0]?.amount || 0)
+        }
+    } catch (error) {
+        console.log('some error')
+        throw new Error('Failed to fetch data.')
+    }
+}
+
 export async function fetchCities() {
     noStore()
 
@@ -201,15 +279,151 @@ export async function fetchShopManagerAnalytics() {
     }
 }
 
-export async function fetchProcurementManagerAnalytics() {
+export async function fetchProcurementManagerAnalytics({ year }: { year: string }) {
     noStore()
 
     try {
         connectDB()
+        let topSuppliers = await PurchaseTransactionModel.aggregate([
+            {
+                $addFields: {
+                    year: { $dateToString: { format: "%Y", date: "$year" } },
+                }
+            },
+            { $match: { year } },
+            {
+                $group: {
+                    _id: '$supplier_id', totalTransactions: { $count: {} }
+                }
+            },
+            { $sort: { 'totalTransactions': -1 } },
+            { $limit: 8 },
+            {
+                $lookup: {
+                    from: 'suppliers',
+                    localField: '_id',
+                    foreignField: '_id',
+                    as: 'supplier_info'
+                }
+            },
+            { $unwind: '$supplier_info' },
+        ])
+
+        topSuppliers = topSuppliers.map(({ totalTransactions, supplier_info }) => (
+            {
+                totalTransactions,
+                name: supplier_info.name
+            }
+        ))
+
+        const topItems = await PurchasedItemsModel.aggregate([
+            {
+                $lookup: {
+                    from: 'purchasetransactions',
+                    localField: 'purchase_transaction_id',
+                    foreignField: '_id',
+                    as: 'purchasetransaction_info'
+                }
+            },
+            { $unwind: '$purchasetransaction_info' },
+            {
+                $addFields: {
+                    month: { $dateToString: { format: "%M", date: "$purchasetransaction_info.year" } },
+                    year: { $dateToString: { format: "%Y", date: "$purchasetransaction_info.year" } },
+                }
+            },
+            { $match: { year } },
+            {
+                $lookup: {
+                    from: 'items',
+                    localField: 'item_id',
+                    foreignField: '_id',
+                    as: 'item_info'
+                }
+            },
+            { $unwind: '$item_info' },
+            {
+                $project: {
+                    unit_price: 1,
+                    item_name: '$item_info.name',
+                    category: '$item_info.type'
+                }
+            },
+            {
+                $group: {
+                    _id: '$item_name',
+                    quantity: { $count: {} },
+                    avg_price: { $avg: '$unit_price' },
+                    categories: { $addToSet: '$category' }
+                }
+            },
+            {
+                $project: {
+                    avg_price: 1,
+                    item_name: '$_id',
+                    category: { $arrayElemAt: ['$categories', 0] },
+                    quantity: 1,
+                    _id: 0
+                }
+            },
+            {
+                $sort: {
+                    avg_price: -1,
+                    quantity: -1,
+                }
+            },
+            {
+                $limit: 8
+            }
+        ])
+
+        const expenditures = await PurchasedItemsModel.aggregate([
+            {
+                $lookup: {
+                    from: 'purchasetransactions',
+                    localField: 'purchase_transaction_id',
+                    foreignField: '_id',
+                    as: 'purchasetransaction_info'
+                }
+            },
+            { $unwind: '$purchasetransaction_info' },
+            {
+                $addFields: {
+                    month: { $dateToString: { format: "%M", date: "$purchasetransaction_info.year" } },
+                    year: { $dateToString: { format: "%Y", date: "$purchasetransaction_info.year" } },
+                }
+            },
+            { $match: { year } },
+            {
+                $lookup: {
+                    from: 'items',
+                    localField: 'item_id',
+                    foreignField: '_id',
+                    as: 'item_info'
+                }
+            },
+            { $unwind: '$item_info' },
+            { $project: { unit_price: 1, item_type: '$item_info.type' } },
+            { $group: { _id: '$item_type', total_spent: { $sum: '$unit_price' } } }
+        ])
+
+        const transportationExpenditures = await ProcurementExpenditureModel.aggregate([
+            {
+                $addFields: {
+                    year: { $dateToString: { format: '%Y', date: '$year' } }
+                }
+            },
+            { $match: { year } },
+            { $group: { _id: '$on', total_spent: { $sum: '$amount' } } }
+        ])
 
         return {
-            totalPurchaseTransactions: 89,
-            totalInvoices: 7
+            topSuppliers,
+            expenditures: [
+                ...expenditures,
+                ...transportationExpenditures
+            ],
+            topItems
         }
     } catch (error) {
         console.error('Database Error:', error)
@@ -256,8 +470,6 @@ export async function fetchFilteredInvoices(
 
         const regex = new RegExp(query, 'i')
         const regex2 = isMonth(query) ? new RegExp((monthNameToMonthIndex(query).toString()), 'i') : null
-
-        console.log({ regex, regex2 })
 
         // Build the search query with proper checks for different field types
         const invoices = await InvoiceModel.aggregate([
@@ -704,8 +916,6 @@ export async function fetchFilteredInventoryPages(
         const regex = new RegExp(query, 'i')
         const branchId = branch.length === 24 ? new ObjectId(branch) : null
 
-        console.log({ regex, branchId })
-
         // Prepare the $match query
         const matchQuery: any = {
             $or: [
@@ -822,12 +1032,6 @@ export async function supplyChainCards() {
         // If aggregation returns no results, return default values
         const result = inventory[0] || { totalMeatProducts: 0, totalGroceries: 0, totalAmount: 0 };
 
-        console.log({
-            totalMeatProducts: result.totalMeatProducts,
-            totalGroceries: result.totalGroceries,
-            totalAmount: formatCurrency(result.totalAmount)
-        })
-
         return {
             totalMeatProducts: result.totalMeatProducts,
             totalGroceries: result.totalGroceries,
@@ -896,9 +1100,7 @@ export async function getMonthlyRevenueByCity(filters: FilterOptions): Promise<M
                 }
             },
             { $sort: { month: 1, city: 1 } }  // Sort by month and city
-        ]);
-
-        console.log({ revenueByCityAndMonth })
+        ])
 
         // return []
         return revenueByCityAndMonth
@@ -954,9 +1156,7 @@ export async function getTotalRevenueByCity(filters: FilterOptions) {
                 }
             },
             { $sort: { totalRevenue: -1 } }  // Sort by total revenue in descending order
-        ]);
-
-        console.log({ revenueByCity })
+        ])
 
         return []
         // return revenueByCity
@@ -1077,8 +1277,6 @@ export async function fetchReports(id: string): Promise<{ sent: any[], received:
 
         const sent: any[] = await ReportModel.find().where('from').equals(id).populate('to')
         const received: any[] = await ReportModel.find().where('to').equals(id).populate('from')
-
-        console.log({ sent, received })
 
         let serializedSent: any = []
         if (sent.length) {

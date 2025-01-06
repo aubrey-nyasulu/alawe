@@ -6,22 +6,10 @@ const PurchasedItemsSchema = new Schema({
         ref: 'PurchaseTransaction',
         required: true
     },
-    quantity: {
-        type: Number,
-        required: true
-    },
     unit_price: {
         type: Number,
         required: true,
         default: 0.00
-    },
-    month: {
-        type: String,
-        required: true
-    },
-    year: {
-        type: Date,
-        required: true
     },
     item_id: {
         type: Schema.Types.ObjectId,

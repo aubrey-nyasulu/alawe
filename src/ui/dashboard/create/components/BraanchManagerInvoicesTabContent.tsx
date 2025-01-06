@@ -38,7 +38,7 @@ export default async function BraanchManagerInvoicesTabContent({
 
     const user = session?.user as User
 
-    const canEdit = user.role === "Branch Manager"
+    const canEdit = user.role === "Supply Chain Manager"
 
     return (
         <div className="w-full ">

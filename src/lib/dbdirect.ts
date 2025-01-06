@@ -316,8 +316,6 @@ export async function fetchSalaries(): Promise<FetchSalariesReturnType[]> {
 }
 
 export async function fetchNotifications(id: string): Promise<Notification[]> {
-    console.log({ id })
-
     try {
         connectDB()
         const notifications: Notification[] = await NotificationModel.find().where({ userId: new ObjectId(id) })

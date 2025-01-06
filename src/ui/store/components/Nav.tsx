@@ -5,7 +5,7 @@ import { LandingPageMobileMenuDrawer } from './LandingPageMobileMenuDrawer'
 import LandingPageMobileMenuButton from './LandingPageMobileMenuButton'
 import Link from 'next/link';
 import { Button } from '@/tremorComponents/Button';
-import logo from '@/../public/logo.png'
+import logo from '@/../public/logo.webp'
 import Image from 'next/image';
 
 export default function Nav() {
