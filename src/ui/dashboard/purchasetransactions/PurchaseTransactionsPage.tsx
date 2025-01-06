@@ -14,7 +14,7 @@ async function PurchaseTransactionsPage() {
         <ProcurementPurchaseTransactionsTabs {...{ Suppliers, items }}>
             <div className="w-full ">
                 <Suspense fallback={<CardsSkeleton />}>
-                    <LatestInvoicesTable />
+                    <LatestInvoicesTable {...{ topItems: [] }} />
                 </Suspense>
             </div>
         </ProcurementPurchaseTransactionsTabs>

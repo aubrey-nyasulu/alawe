@@ -74,7 +74,7 @@ export interface Invoice extends defs {
 export interface Item extends defs {
     name: string
     type: string
-    price: number
+    price?: number
 }
 
 export interface PaymentMethod extends defs {

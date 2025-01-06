@@ -102,7 +102,7 @@ export async function fetchItems(): Promise<Item[]> {
         connectDB()
         const data: Item[] = await ItemModel.find()
 
-        return data.map(({ _id, name, type }) => ({ _id: _id?.toString(), name, type }))
+        return data.map(({ _id, name, type, }) => ({ _id: _id?.toString(), name, type }))
     } catch (error) {
         console.error('Database Error:', error);
         throw new Error('Failed to fetch revenue data.');
