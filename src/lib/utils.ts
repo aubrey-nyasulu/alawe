@@ -4,6 +4,7 @@ import { Revenue, User } from "@/types";
 // Tremor Raw cx [v0.0.0]
 import clsx, { type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { number } from "zod";
 
 export function cx(...args: ClassValue[]) {
   return twMerge(clsx(...args))
@@ -56,13 +57,23 @@ export const formatCurrency = (amountInTambala: number) => {
 
     return amount
   }
-  else {
+  else if (amountInKwacha <= 999999999) {
     const amount = (amountInKwacha / 1000000).toLocaleString('malawi', {
       style: 'currency',
       currency: 'MWK',
     }) + 'm'
 
     return amount
+  }
+  else if (amountInKwacha <= 999999999999) {
+    const amount = (amountInKwacha / 1000000000).toLocaleString('malawi', {
+      style: 'currency',
+      currency: 'MWK',
+    }) + 'b'
+
+    return amount
+  } else {
+    return 'N/A'
   }
 
 }
@@ -181,4 +192,35 @@ export function formatSolidNumber(value: number) {
       }
     }
   }
+}
+
+export function decimalToRatio(decimal: number, precision = 1e-6) {
+  if (typeof decimal !== 'number' || isNaN(decimal)) return 'NaN'
+  decimal = Number(decimal.toFixed(1))
+  // Initial numerator and denominator
+  let numerator = Math.round(decimal / precision)
+  let denominator = Math.round(1 / precision)
+
+  // Greatest Common Divisor (GCD) function
+  function gcd(a: number, b: number): any {
+    return b === 0 ? a : gcd(b, a % b)
+  }
+
+  // Simplify the fraction
+  const commonDivisor = gcd(numerator, denominator)
+  numerator /= commonDivisor
+  denominator /= commonDivisor
+
+  return `${numerator}:${denominator}` // or `${numerator}/${denominator}`
+}
+
+export function capitalise(str: string) {
+  return str
+    .split(' ')
+    .map(word => word[0].toUpperCase() + word.substring(1).toLowerCase())
+    .join(' ')
+}
+
+export function calculatePercentage(num1: number, num2: number, toFixedValue = 2) {
+  return Number(((num1 / num2) * 100).toFixed(toFixedValue))
 }

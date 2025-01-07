@@ -33,7 +33,7 @@ export default async function SideNav() {
         <SideNavProfileDropdown {...{ username, role }} />
       </div>
 
-      <div className='md:hidden mr-4 flex gap-2 items-center '>
+      <div className='md:hidden mr-4 flex gap-3 items-center '>
         <NotificationsComponent />
         <SideNavProfileDropdown />
       </div>

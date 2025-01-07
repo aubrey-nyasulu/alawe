@@ -50,7 +50,7 @@ export default async function InventoryTable(
                     {inventory.product_id.type}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
-                    {formatCurrency(inventory.product_id.price)}
+                    {formatCurrency(inventory.price)}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
                     {inventory.quantity}

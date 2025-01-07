@@ -91,7 +91,7 @@ export interface Payment extends defs {
 export interface Product extends defs {
     name: string
     type: 'Meat Product' | 'Grocery'
-    price: number
+    price?: number
 }
 
 export interface ProductSold extends defs {
@@ -113,6 +113,8 @@ export interface PurchasedItem extends defs {
 export interface PurchaseTransaction extends defs {
     purchase_total: number
     supplier_id: string //ObjectId
+    year?: string
+    month?: string
 }
 
 export interface Revenue extends defs {

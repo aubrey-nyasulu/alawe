@@ -33,6 +33,7 @@ import { months, years } from "@/lib/utils";
 import BudgetModel from "@/db/models/BudgetModel";
 import ExpenditureModel from "@/db/models/ExpenditureModel";
 import ProcurementExpenditureModel from "@/db/models/ProcurementExpenditureModel";
+import OrdersModel from "@/db/models/OrdersModel";
 
 
 export async function GET(req: NextRequest) {
@@ -93,12 +94,12 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PUT(req: NextRequest) {
-    return NextResponse.json({ message: 'eary return. no seeding happened' })
+    // return NextResponse.json({ message: 'eary return. no seeding happened' })
 
     try {
         connectDB()
 
-        // const res = await populateProcurementExpenditures()
+        // let res = await populateOrders()
 
         // if (res) {
         //     return NextResponse.json(res)
@@ -180,7 +181,9 @@ async function SeedDataBase() {
 
         res = await populateEmployees()
         if (!res) throw new Error('failed to populate employees')
-        // await TempEmployeeModel.find()
+
+        res = await populateOrders()
+        if (!res) throw new Error('failed to populate Orders')
 
         return { ok: true, message: 'seeding successfull' }
     } catch (error: any) {
@@ -313,7 +316,7 @@ async function populateItems() {
 
 async function populateProducts() {
     try {
-        const data = await ProductModel.insertMany(products)
+        const data = await ProductModel.insertMany(products.map(({ name, type }) => ({ name, type })))
 
         return true
     } catch (error) {
@@ -336,18 +339,42 @@ async function populatePaymentMethods() {
 async function populateInventory() {
     try {
         const branches: Branch[] = await BranchModel.find()
-        const products: Product[] = await ProductModel.find()
+        const Products: Product[] = await ProductModel.find()
         const inventoryToInset = []
 
-        for (let branch of branches) {
-            for (let product of products) {
-                const randomQuantity = generateRandomNumber(1000, 20000)
+        for (let year of years) {
+            for (let month of months) {
+                for (let branch of branches) {
+                    for (let product of Products) {
+                        const randomQuantity = generateRandomNumber(0, 250)
 
-                const newInventoryItem = { product_id: new ObjectId(product._id), quantity: randomQuantity, branch_id: new ObjectId(branch._id), }
+                        if (randomQuantity < 100) continue
 
-                inventoryToInset.push(newInventoryItem)
+                        const { appreciated, percentage } = appreciate(month, year)
+
+                        const prod = products.find(p => p.name === product.name)
+
+                        const productPrice = prod?.price
+
+                        if (!productPrice) continue
+
+                        const price = appreciated
+                            ? productPrice + ((productPrice % percentage) / 100)
+                            : productPrice
+
+                        const newInventoryItem = {
+                            product_id: new ObjectId(product._id),
+                            quantity: randomQuantity,
+                            branch_id: new ObjectId(branch._id),
+                            year,
+                            month,
+                            price
+                        }
+
+                        inventoryToInset.push(newInventoryItem)
+                    }
+                }
             }
-
         }
 
         await InventoryModel.insertMany(inventoryToInset)
@@ -415,7 +442,7 @@ async function populatePurchaseTransactions() {
             for (let month of months) {
                 for (let i = 0; i < 3; i++) {
 
-                    const purchase_total = generateRandomNumber(3, 20)
+                    const purchase_total = generateRandomNumber(500000000, 800000000)
 
                     const supplier_id = await randomID(suppliers)
 
@@ -441,9 +468,20 @@ async function populatePurchaseItems() {
         const Items = await ItemModel.find()
 
         for (let purchaseTransaction of purchaseTransactions) {
-            for (let i = 0; i < purchaseTransaction.purchase_total; i++) {
+            let amount = Math.ceil(purchaseTransaction.purchase_total / 3)
 
+            const ids: any[] = []
+
+            for (let i = 0; i < 3;) {
                 const _id = await randomID(Items)
+                if (ids.includes(_id)) {
+                    continue
+                }
+
+                i++
+
+                ids.push(_id)
+
                 const { name } = Items.find(Itm => Itm._id === _id)
                 const item = items.find(itm => itm.name === name)
                 const price = item?.price
@@ -452,11 +490,7 @@ async function populatePurchaseItems() {
 
                 const ranPrice = generateRandomNumber((price - (price * 0.1)), price + (price * 0.1))
 
-                const quantity = price < 1000000
-                    ? generateRandomNumber(50, 100)
-                    : price < 10000000
-                        ? generateRandomNumber(15, 30)
-                        : generateRandomNumber(5, 10)
+                const quantity = Math.ceil(amount / price)
 
                 const purchase_transaction_id = await randomID(purchaseTransactions)
 
@@ -632,6 +666,35 @@ async function populateInvoices() {
     }
 }
 
+async function populateOrders() {
+    try {
+        const clients: Client[] = await ClientModel.find()
+        const invoicesToInsert = []
+
+        for (let year of years) {
+            for (let month of months) {
+                const numberOfOrders = generateRandomNumber(100, 800)
+
+                for (let i = 0; i <= numberOfOrders; i++) {
+                    const id = await randomID(clients)
+                    const ran = Math.floor(Math.random() * 100) < 90 ? 0 : 1
+                    const status = ['fullfilled', 'unfullfilled'][ran]
+
+                    const newInvoice = { client_id: id, status, year, month }
+
+                    invoicesToInsert.push(newInvoice)
+                }
+            }
+        }
+
+        await OrdersModel.insertMany(invoicesToInsert)
+        return true
+    } catch (error) {
+
+        return false
+    }
+}
+
 type ModelProp = Model<any, {}, {}, {}, any, any>
 async function randomID(data: any[]) {
     let id: ObjectId | null = null
@@ -654,4 +717,64 @@ function generateRandomDate(startYear: number, endYear: number) {
     const randomTime = Math.random() * timeDifference + startDate.getTime();
 
     return new Date(randomTime);
+}
+
+function appreciate(month: string, year: string) {
+    let appreciated = false
+    let percentage = 1
+
+    if (year === '2020') {
+        if (month === 'jun') {
+            appreciated = true
+            percentage = 1.7
+        } else if (month === 'nov') {
+            appreciated = true
+            percentage = 2.5
+        }
+    }
+
+    if (year === '2021') {
+        if (month === 'jun') {
+            appreciated = true
+            percentage = 3.1
+        } else if (month === 'nov') {
+            appreciated = true
+            percentage = 4.5
+        }
+    }
+
+    if (year === '2022') {
+        if (month === 'jun') {
+            appreciated = true
+            percentage = 4.9
+        } else if (month === 'nov') {
+            appreciated = true
+            percentage = 6.2
+        }
+    }
+
+    if (year === '2023') {
+        if (month === 'jun') {
+            appreciated = true
+            percentage = 8.4
+        } else if (month === 'nov') {
+            appreciated = true
+            percentage = 9.5
+        }
+    }
+
+    if (year === '2023') {
+        if (month === 'jun') {
+            appreciated = true
+            percentage = 10.3
+        } else if (month === 'nov') {
+            appreciated = true
+            percentage = 13.5
+        }
+    }
+
+    return {
+        appreciated,
+        percentage
+    }
 }

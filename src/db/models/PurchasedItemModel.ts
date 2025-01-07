@@ -11,6 +11,10 @@ const PurchasedItemsSchema = new Schema({
         required: true,
         default: 0.00
     },
+    quantity: {
+        type: Number,
+        required: true
+    },
     item_id: {
         type: Schema.Types.ObjectId,
         ref: 'Product',

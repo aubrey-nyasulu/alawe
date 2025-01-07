@@ -1,15 +1,15 @@
 import { formatCurrency } from '@/lib/utils';
 import { fetchFilteredInventory, fetchLatestPurchasedItems, } from '@/lib/data';
 import { Card } from '@/tremorComponents/Card';
+import { fetchPurchaseTransactions } from '@/lib/dbdirect';
 
-export default async function LatestInvoicesTable({ title, topItems }: {
-    title?: string, topItems: {
-        quantity: number,
-        avg_price: number,
-        item_name: string,
-        category: string
-    }[]
+export default async function PurchaseTransactionsTable({ title }: {
+    title?: string
 }) {
+
+    const purchaseTransactions = await fetchPurchaseTransactions()
+
+    console.log({ purchaseTransactions })
 
     return (
         <div className=" flow-root w-full">
@@ -30,7 +30,7 @@ export default async function LatestInvoicesTable({ title, topItems }: {
                                     Category
                                 </th>
                                 <th scope="col" className="px-3 py-5 font-medium text-nowrap">
-                                    Average Price
+                                    Unit Price
                                 </th>
                                 <th scope="col" className="px-3 py-5 font-medium text-nowrap">
                                     quantity
@@ -38,7 +38,7 @@ export default async function LatestInvoicesTable({ title, topItems }: {
                             </tr>
                         </thead>
                         <tbody className=" rounded-lg bg-[#f5f6f9] dark:bg-gray-900 text-gray-900 dark:text-gray-50">
-                            {topItems?.map((topItem: any, i: number) => (
+                            {/* {topItems?.map((topItem: any, i: number) => (
                                 <tr
                                     key={topItem._id}
                                     className="relative w-full border-b-2 border-b-white dark:border-b-gray-950 py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg   "
@@ -60,7 +60,7 @@ export default async function LatestInvoicesTable({ title, topItems }: {
                                         {topItem.quantity}
                                     </td>
                                 </tr>
-                            ))}
+                            ))} */}
                         </tbody>
                     </table>
                 </Card>

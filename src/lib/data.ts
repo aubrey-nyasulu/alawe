@@ -4,13 +4,13 @@ import {
     Report,
     User
 } from '@/types'
-import { deepClone, formatCurrency, formatDateToLocal } from './utils'
+import { calculatePercentage, capitalise, deepClone, formatCurrency, formatDateToLocal } from './utils'
 import { unstable_noStore as noStore } from 'next/cache'
 import RevenueModel from '../db/models/RevenueModel'
 import InvoiceModel from '../db/models/InvoiceModel'
 import ClientModel from '../db/models/ClientModel'
 import { ObjectId } from 'mongodb'
-import { BranchModel, EmployeeModel, InventoryModel, PaymentMethodModel, ProductModel, PurchasedItemsModel, PurchaseTransactionModel, SalesTransactionModel, SupplierModel } from '../db/models'
+import { BranchModel, EmployeeModel, InventoryModel, PaymentMethodModel, ProductModel, ProductSoldModel, PurchasedItemsModel, PurchaseTransactionModel, SalesTransactionModel, SupplierModel } from '../db/models'
 import SalaryModel from '../db/models/SalaryModel'
 import connectDB from '../db/config/connectDB'
 import UserModel from '@/db/models/UserModel'
@@ -18,6 +18,7 @@ import ReportModel from '@/db/models/ReportModel'
 import BudgetModel from '@/db/models/BudgetModel'
 import ExpenditureModel from '@/db/models/ExpenditureModel'
 import ProcurementExpenditureModel from '@/db/models/ProcurementExpenditureModel'
+import OrdersModel from '@/db/models/OrdersModel'
 
 export type FetchRevenueReturnType = {
     [K in keyof Revenue]: K extends 'revenue' ? string : Revenue[K]
@@ -403,8 +404,8 @@ export async function fetchProcurementManagerAnalytics({ year }: { year: string 
                 }
             },
             { $unwind: '$item_info' },
-            { $project: { unit_price: 1, item_type: '$item_info.type' } },
-            { $group: { _id: '$item_type', total_spent: { $sum: '$unit_price' } } }
+            { $project: { total_amount: { $multiply: ['$unit_price', '$quantity'] }, item_type: '$item_info.type' } },
+            { $group: { _id: '$item_type', total_spent: { $sum: '$total_amount' } } }
         ])
 
         const transportationExpenditures = await ProcurementExpenditureModel.aggregate([
@@ -416,6 +417,11 @@ export async function fetchProcurementManagerAnalytics({ year }: { year: string 
             { $match: { year } },
             { $group: { _id: '$on', total_spent: { $sum: '$amount' } } }
         ])
+
+        console.log({
+            expenditures: formatCurrency(expenditures[0].total_spent),
+            transportationExpenditures: formatCurrency(transportationExpenditures[0].total_spent)
+        })
 
         return {
             topSuppliers,
@@ -431,7 +437,57 @@ export async function fetchProcurementManagerAnalytics({ year }: { year: string 
     }
 }
 
+export async function fetchSupplyChainManagerAnalytics({ year }: { year: string }) {
+    noStore()
+
+    try {
+        connectDB()
+
+        const { expenditures } = await fetchProcurementManagerAnalytics({ year })
+
+        console.log({ expenditures })
+
+        const total_expenditure = expenditures.reduce((acc, expenditures) => acc + expenditures.total_spent, 0)
+
+        let beginningInventory = await InventoryModel.aggregate([
+            {
+                $addFields: {
+                    year: { $dateToString: { format: '%Y', date: '$year' } }
+                }
+            },
+            { $match: { year } },
+            { $match: { month: 'Jan' } },
+            { $project: { total_amount: { $multiply: ['$quantity', '$price'] } } },
+            { $group: { _id: null, total: { $sum: '$total_amount' } } }
+        ])
+
+        let endingInventory = await InventoryModel.aggregate([
+            {
+                $addFields: {
+                    year: { $dateToString: { format: '%Y', date: '$year' } }
+                }
+            },
+            { $match: { year } },
+            { $match: { month: 'Dec' } },
+            { $project: { total_amount: { $multiply: ['$quantity', '$price'] } } },
+            { $group: { _id: null, total: { $sum: '$total_amount' } } }
+        ])
+
+        const avg_inventory = (beginningInventory[0].total + endingInventory[0].total) / 2
+
+        return {
+            const_of_goods_sold: total_expenditure,
+            avg_inventory: avg_inventory,
+        }
+    } catch (error) {
+        console.error('Database Error:', error)
+        throw new Error('Failed to fetch the latest invoices.')
+    }
+}
+
 const months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december']
+
+const monthsShort = ['Jan', 'Feb', 'Mar', 'Apr', 'may', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 const monthNameToMonthIndex = (query: string) => {
     if (query.length < 1) return -1
@@ -721,7 +777,7 @@ export async function fetchFilteredInventory(
             $or: [
                 { 'product_info.name': { $regex: regex } },
                 { 'product_info.type': { $regex: regex } },
-                { 'product_info.price': { $regex: regex } },
+                { price: { $regex: regex } },
                 { quantity: { $regex: regex } },
             ]
         }
@@ -982,7 +1038,6 @@ export async function fetchClients() {
     }
 }
 
-
 export async function supplyChainCards() {
     noStore()
 
@@ -1036,6 +1091,90 @@ export async function supplyChainCards() {
             totalMeatProducts: result.totalMeatProducts,
             totalGroceries: result.totalGroceries,
             totalAmount: result.totalAmount
+        };
+    } catch (error) {
+        console.error('Error calculating inventory totals:', error);
+        throw new Error('Failed to calculate inventory totals.');
+    }
+}
+
+export async function fetchOrdersAnalytics({ year }: { year: string }) {
+    noStore()
+
+    try {
+        connectDB()
+        // Aggregate the inventory with product info to get the relevant data
+        let orders = await OrdersModel.aggregate([
+            {
+                $addFields: {
+                    year: { $dateToString: { format: '%Y', date: '$year' } }
+                }
+            },
+            {
+                $match: { year }
+            },
+            {
+                $group: { _id: ['$month', '$status',], total: { $count: {} } },
+            },
+        ])
+
+        orders = orders.sort((a, b) => monthsShort.findIndex(val => val.toLowerCase() === a._id[0].toLowerCase()) - monthsShort.findIndex(val => val.toLowerCase() === b._id[0].toLowerCase()))
+
+        const recordOfOrders = await OrdersModel.aggregate([
+            {
+                $addFields: {
+                    year: { $dateToString: { format: '%Y', date: '$year' } }
+                }
+            },
+            {
+                $match: { year }
+            },
+            {
+                $group: { _id: '$month', total: { $count: {} } },
+            },
+        ])
+
+        let highestRecordOfOrders = 0
+
+        for (let order of recordOfOrders) {
+            highestRecordOfOrders = order.total > highestRecordOfOrders
+                ? order.total : highestRecordOfOrders
+        }
+
+        const ordersFullfilmentRates: any[] = []
+
+        console.log('percentage', calculatePercentage(20, 80))
+
+        for (let order of orders) {
+
+            const item = ordersFullfilmentRates.find(a => a.date === order._id[0])
+            const monthlyOrders = recordOfOrders.find(a => a._id === order._id[0])
+            console.log({ monthlyOrders })
+
+            if (item) {
+                item.issues.push({
+                    status: capitalise(order._id[1]),
+                    value: order.total,
+                    percentage: calculatePercentage(order.total, monthlyOrders.total),
+                })
+            } else {
+                ordersFullfilmentRates.push({
+                    date: order._id[0],
+                    issues: [
+                        {
+                            status: capitalise(order._id[1]),
+                            value: order.total,
+                            percentage: calculatePercentage(order.total, monthlyOrders.total),
+                        },
+                    ],
+                })
+            }
+        }
+
+        // console.log({ ordersFullfilmentRates: JSON.stringify(ordersFullfilmentRates) })
+
+        return {
+            ordersFullfilmentRates,
         };
     } catch (error) {
         console.error('Error calculating inventory totals:', error);

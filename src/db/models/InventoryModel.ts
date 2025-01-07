@@ -14,7 +14,19 @@ const InventorySchema = new Schema({
     quantity: {
         type: Number,
         required: true
-    }
+    },
+    price: {
+        type: Number,
+        required: [true, 'Please provide a product type']
+    },
+    year: {
+        type: Date,
+        required: true
+    },
+    month: {
+        type: String,
+        required: true
+    },
 }, { timestamps: true })
 
 const InventoryModel = models?.Inventory || model('Inventory', InventorySchema)

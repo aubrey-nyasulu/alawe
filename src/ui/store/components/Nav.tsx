@@ -5,19 +5,19 @@ import { LandingPageMobileMenuDrawer } from './LandingPageMobileMenuDrawer'
 import LandingPageMobileMenuButton from './LandingPageMobileMenuButton'
 import Link from 'next/link';
 import { Button } from '@/tremorComponents/Button';
-import logo from '@/../public/logo.webp'
+import logo from '@/../public/logo.png'
 import Image from 'next/image';
 
 export default function Nav() {
     const [showMenu, setShowMenu] = useState(false)
 
     return (
-        <nav className=' flex items-center justify-between mt-8 sticky top-4'>
+        <nav className=' flex items-center justify-between mt-4 sticky top-4'>
             <Link
                 href={"/"}
                 className='text-primary font-semibold text-xl flex gap-2 items-center justify-start'
             >
-                <div className='w-12 h-12 rounded-md overflow-hidden'>
+                <div className='w-20 h-20 rounded-md overflow-hidden'>
                     <Image
                         src={logo}
                         alt='company logo'
@@ -26,9 +26,9 @@ export default function Nav() {
                         className='w-full object-cover object-center'
                     />
                 </div>
-                <div className='flex-1 overflow-hidden text-gray-900 dark:text-gray-50 text-wrap'>
+                {/* <div className='flex-1 overflow-hidden text-gray-900 dark:text-gray-50 text-wrap'>
                     <p className='font-[500] hidden md:block text-ellipsis whitespace-nowrap text-sm'>Alawe Meat Merchants</p>
-                </div>
+                </div> */}
             </Link>
 
             <ul className=' items-center gap-4 hidden md:flex border-2 border-[#323232] p-[2px] rounded-full'>

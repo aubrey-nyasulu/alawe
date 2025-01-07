@@ -28,7 +28,7 @@ export default function NotificationsComponent() {
                         <small className='text-xs font-semibold'>{notificationsCount}</small>
                     </div>
                 }
-                <RiNotification3Line className='size-5 ' />
+                <RiNotification3Line className='size-6' />
             </div>
         </Link>
     )

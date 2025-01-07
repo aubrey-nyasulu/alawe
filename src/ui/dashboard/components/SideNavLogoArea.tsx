@@ -1,16 +1,16 @@
 import Link from 'next/link';
 
-import logo from '@/../public/logo.webp'
+import logo from '@/../public/logo.png'
 import Image from 'next/image';
 
 export default async function SideNavLogoArea() {
 
     return (
         <Link
-            className="w-full flex gap-2 items-center px-0 md:px-0 md:py-4 md:border-b md:border-[#e0e0e0] dark:border-gray-900 "
+            className="w-full flex md:gap-2 items-center px-1 md:px-2 md:py-2 md:border-b md:border-[#e0e0e0] dark:border-gray-900 "
             href="/dashboard"
         >
-            <div className='w-12 h-12 ml-4 rounded-md  overflow-hidden'>
+            <div className='w-16 h-16 m-0 rounded-md  overflow-hidden'>
                 <Image
                     src={logo}
                     alt='company logo'
