@@ -34,6 +34,7 @@ import BudgetModel from "@/db/models/BudgetModel";
 import ExpenditureModel from "@/db/models/ExpenditureModel";
 import ProcurementExpenditureModel from "@/db/models/ProcurementExpenditureModel";
 import OrdersModel from "@/db/models/OrdersModel";
+import AdminAnalyticsModel from "@/db/models/AdminAnalyticsModel";
 
 
 export async function GET(req: NextRequest) {
@@ -41,7 +42,7 @@ export async function GET(req: NextRequest) {
     try {
         connectDB()
 
-        return NextResponse.json({ message: 'eary return. no seeding happened' })
+        // return NextResponse.json({ message: 'eary return. no seeding happened' })
 
         const res = await SeedDataBase()
 
@@ -99,13 +100,13 @@ export async function PUT(req: NextRequest) {
     try {
         connectDB()
 
-        // let res = await populateOrders()
+        let res = await populateRevenue()
 
-        // if (res) {
-        //     return NextResponse.json(res)
-        // } else {
-        //     return NextResponse.json({ message: 'failed' }, { status: 303 })
-        // }
+        if (res) {
+            return NextResponse.json(res)
+        } else {
+            return NextResponse.json({ message: 'failed' }, { status: 303 })
+        }
 
         return NextResponse.json('fallback response')
     } catch (error) {
@@ -184,6 +185,9 @@ async function SeedDataBase() {
 
         res = await populateOrders()
         if (!res) throw new Error('failed to populate Orders')
+
+        res = await populateAdminAnalytics()
+        if (!res) throw new Error('failed to populate Admin Analytics')
 
         return { ok: true, message: 'seeding successfull' }
     } catch (error: any) {
@@ -294,6 +298,48 @@ async function populateSuppliers() {
 async function populateUserRoles() {
     try {
         const data = await UserRoleModel.insertMany(UserRoles)
+
+        return true
+    } catch (error) {
+        console.log('populate user roles error', { error })
+
+        return false
+    }
+}
+
+async function populateAdminAnalytics() {
+    try {
+        const adminAnalyticsToInsert = []
+
+        for (let year of years) {
+            for (let month of months) {
+                const documents_read = generateRandomNumber(5000, 15000)
+                const documents_written = generateRandomNumber(2500, 7500)
+                const deployement = generateRandomNumber(
+                    (documents_read * documents_written),
+                    (documents_read * documents_written)
+                )
+                const cloud_services = generateRandomNumber(
+                    (documents_read * documents_written * 1.5),
+                    (documents_read * documents_written * 2 * 2)
+                )
+
+                const newAnalytic = {
+                    year,
+                    month,
+                    documents_read,
+                    documents_written,
+                    operation_cost: {
+                        deployement,
+                        cloud_services
+                    }
+                }
+
+                adminAnalyticsToInsert.push(newAnalytic)
+            }
+        }
+
+        await AdminAnalyticsModel.insertMany(adminAnalyticsToInsert)
 
         return true
     } catch (error) {
@@ -616,7 +662,7 @@ async function populateEmployees() {
 
 async function populateRevenue() {
     try {
-        const branches: Branch[] = await BranchModel.find().distinct('city')
+        const branches: Branch[] = await BranchModel.find()
         const currentYear = new Date().getFullYear()
         const currentMonth = new Date().getMonth()
         const revenueToInsert = []

@@ -32,7 +32,7 @@ export default async function InventoryPage({
     const branch = searchParams?.branch_id || '';
     const currentPage = Number(searchParams?.page) || 1;
 
-    const totalPages = await fetchFilteredInventoryPages({ query, currentPage, branch }); 1
+    const totalPages = await fetchFilteredInventoryPages({ query, currentPage, branch })
     // const totalPages = 1
 
     return (

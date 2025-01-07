@@ -29,7 +29,7 @@ export default async function OverviewPage({
     return (
         <>
             {isCEO && <CEOOverview {...{ searchParams }} />}
-            {isAdmin && <AdminOverview />}
+            {isAdmin && <AdminOverview {...{ searchParams }} />}
             {isBranchManager && <BranchManagerOverView {...{ searchParams }} />}
             {isProcurementManager && <ProcurementManagerOverView {...{ searchParams }} />}
             {isSupplyChainManager && <SupplyChainManagerManagerOverView {...{ searchParams }} />}

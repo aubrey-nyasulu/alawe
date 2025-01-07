@@ -19,6 +19,7 @@ import BudgetModel from '@/db/models/BudgetModel'
 import ExpenditureModel from '@/db/models/ExpenditureModel'
 import ProcurementExpenditureModel from '@/db/models/ProcurementExpenditureModel'
 import OrdersModel from '@/db/models/OrdersModel'
+import AdminAnalyticsModel from '@/db/models/AdminAnalyticsModel'
 
 export type FetchRevenueReturnType = {
     [K in keyof Revenue]: K extends 'revenue' ? string : Revenue[K]
@@ -240,21 +241,44 @@ export async function fetchCities() {
     }
 }
 
-export async function fetchAdminAnalytics() {
+export async function fetchAdminAnalytics({ year }: { year: string }) {
     noStore()
 
     try {
         connectDB()
-        const totalBranches = await BranchModel.find().countDocuments()
-        const totalEmployees = await EmployeeModel.find().countDocuments()
-        const totalUsers = await UserModel.find().countDocuments()
-        const paymentMethods = await PaymentMethodModel.find().countDocuments()
+
+        const usageAnalytics = await AdminAnalyticsModel.aggregate([
+            {
+                $match: { year }
+            },
+            {
+                $group: {
+                    _id: null,
+                    total_documents_read: { $sum: '$documents_read' },
+                    total_documents_written: { $sum: '$documents_written' },
+                }
+            }
+        ])
+
+        const chartdata = await AdminAnalyticsModel.aggregate([
+            {
+                $match: { year }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    date: '$month',
+                    deployement: '$operation_cost.deployement',
+                    cloud_services: '$operation_cost.cloud_services',
+                }
+            }
+        ])
+
+        console.log('fugure', chartdata)
 
         return {
-            totalBranches,
-            paymentMethods,
-            totalEmployees,
-            totalUsers
+            usageAnalytics: usageAnalytics[0],
+            chartdata
         }
     } catch (error) {
         console.error('Database Error:', error)
@@ -789,6 +813,14 @@ export async function fetchFilteredInventory(
 
         const inventory = await InventoryModel.aggregate([
             {
+                $addFields: {
+                    year: { $dateToString: { format: '%Y', date: '$year' } }
+                }
+            },
+            {
+                $match: { year: '2024', month: 'Dec' },
+            },
+            {
                 $lookup: {
                     from: 'products',  // The name of the Client collection
                     localField: 'product_id',
@@ -809,6 +841,8 @@ export async function fetchFilteredInventory(
             { $skip: offset },
             { $limit: ITEMS_PER_PAGE }
         ]);
+
+        console.log('arr length', inventory.length)
 
         const formatedInventory = inventory.map((invoice) => {
             return {
@@ -989,6 +1023,14 @@ export async function fetchFilteredInventoryPages(
 
         // Build the search query with proper checks for different field types
         const totalDocuments = await InventoryModel.aggregate([
+            {
+                $addFields: {
+                    year: { $dateToString: { format: '%Y', date: '$year' } }
+                }
+            },
+            {
+                $match: { year: '2024', month: 'Dec' },
+            },
             {
                 $lookup: {
                     from: 'products',  // The name of the Client collection

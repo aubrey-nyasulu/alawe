@@ -37,8 +37,8 @@ const valueFormatter = (number: number) => {
 };
 
 const status = {
-    "Fullfilled": "bg-amber-500 dark:bg-blue-500",
-    "Unfullfilled": "bg-primary dark:bg-cyan-500",
+    "Fullfilled": "bg-amber-500 dark:bg-amber-500",
+    "Unfullfilled": "bg-primary dark:bg-primary",
 }
 
 const Tooltip = ({ payload, active, label }: TooltipProps) => {

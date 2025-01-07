@@ -9,31 +9,39 @@ import { SelectComponent } from '@/ui/dashboard/components/SelectComponent';
 import { fetchAdminAnalytics, fetchCardData, fetchCities } from '@/lib/data';
 import { fetchRevenue } from '@/lib/data';
 import { Revenue } from '@/types';
-import { formatCurrency } from '@/lib/utils';
+import { barChartFormatCurrency, formatCurrency } from '@/lib/utils';
 import { fetchBranches } from '@/lib/dbdirect';
 import { AdminTrackerChart } from '../components/AdminTrackerChart';
+import { AdminBarChart } from '../components/AdminBarChart';
+import { SelectYearFilter, ResetFilters } from '../components/OverviewFilters';
 
-export default async function AdminOverview() {
-    // return <p>Admin Overview</p>
-    let { totalBranches, paymentMethods, totalEmployees, totalUsers } = await fetchAdminAnalytics()
+export default async function AdminOverview({
+    searchParams,
+}: {
+    searchParams?: {
+        quert?: '',
+        branch_id?: string,
+        year?: string
+    };
+}) {
+    const year = searchParams?.year || '2024'
+
+    let { usageAnalytics, chartdata } = await fetchAdminAnalytics({ year })
 
     const cardData = [
         {
-            cardTitle: "totalUsers",
-            numalator: totalUsers,
+            cardTitle: "Documents Read",
+            numalator: Math.floor(usageAnalytics.total_documents_read / 1000) + 'k',
+            denominator: '200k',
+            percentValue: Number(((usageAnalytics.total_documents_read / 200000) * 100).toFixed(0)),
         },
         {
-            cardTitle: "totalBranches",
-            numalator: totalBranches,
+            cardTitle: "Documents Written",
+            numalator: Math.floor(usageAnalytics.total_documents_written / 1000) + 'k',
+            denominator: '100k',
+            percentValue: Number(((usageAnalytics.total_documents_written / 100000) * 100).toFixed(0)),
         },
-        {
-            cardTitle: "payment Methods",
-            numalator: paymentMethods,
-        },
-        {
-            cardTitle: "totalEmployees",
-            numalator: totalEmployees,
-        },
+
     ]
 
     let cities = await fetchCities()
@@ -56,28 +64,44 @@ export default async function AdminOverview() {
         <main className='container max-w-[1120px]'>
             <div className='px-4 py-4'>
                 <Card className="flex gap-12 items-center justify-start p-4 px-8  sticky top-0 z-40">
-                    {/* <h1 className={`${lusitana.className} text-2xl font-bold`}>Inventory</h1> */}
-                    <div className="max-w-40">
-                        <SelectComponent {...{ data: cities, placeholder: 'Select City' }} />
-                    </div>
-                    <div className="max-w-40">
-                        <SelectComponent {...{ data: branches, placeholder: 'Select Branch' }} />
-                    </div>
-                    <div className="max-w-40">
-                        <SelectComponent {...{ data: [], placeholder: 'Select Filter' }} />
-                    </div>
+                    <SelectYearFilter {...{
+                        data: [
+                            {
+                                label: '2024',
+                                value: '2024'
+                            },
+                            {
+                                label: '2023',
+                                value: '2023'
+                            },
+                            {
+                                label: '2022',
+                                value: '2022'
+                            },
+                            {
+                                label: '2021',
+                                value: '2021'
+                            },
+                            {
+                                label: '2020',
+                                value: '2020'
+                            },
+                        ],
+                        defaultValue: searchParams?.year || "2024"
+                    }} />
+                    <ResetFilters />
                 </Card>
                 <div className="flex gap-4 mt-4">
                     <Suspense fallback={<CardsSkeleton />}>
                         <ProgressCards {...{ data: cardData }} />
                     </Suspense>
                 </div>
-                <div className="w-full mt-4 bg-white shadow-sm p-8 rounded-lg border border-[#e0e0e0]">
-                    <p className='pb-8'>Systmem Perfomance</p>
+                <Card className='mt-4'>
+                    <p className='text-gray-900 dark:text-gray-50'>Operation Cost</p>
                     <Suspense fallback={<CardsSkeleton />}>
-                        <AdminTrackerChart />
+                        <AdminBarChart {...{ chartdata: chartdata }} />
                     </Suspense>
-                </div>
+                </Card>
             </div>
         </main >
     )

@@ -68,15 +68,10 @@ export default async function SupplyChainManagerManagerOverView({
     }
     )
 
-
     return (
         <main className='container max-w-[1120px]'>
             <div className='px-4 py-4'>
                 <Card className="flex gap-2 md:gap-12 flex-col md:flex-row items-center justify-start p-4 px-8  sticky top-0 z-40">
-                    <SelectCityFilter {...{ data: [{ label: "Lilongwe", value: 'Lilongwe' }], defaultValue: 'Lilongwe', disabled: true }} />
-
-                    <SelectBranchFilter {...{ data: branches, defaultValue: branch }} />
-
                     <SelectYearFilter {...{
                         data: [
                             {

@@ -123,17 +123,19 @@ export default async function BranchManagerOverView({
                         <ProgressCards {...{ data: cardData2 }} />
                     </Suspense>
                 </div>
-                <div className="flex gap-4 mt-4">
-                    <Suspense fallback={<CardsSkeleton />}>
-                        <ProgressCards {...{ data: cardData }} />
-                    </Suspense>
-                </div>
+
                 <Card className='mt-4'>
                     <p className='text-gray-900 dark:text-gray-50'>Revenue</p>
                     <Suspense fallback={<CardsSkeleton />}>
                         <OverviewBarChart {...{ chartdata: data }} />
                     </Suspense>
                 </Card>
+
+                <div className="flex gap-4 mt-4">
+                    <Suspense fallback={<CardsSkeleton />}>
+                        <ProgressCards {...{ data: cardData }} />
+                    </Suspense>
+                </div>
             </div>
         </main >
     )

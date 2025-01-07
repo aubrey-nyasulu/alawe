@@ -15,7 +15,7 @@ import { AdminTrackerChart } from '../components/AdminTrackerChart';
 import SuppliersTable from '../../suppliers/components/table';
 import LatestInvoicesTable from '../components/LatestInvoicesTable';
 import TopSuppliersTable from '../components/TopSuppliersTable';
-import { SelectYearFilter } from '../components/OverviewFilters';
+import { ResetFilters, SelectYearFilter } from '../components/OverviewFilters';
 
 export default async function ProcurementManagerOverView({
     searchParams,
@@ -90,12 +90,7 @@ export default async function ProcurementManagerOverView({
                             defaultValue: year
                         }} />
                     </div>
-                    <div className="max-w-40">
-                        <SelectComponent {...{ data: branches, placeholder: 'Select Branch' }} />
-                    </div>
-                    <div className="max-w-40">
-                        <SelectComponent {...{ data: [], placeholder: 'Select Filter' }} />
-                    </div>
+                    <ResetFilters />
                 </Card>
                 <p className='p-6 pb-0 font-semibold'>Expenditures</p>
                 <div className="flex gap-4 mt-4">
