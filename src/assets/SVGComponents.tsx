@@ -1,5 +1,5 @@
 
-export const Caret = ({ color = '#000', styles = '', width = "1em", height = width, strokeWidth = 1 }) => (
+export const Caret = ({ color = '#000', styles = '', width = "1em", height = "1em", strokeWidth = 1 }) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
@@ -20,7 +20,7 @@ export const Caret = ({ color = '#000', styles = '', width = "1em", height = wid
     </svg>
 )
 
-export const DoubleCaret = ({ color = '#000', styles = '', width = "1em", height = width, strokeWidth = 1 }) => (
+export const DoubleCaret = ({ color = '#000', styles = '', width = "1em", height = "1em", strokeWidth = 1 }) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
@@ -38,7 +38,7 @@ export const DoubleCaret = ({ color = '#000', styles = '', width = "1em", height
     </svg>
 )
 
-export const Elipsis = ({ color = "#000", width = "2.5em", height = width, strokeWidth = 2 }) => (
+export const Elipsis = ({ color = "#000", width = "2.5em", height = "2.5em", strokeWidth = 2 }) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
@@ -57,7 +57,7 @@ export const Elipsis = ({ color = "#000", width = "2.5em", height = width, strok
     </svg>
 )
 
-export const More = ({ color = "#000", width = "2.5em", height = width, strokeWidth = 2 }) => (
+export const More = ({ color = "#000", width = "2.5em", height = "2.5em", strokeWidth = 2 }) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
@@ -205,7 +205,7 @@ export const AddIcon = ({ color = '#000', width = "1em" }) => (
     </svg>
 )
 
-export const ReviewIcon = ({ color = '#000', width = "1em", height = width }) => (
+export const ReviewIcon = ({ color = '#000', width = "1em", height = "1em" }) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 1920 1920"
@@ -225,7 +225,7 @@ export const ReviewIcon = ({ color = '#000', width = "1em", height = width }) =>
     </svg>
 )
 
-export const NotificationIcon = ({ color = "#000", width = "1em", height = width, strokeWidth = 2 }) => (
+export const NotificationIcon = ({ color = "#000", width = "1em", height = "1em", strokeWidth = 2 }) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
@@ -345,5 +345,23 @@ export const CreatUserIcon = ({ color = '#000', width = "1em" }) => (
             strokeWidth={2}
             d="M4 20v-1a5 5 0 0 1 5-5h3.75m4.785-.036V17.5m0 0v3.535m0-3.535h3.536m-3.536 0H14M15 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"
         />
+    </svg>
+)
+
+export const CartIcon = ({ color = '#000', width = "2m", height = '2em' }) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        width={width}
+        height={height}
+    >
+        <g stroke="#000" strokeWidth={1.5}>
+            <path d="M7.5 18a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM16.5 18a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z" />
+            <path
+                strokeLinecap="round"
+                d="m2 3 .261.092c1.302.457 1.953.686 2.325 1.231.372.545.372 1.268.372 2.715V9.76c0 2.942.063 3.912.93 4.826.866.914 2.26.914 5.05.914H12m4.24 0c1.561 0 2.342 0 2.894-.45.551-.45.709-1.214 1.024-2.743l.5-2.424c.347-1.74.52-2.609.076-3.186-.443-.577-1.96-.577-3.645-.577h-6.065m-6.066 0H7"
+            />
+        </g>
     </svg>
 )

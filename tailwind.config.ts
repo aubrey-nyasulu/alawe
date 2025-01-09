@@ -15,7 +15,7 @@ const config: Config = {
         '14': 'repeat(14, minmax(0, 1fr))',
       },
       colors: {
-        primary: '#fa4040'
+        primary: '#A7323F'
       },
       keyframes: {
         shimmer: {

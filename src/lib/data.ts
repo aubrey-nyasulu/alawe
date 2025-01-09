@@ -461,6 +461,45 @@ export async function fetchProcurementManagerAnalytics({ year }: { year: string 
     }
 }
 
+export async function fetchLatestPurchaseTransaction() {
+    noStore()
+
+    try {
+        connectDB()
+        let latestPurchaseTransaction = await PurchaseTransactionModel.aggregate([
+            {
+                $addFields: {
+                    year: { $dateToString: { format: "%Y", date: "$year" } },
+                }
+            },
+            { $match: { year: '2024' } },
+            { $limit: 16 },
+            {
+                $lookup: {
+                    from: 'suppliers',
+                    localField: 'supplier_id',
+                    foreignField: '_id',
+                    as: 'supplier_info'
+                }
+            },
+            {
+                $unwind: '$supplier_info'
+            }, {
+                $project: { supplier_name: '$supplier_info.name', purchase_total: 1, month: 1 }
+            }
+        ])
+
+        latestPurchaseTransaction = latestPurchaseTransaction.map(({ _id, supplier_name, purchase_total, month }) => ({ _id: _id.toString(), supplier_name, purchase_total, month }))
+
+        console.log({ latestPurchaseTransaction })
+
+        return latestPurchaseTransaction
+    } catch (error) {
+        console.error('Database Error:', error)
+        throw new Error('Failed to fetch the latest invoices.')
+    }
+}
+
 export async function fetchSupplyChainManagerAnalytics({ year }: { year: string }) {
     noStore()
 

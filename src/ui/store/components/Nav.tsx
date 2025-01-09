@@ -7,6 +7,8 @@ import Link from 'next/link';
 import { Button } from '@/tremorComponents/Button';
 import logo from '@/../public/logo.png'
 import Image from 'next/image';
+import { CartIcon } from '@/assets/SVGComponents';
+import { RiTrophyFill } from '@remixicon/react';
 
 export default function Nav() {
     const [showMenu, setShowMenu] = useState(false)
@@ -31,30 +33,32 @@ export default function Nav() {
                 </div> */}
             </Link>
 
-            <ul className=' items-center gap-4 hidden md:flex border-2 border-[#323232] p-[2px] rounded-full'>
-                <li className='hover:text-primary bg-[#323232] text-white p-2 px-3 rounded-full '>
-                    <Link href={"/"}>Home</Link>
-                </li>
-                <li className='hover:text-primary p-2 px-3'>
-                    <Link href={"#about"}>About Us</Link>
-                </li>
-                <li className='hover:text-primary p-2 px-3'>
-                    <Link href={"#bulk-order"}>Discounts</Link>
-                </li>
-            </ul>
+            <div className="flex gap-16 items-center">
+                <ul className=' items-center gap-4 hidden md:flex '>
+                    <li className=' p-2 px-3 text-primary font-semibold flex gap-2 items-center group/li '>
+                        <div className='w-0 h-0 border-4 border-primary border-b-transparent border-l-transparent group-hover/li:rotate-45 group-hover/li:scale-150 '></div>
+                        <Link href={"/"}>Home</Link>
+                    </li>
+                    <li className=' p-2 px-3'>
+                        <Link href={"#bulk-order"}>Products</Link>
+                    </li>
+                </ul>
 
-            <div className='flex items-center gap-2'>
-                <Link
-                    href="/login"
-                >
-                    <Button variant='secondary' className='bg-transparent md:px-8 md:py-4 w-fit h-fit hover:bg-primary hover:text-white  ' >
-                        Log in
-                    </Button>
-                </Link>
-                <div className='md:hidden flex gap-2 items-center '>
-                    <div className='md:hidden  flex gap-2 items-center'>
-                        <LandingPageMobileMenuButton {...{ showMenu, setShowMenu }} />
-                        <LandingPageMobileMenuDrawer {...{ showMenu, setShowMenu }} />
+                <div className='flex items-center gap-6'>
+                    <CartIcon />
+
+                    <Link
+                        href="/login"
+                    >
+                        <Button variant='secondary' className='bg-transparent md:px-8 md:py-4 w-fit h-fit hover:bg-primary hover:border-white hover:text-white rounded-full  ' >
+                            Log in
+                        </Button>
+                    </Link>
+                    <div className='md:hidden flex gap-2 items-center '>
+                        <div className='md:hidden  flex gap-2 items-center'>
+                            <LandingPageMobileMenuButton {...{ showMenu, setShowMenu }} />
+                            <LandingPageMobileMenuDrawer {...{ showMenu, setShowMenu }} />
+                        </div>
                     </div>
                 </div>
             </div>

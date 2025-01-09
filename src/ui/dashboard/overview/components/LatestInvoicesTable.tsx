@@ -1,8 +1,8 @@
 import { formatCurrency } from '@/lib/utils';
-import { fetchFilteredInventory, fetchLatestPurchasedItems, } from '@/lib/data';
+import { fetchFilteredInventory, fetchLatestPurchasedItems, fetchLatestPurchaseTransaction, } from '@/lib/data';
 import { Card } from '@/tremorComponents/Card';
 
-export default async function LatestInvoicesTable({ title, topItems }: {
+export default async function LatestInvoicesTable({ title }: {
     title?: string, topItems: {
         quantity: number,
         avg_price: number,
@@ -10,6 +10,8 @@ export default async function LatestInvoicesTable({ title, topItems }: {
         category: string
     }[]
 }) {
+
+    const topItems: any[] = await fetchLatestPurchaseTransaction()
 
     return (
         <div className=" flow-root w-full">
@@ -24,16 +26,13 @@ export default async function LatestInvoicesTable({ title, topItems }: {
                         <thead className="rounded-lg text-left text-sm font-normal">
                             <tr className=' relative  text-nowrap'>
                                 <th scope="col" className="px-4 py-5 font-medium sm:pl-6 text-nowrap sticky left-0 bg-white dark:bg-[#090E1A] z-20">
-                                    Item Name
+                                    Supplier Name
                                 </th>
                                 <th scope="col" className="px-3 py-5 font-medium text-nowrap">
-                                    Category
+                                    Purchase Total
                                 </th>
                                 <th scope="col" className="px-3 py-5 font-medium text-nowrap">
-                                    Average Price
-                                </th>
-                                <th scope="col" className="px-3 py-5 font-medium text-nowrap">
-                                    quantity
+                                    month
                                 </th>
                             </tr>
                         </thead>
@@ -47,17 +46,14 @@ export default async function LatestInvoicesTable({ title, topItems }: {
                                         <div className="flex items-center gap-3">
 
                                             <div className="w-7 h-7 bg-gray-400 rounded-full"></div>
-                                            <p>{topItem.item_name}</p>
+                                            <p>{topItem.supplier_name}</p>
                                         </div>
                                     </td>
                                     <td className="whitespace-nowrap px-3 py-3">
-                                        {topItem.category}
+                                        {formatCurrency(topItem.purchase_total)}
                                     </td>
                                     <td className="whitespace-nowrap px-3 py-3">
-                                        {formatCurrency(topItem.avg_price)}
-                                    </td>
-                                    <td className="whitespace-nowrap px-3 py-3">
-                                        {topItem.quantity}
+                                        {topItem.month}
                                     </td>
                                 </tr>
                             ))}

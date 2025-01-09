@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import sectionImg from '@/../public/store/heroImg2.jpg'
+import sectionImg from '@/../public/store/section1.jpg'
 import { Button } from '@/tremorComponents/Button';
 
 export default function SectionTwo() {

@@ -38,7 +38,7 @@ export default function LoginForm() {
   }
 
   return (
-    <main className='w-fit h-full flex flex-col items-center justify-center ' >
+    <>
       {error && <p style={{ color: 'red' }} className='mb-4'> {error} </p>
       }
       <form onSubmit={handleSubmit} className='w-[400px] flex flex-col gap-8' >
@@ -64,7 +64,7 @@ export default function LoginForm() {
         </div>
         <LoginButton {...{ isSubmitting }} />
       </form>
-    </main>
+    </>
   )
 }
 
