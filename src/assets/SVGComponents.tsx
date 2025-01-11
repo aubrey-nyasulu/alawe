@@ -365,3 +365,56 @@ export const CartIcon = ({ color = '#000', width = "2m", height = '2em' }) => (
         </g>
     </svg>
 )
+
+export const FilterIcon = () => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        width="1.5em"
+        height="1.5em"
+    >
+        <title>{"Adjustment"}</title>
+        <g fill="none" fillRule="evenodd">
+            <path d="M0 0h24v24H0z" />
+            <path
+                stroke="#0C0310"
+                strokeLinecap="round"
+                strokeWidth={2}
+                d="M4 7h8M4 17h2M18 7h2M13 17h7"
+            />
+            <circle
+                cx={15}
+                cy={7}
+                r={3}
+                stroke="#0C0310"
+                strokeLinecap="round"
+                strokeWidth={2}
+            />
+            <circle
+                cx={9}
+                cy={17}
+                r={3}
+                stroke="#0C0310"
+                strokeLinecap="round"
+                strokeWidth={2}
+            />
+        </g>
+    </svg>
+)
+
+export const CategoriesIcon = () => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 48 48"
+        width="1.5em"
+        height="1.5em"
+    >
+        <title>{"category-solid"}</title>
+        <g data-name="Layer 2">
+            <path fill="none" d="M0 0h48v48H0z" data-name="invisible box" />
+            <g data-name="icons Q2">
+                <path d="M24 2a2.1 2.1 0 0 0-1.7 1l-9.1 14a2.3 2.3 0 0 0 0 2 1.9 1.9 0 0 0 1.7 1H33a2.1 2.1 0 0 0 1.7-1 1.8 1.8 0 0 0 0-2l-9-14A1.9 1.9 0 0 0 24 2ZM43 43H29a2 2 0 0 1-2-2V27a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2ZM13 24a10 10 0 1 0 10 10 10 10 0 0 0-10-10Z" />
+            </g>
+        </g>
+    </svg>
+)

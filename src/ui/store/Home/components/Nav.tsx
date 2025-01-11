@@ -8,10 +8,14 @@ import { Button } from '@/tremorComponents/Button';
 import logo from '@/../public/logo.png'
 import Image from 'next/image';
 import { CartIcon } from '@/assets/SVGComponents';
-import { RiTrophyFill } from '@remixicon/react';
+import { usePathname } from 'next/navigation';
+import { cx } from '@/lib/utils';
+import { RiProfileLine, RiUser2Line, RiUser3Line } from '@remixicon/react';
 
 export default function Nav() {
     const [showMenu, setShowMenu] = useState(false)
+
+    const pathName = usePathname()
 
     return (
         <nav className=' flex items-center justify-between mt-4 sticky top-4'>
@@ -33,27 +37,38 @@ export default function Nav() {
                 </div> */}
             </Link>
 
-            <div className="flex gap-16 items-center">
+            <div className="flex gap-16 items-center md:border md:bg-white p-1 md:pl-4 rounded-full">
                 <ul className=' items-center gap-4 hidden md:flex '>
-                    <li className=' p-2 px-3 text-primary font-semibold flex gap-2 items-center group/li '>
-                        <div className='w-0 h-0 border-4 border-primary border-b-transparent border-l-transparent group-hover/li:rotate-45 group-hover/li:scale-150 '></div>
+                    <li className={cx('hover:text-primary p-2 px-3 flex gap-2 items-center group/li', pathName === '/' && 'text-primary font-semibold ')}>
+                        {
+                            pathName === '/' &&
+                            <div className='w-0 h-0 border-4 border-primary border-b-transparent border-l-transparent group-hover/li:rotate-45 group-hover/li:scale-150 '></div>
+                        }
                         <Link href={"/"}>Home</Link>
                     </li>
-                    <li className=' p-2 px-3'>
-                        <Link href={"#bulk-order"}>Products</Link>
+                    <li className={cx('hover:text-primary p-2 px-3 flex gap-2 items-center group/li', pathName === '/products' && 'text-primary font-semibold ')}>
+                        {
+                            pathName === '/products' &&
+                            <div className='w-0 h-0 border-4 border-primary border-b-transparent border-l-transparent group-hover/li:rotate-45 group-hover/li:scale-150 '></div>
+                        }
+                        <Link href={"/products"}>Products</Link>
                     </li>
                 </ul>
 
-                <div className='flex items-center gap-6'>
-                    <CartIcon />
+                <div className='flex items-center gap-2 md:gap-4'>
+                    <Button className='bg-transparent shadow-none'>
+                        <CartIcon />
+                    </Button>
 
                     <Link
                         href="/login"
+                        className='hidden md:block'
                     >
-                        <Button variant='secondary' className='bg-transparent md:px-8 md:py-4 w-fit h-fit hover:bg-primary hover:border-white hover:text-white rounded-full  ' >
-                            Log in
+                        <Button variant='secondary' className='bg-transparent md:p-4 w-fit h-fit hover:bg-primary hover:border-white hover:text-white rounded-full  ' >
+                            <RiUser3Line />
                         </Button>
                     </Link>
+
                     <div className='md:hidden flex gap-2 items-center '>
                         <div className='md:hidden  flex gap-2 items-center'>
                             <LandingPageMobileMenuButton {...{ showMenu, setShowMenu }} />

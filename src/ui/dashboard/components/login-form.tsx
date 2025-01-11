@@ -72,7 +72,7 @@ function LoginButton({ isSubmitting }: { isSubmitting: boolean }) {
 
   return (
     <Button
-      className={cx("p-4 bg-primary text-white rounded-md")}
+      className={cx("p-4 bg-primary text-white rounded-full")}
       aria-disabled={isSubmitting}
       disabled={isSubmitting}
       isLoading={isSubmitting}

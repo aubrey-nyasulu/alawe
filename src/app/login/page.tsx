@@ -34,7 +34,7 @@ export default async function LoginPage() {
           <Link
             href="/"
           >
-            <Button variant='secondary' className='bg-transparent md:p-4 w-fit h-fit hover:bg-primary hover:text-white  ' >
+            <Button variant='secondary' className='bg-transparent md:p-4 w-fit h-fit hover:bg-primary hover:text-white  rounded-full ' >
               Back To Home
             </Button>
           </Link>

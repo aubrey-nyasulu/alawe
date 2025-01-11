@@ -1,13 +1,12 @@
-import Hero from '@/ui/store/components/Hero';
-import Nav from '@/ui/store/components/Nav';
-import StoreAi from '@/ui/store/components/StoreAi';
+import Hero from '@/ui/store/Home/components/Hero';
+import Nav from '@/ui/store/Home/components/Nav';
+import StoreAi from '@/ui/store/Home/components/StoreAi';
 
 export default function StoreLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <header className='langingpage-container px-4 lg:px-0 text-gray-950 dark:text-green-50'>
         <Nav />
-        <Hero />
       </header>
       <main className="flex min-h-screen flex-col">
         {children}

@@ -35,10 +35,10 @@ export function LandingPageMobileMenuDrawer({ showMenu, setShowMenu }: { showMen
                         </DrawerHeader>
                         <DrawerBody>
                             <div className="w-full h-full gap-2 grow flex-col flex">
-                                <ul className='pt-32 w-full items-center gap-4 flex flex-col '>
+                                <ul className='pt-32 w-full h-full items-center gap-8 flex flex-col text-center '>
                                     <Link
                                         href={"/"}
-                                        className={cx('hover:text-primary p-2 px-3 rounded-full', active === 'home' && 'bg-[#323232] text-white')}
+                                        className={cx('hover:text-primary w-full p-2 px-3 rounded-full', active === 'home' && 'bg-[#323232] text-white')}
                                         onClick={() => {
                                             setActive('home')
                                             setShowMenu(false)
@@ -47,24 +47,24 @@ export function LandingPageMobileMenuDrawer({ showMenu, setShowMenu }: { showMen
                                         Home
                                     </Link>
                                     <Link
-                                        href={"#about"}
-                                        className={cx('hover:text-primary p-2 px-3 rounded-full ', active === 'about' && 'bg-[#323232] text-white')}
+                                        href={"/products"}
+                                        className={cx('hover:text-primary w-full p-2 px-3 rounded-full ', active === 'about' && 'bg-[#323232] text-white')}
                                         onClick={() => {
                                             setActive('about')
                                             setShowMenu(false)
                                         }}
                                     >
-                                        About Us
+                                        Products
                                     </Link>
                                     <Link
-                                        href={"#bulk-order"}
-                                        className={cx('hover:text-primary p-2 px-3 rounded-full', active === 'bulk-order' && 'bg-[#323232] text-white')}
+                                        href={"/login"}
+                                        className={cx('block justify-self-end hover:text-primary w-full p-2 px-3 rounded-full', active === 'bulk-order' && 'bg-[#323232] text-white')}
                                         onClick={() => {
                                             setActive('bulk-order')
                                             setShowMenu(false)
                                         }}
                                     >
-                                        Discounts
+                                        Login
                                     </Link>
                                 </ul>
                             </div>
