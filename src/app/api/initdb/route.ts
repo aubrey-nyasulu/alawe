@@ -42,7 +42,7 @@ export async function GET(req: NextRequest) {
     try {
         connectDB()
 
-        // return NextResponse.json({ message: 'eary return. no seeding happened' })
+        return NextResponse.json({ message: 'eary return. no seeding happened' })
 
         const res = await SeedDataBase()
 
@@ -100,7 +100,7 @@ export async function PUT(req: NextRequest) {
     try {
         connectDB()
 
-        let res = await populateRevenue()
+        let res = await populateProducts()
 
         if (res) {
             return NextResponse.json(res)
@@ -362,7 +362,7 @@ async function populateItems() {
 
 async function populateProducts() {
     try {
-        const data = await ProductModel.insertMany(products.map(({ name, type }) => ({ name, type })))
+        const data = await ProductModel.insertMany(products.map(({ name, type, category, price }) => ({ name, type, category, price })))
 
         return true
     } catch (error) {

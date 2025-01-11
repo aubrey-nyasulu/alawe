@@ -10,7 +10,7 @@ export default function FeaturedProductsSection() {
     return (
         <section
             id='about'
-            className='w-[calc(100vw_-_8px)] mx-auto langingpage-container px-4 py-4 lg:px-16 lg:py-12 mt-20 flex flex-col items-center justify-center gap-12 pt-8 bg-white rounded-[32px] shadow-sm'
+            className='w-[calc(100vw_-_8px)] mx-auto langingpage-container px-4 py-4 lg:px-16 lg:py-12 mt-20 flex flex-col items-center justify-center gap-12 pt-8 bg-white rounded-[32px] shadow-sm ring-4 ring-black/20 ring-offset-2'
         >
             <h2 className='text-3xl font-semibold text-center '>Explore our popular Products</h2>
             <div className='flex gap-8 items-center md:flex-row flex-col justify-center'>
@@ -24,7 +24,7 @@ export default function FeaturedProductsSection() {
                 href='/products'
                 className="w-fit h-fit"
             >
-                <Button className="px-8 py-4 rounded-full">More Products</Button>
+                <Button className="md:px-8 md:py-4 w-fit h-fit bg-primary rounded-full text-white ring ring-offset-2 ring-primary/50 hover:ring-orange-600">More Products</Button>
             </Link>
         </section>
     )

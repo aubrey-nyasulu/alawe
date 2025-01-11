@@ -1,3 +1,13 @@
+import sausageImg from '@/../public/store/sausage.jpg'
+import Meance from '@/../public/store/meanced meat.jpg'
+import Liver from '@/../public/store/liver.jpg'
+import Wings from '@/../public/store/wings.jpg'
+import beefliver from '@/../public/store/beef liver.jpg'
+import beefribs from '@/../public/store/beef ribs.jpg'
+import beefsteak from '@/../public/store/beef steak.jpg'
+import ChickenDrumsticks from '@/../public/store/Chicken Drumsticks.jpg'
+import wholechicken from '@/../public/store/whole chicken.jpg'
+
 export const CEOAnalyticsLinks = [
     { name: 'Analytics', href: '/dashboard' },
 ];
@@ -81,3 +91,16 @@ export const SupplyChainManagerWorksSpaceLinks = [
     },
     { name: 'Notifications', href: '/dashboard/notifications' },
 ];
+
+export const ProductsImages = {
+    'sausage': sausageImg,
+    'Beef Sausages': sausageImg,
+    'Minced Beef': Meance,
+    'Chicken Liver': Liver,
+    'Chicken Wings': Wings,
+    'Whole Chicken': wholechicken,
+    'Liver Beef': beefliver,
+    'Beef Ribs': beefribs,
+    'Beef Steak': beefsteak,
+    'Chicken Drumsticks': ChickenDrumsticks,
+}

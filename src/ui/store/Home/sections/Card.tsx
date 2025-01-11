@@ -4,7 +4,7 @@ import { Button } from '@/tremorComponents/Button'
 export default function Card({ image, name, price }: { image: StaticImageData, name: string, price: number }) {
     return (
         <div className='md:max-w-[250px] flex-1'>
-            <div className='flex-1 w-full h-fit rounded-[12px] overflow-hidden '>
+            <div className='flex-1 w-full h-fit rounded-[12px] overflow-hidden ring-1 ring-black/20 ring-offset-2 '>
                 <Image
                     src={image}
                     alt='sausage image'
@@ -14,11 +14,11 @@ export default function Card({ image, name, price }: { image: StaticImageData, n
                     className='w-full aspect-[4/3]'
                 />
             </div>
-            <p className='pt-2 px-2'>{name}</p>
+            <p className='pt-4 px-2'>{name}</p>
 
             <div className='px-2 flex gap-4 items-center justify-between pt-4'>
                 <Button variant='secondary' className='rounded-full'>Order Now</Button>
-                <p>MK{price}.00</p>
+                <p>MK{price / 100}.00</p>
             </div>
         </div>
     )

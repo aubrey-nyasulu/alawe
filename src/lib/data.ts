@@ -21,6 +21,8 @@ import ProcurementExpenditureModel from '@/db/models/ProcurementExpenditureModel
 import OrdersModel from '@/db/models/OrdersModel'
 import AdminAnalyticsModel from '@/db/models/AdminAnalyticsModel'
 
+const ITEMS_PER_PAGE = 8
+
 export type FetchRevenueReturnType = {
     [K in keyof Revenue]: K extends 'revenue' ? string : Revenue[K]
 }
@@ -500,6 +502,94 @@ export async function fetchLatestPurchaseTransaction() {
     }
 }
 
+export async function fetchProducts({ category, query, currentPage = 1 }: { category?: string, currentPage?: number, query?: string, }) {
+    noStore()
+
+    const itemsPerPage = 16
+
+    console.log({ currentPage })
+    const offset = Math.abs(currentPage - 1) * itemsPerPage
+    console.log({ offset })
+
+    const regex = new RegExp(category || '', 'i')
+    const regex2 = new RegExp(query || '', 'i')
+
+    try {
+        connectDB()
+        let products = await ProductModel.aggregate([
+            { $match: { type: 'Meat Product' } },
+            {
+                $match: {
+                    $or: [
+                        { category: { $regex: regex } },
+                    ]
+                }
+            },
+            {
+                $match: {
+                    $or: [
+                        { name: { $regex: regex2 } },
+                        { type: { $regex: regex2 } },
+                    ]
+                }
+            },
+            {
+                $project: { _id: 0, name: 1, type: 1, category: 1, price: 1 }
+            },
+            {
+                $skip: offset
+            },
+            {
+                $limit: itemsPerPage
+            },
+        ])
+
+        let categories = await ProductModel.aggregate([
+            { $match: { type: 'Meat Product' } },
+            {
+                $group: { _id: '$category' }
+            },
+            {
+                $project: { _id: 0, category: '$_id', }
+            },
+            { $sort: { category: 1 } }
+        ])
+
+        let totalDocuments = await ProductModel.aggregate([
+            { $match: { type: 'Meat Product' } },
+            {
+                $match: {
+                    $or: [
+                        { category: { $regex: regex } },
+                    ]
+                }
+            },
+            {
+                $match: {
+                    $or: [
+                        { name: { $regex: regex2 } },
+                        { type: { $regex: regex2 } },
+                    ]
+                }
+            },
+            {
+                $project: { _id: 0, name: 1, type: 1, category: 1, price: 1 }
+            },
+            {
+                $count: 'total'
+            },
+        ])
+
+        const totalResults = totalDocuments.length > 0 ? totalDocuments[0].total : 0
+        const totalPages = Math.ceil(Number(totalResults) / itemsPerPage)
+
+        return { products, categories, totalPages }
+    } catch (error) {
+        console.error('Database Error:', error)
+        throw new Error('Failed to fetch the latest invoices.')
+    }
+}
+
 export async function fetchSupplyChainManagerAnalytics({ year }: { year: string }) {
     noStore()
 
@@ -574,7 +664,6 @@ const isMonth = (query: string) => {
     return false
 }
 
-const ITEMS_PER_PAGE = 8
 export async function fetchFilteredInvoices(
     query: string,
     currentPage: number,

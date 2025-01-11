@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import sectionImg from '@/../public/logo.webp'
+import sectionImg from '@/../public/logo img.jpg'
 
 export default function AboutUsSection() {
     return (
@@ -12,7 +12,7 @@ export default function AboutUsSection() {
                 <p>We are a family-owned meat processing company dedicated to providing the highest quality, ethically sourced meat products. At Alawe Meat Merchants, we are committed to providing the highest quality halal meat products. Our dedication to excellence begins with sourcing live animals from trusted farms, ensuring that every step of our processing meets strict halal standards.</p>
             </div>
 
-            <div className='w-full px-0 rounded-full overflow-hidden'>
+            <div className='w-full px-0 rounded-full overflow-hidden ring-4 ring-primary/20 ring-offset-2'>
                 <Image
                     src={sectionImg}
                     alt='hero image'

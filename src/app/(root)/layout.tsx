@@ -1,10 +1,11 @@
+import { StoreContextProvider } from '@/context/StoreStateProvider';
 import Hero from '@/ui/store/Home/components/Hero';
 import Nav from '@/ui/store/Home/components/Nav';
 import StoreAi from '@/ui/store/Home/components/StoreAi';
 
 export default function StoreLayout({ children }: { children: React.ReactNode }) {
   return (
-    <>
+    <StoreContextProvider>
       <header className='langingpage-container px-4 lg:px-0 text-gray-950 dark:text-green-50'>
         <Nav />
       </header>
@@ -12,7 +13,7 @@ export default function StoreLayout({ children }: { children: React.ReactNode })
         {children}
       </main>
 
-      <footer className="w-full py-4 pt-8 bg-gray-950 text-center mt-10">
+      <footer className="w-full py-4 pt-8 bg-stone-950 text-center mt-10">
         <div className='langingpage-container px-4 lg:px-0'>
           <div className="mt-4">
             <a href="/" className="mx-3 text-gray-300 hover:underline">Home</a>
@@ -25,6 +26,6 @@ export default function StoreLayout({ children }: { children: React.ReactNode })
         </div>
         <StoreAi />
       </footer>
-    </>
+    </StoreContextProvider>
   )
 }

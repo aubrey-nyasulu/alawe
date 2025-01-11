@@ -8,7 +8,7 @@ export default function BulkDiscounts() {
             id='bulk-order'
             className='langingpage-container px-4 lg:px-0 mt-20 flex flex-col-reverse md:flex-row items-center justify-between gap-16 pt-8 text-center md:text-left'
         >
-            <div className='w-full rounded-full overflow-hidden '>
+            <div className='w-full rounded-full overflow-hidden ring-4 ring-primary/20 ring-offset-2 '>
                 <Image
                     src={sectionImg}
                     alt='hero image'

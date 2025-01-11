@@ -1,10 +1,11 @@
 'use client';
 
+import { cx } from '@/lib/utils';
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 // import { useDebouncedCallback } from 'use-debounce';
 
 
-export default function Search({ placeholder }: { placeholder: string }) {
+export default function Search({ placeholder, className }: { placeholder: string, className?: string }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
@@ -25,7 +26,8 @@ export default function Search({ placeholder }: { placeholder: string }) {
   return (
     <div className="relative w-full min-w-64">
       <input
-        className="peer block w-full rounded-md bg-white dark:bg-gray-950 dark:text-white text-gray-950 border border-gray-300 dark:border-gray-800 py-3 pl-6 text-sm outline-2 placeholder:text-gray-500"
+        type='search'
+        className={cx("peer block w-full rounded-md bg-white dark:bg-gray-950 dark:text-white text-gray-950 border border-gray-300 dark:border-gray-800 py-3 pl-6 text-sm outline-2 placeholder:text-gray-500", className)}
         placeholder={placeholder}
         onChange={(e) => {
           handleSearch(e.target.value);
