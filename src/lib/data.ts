@@ -505,7 +505,7 @@ export async function fetchLatestPurchaseTransaction() {
 export async function fetchProducts({ category, query, currentPage = 1 }: { category?: string, currentPage?: number, query?: string, }) {
     noStore()
 
-    const itemsPerPage = 16
+    const itemsPerPage = 12
 
     console.log({ currentPage })
     const offset = Math.abs(currentPage - 1) * itemsPerPage

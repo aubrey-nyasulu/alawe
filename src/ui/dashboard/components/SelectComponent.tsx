@@ -7,7 +7,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/tremorComponents/Select"
-import { useEffect } from "react";
 
 const initialValue = ''
 

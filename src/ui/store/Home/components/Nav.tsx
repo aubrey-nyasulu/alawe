@@ -11,6 +11,7 @@ import { CartIcon } from '@/assets/SVGComponents';
 import { usePathname } from 'next/navigation';
 import { cx } from '@/lib/utils';
 import { RiProfileLine, RiUser2Line, RiUser3Line } from '@remixicon/react';
+import Cart from './Cart';
 
 export default function Nav() {
     const [showMenu, setShowMenu] = useState(false)
@@ -50,9 +51,7 @@ export default function Nav() {
                 </ul>
 
                 <div className='flex items-center gap-2 md:gap-4'>
-                    <Button className='bg-transparent shadow-none'>
-                        <CartIcon />
-                    </Button>
+                    <Cart />
 
                     <Link
                         href="/login"

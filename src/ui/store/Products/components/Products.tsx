@@ -25,7 +25,7 @@ export default function Products({ currentPage, query }: { currentPage: number, 
                                 // @ts-ignore
                                 image: ProductsImages[product.name] || img_not_available,
                                 name: product.name,
-                                price: product.price
+                                price: product.price / 100
                             }} />
 
                     ))

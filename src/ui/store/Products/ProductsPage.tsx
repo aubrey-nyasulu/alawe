@@ -38,7 +38,7 @@ export default function ProductsPage({
             </section>
 
             <section
-                className='w-full mx-auto langingpage-container mt-6 md:mt-10 flex justify-between '
+                className='w-full mx-auto langingpage-container mt-4 flex justify-between '
             >
                 <Filters  {...{ currentPage, query }} />
 
