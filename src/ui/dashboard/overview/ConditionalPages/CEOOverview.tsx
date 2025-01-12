@@ -45,7 +45,7 @@ export default async function CEOOverview({
         },
         {
             cardTitle: "Profit Margin",
-            percentValue: Number((((data2.revenue - data2.expenditure) / data2.revenue) * 100).toFixed(2)),
+            percentValue: Number((((data2.revenue - data2.expenditure) / data2.revenue) * 100).toFixed(1)),
             fair: true
         },
     ]
@@ -72,9 +72,9 @@ export default async function CEOOverview({
     ))
 
     return (
-        <main className='container max-w-[1120px]'>
-            <div className='px-4 py-4'>
-                <Card className="flex gap-2 md:gap-12 flex-col md:flex-row items-center justify-start p-4 px-8  sticky top-0 z-40">
+        <main className='w-full container max-w-[1120px]'>
+            <div className='w-full px-2 md:px-4 py-4'>
+                <Card className="flex gap-2 md:gap-12  items-center justify-between md:justify-start p-4 px-1 md:px-8  sticky top-0 z-40">
                     <SelectCityFilter {...{ data: cities, defaultValue: query ?? undefined }} />
                     <SelectYearFilter {...{
                         data: [

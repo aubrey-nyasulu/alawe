@@ -32,6 +32,9 @@ export default async function InventoryTable(
                 <th scope="col" className="px-3 py-5 font-medium text-nowrap">
                   Total in Stock
                 </th>
+                <th scope="col" className="px-3 py-5 font-medium text-nowrap">
+                  Branch
+                </th>
               </tr>
             </thead>
             <tbody className="overflow-hidden rounded-lg bg-[#f5f6f9] dark:bg-gray-900">
@@ -54,6 +57,9 @@ export default async function InventoryTable(
                   </td>
                   <td className="whitespace-nowrap px-3 py-3">
                     {inventory.quantity}
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-3">
+                    {inventory.branch_info.address}
                   </td>
                 </tr>
               ))}

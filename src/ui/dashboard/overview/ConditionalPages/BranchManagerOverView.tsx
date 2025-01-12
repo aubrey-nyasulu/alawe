@@ -62,7 +62,7 @@ export default async function BranchManagerOverView({
         },
         {
             cardTitle: "Profit Margin",
-            percentValue: Number((((data2.revenue - data2.expenditure) / data2.revenue) * 100).toFixed(2)),
+            percentValue: Number((((data2.revenue - data2.expenditure) / data2.revenue) * 100).toFixed(1)),
             fair: true
         },
     ]
@@ -87,8 +87,8 @@ export default async function BranchManagerOverView({
 
     return (
         <main className='container max-w-[1120px]'>
-            <div className='px-4 py-4'>
-                <Card className="flex gap-2 md:gap-12 flex-col md:flex-row items-center justify-start p-4 px-8  sticky top-0 z-40">
+            <div className='px-2 md:px-4 py-4'>
+                <Card className="flex gap-2 md:gap-12 items-center justify-start p-4 px-2 md:px-8 sticky top-0 z-40">
                     <SelectCityFilter {...{ data: [{ label: "Lilongwe", value: 'Lilongwe' }], defaultValue: 'Lilongwe', disabled: true }} />
                     <SelectYearFilter {...{
                         data: [

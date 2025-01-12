@@ -3,6 +3,7 @@ import { inter } from '@/assets/fonts';
 import { Metadata } from 'next';
 
 import { Toaster } from "@/ui/dashboard/components/Toaster";
+import { StoreContextProvider } from '@/context/StoreStateProvider';
 
 export const metadata: Metadata = {
   title: {
@@ -19,8 +20,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} antialiased text-gray-950 dark:text-gray-50 `}>
-        {children}
+      <body className={`${inter.className} antialiased text-gray-950 dark:text-gray-50 relative `}>
+        <StoreContextProvider>
+          {children}
+        </StoreContextProvider>
         <Toaster />
       </body>
     </html>

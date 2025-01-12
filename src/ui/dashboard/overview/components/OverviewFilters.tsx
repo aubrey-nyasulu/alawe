@@ -132,12 +132,12 @@ export function ResetFilters() {
   }
 
   return (
-    <div className="w-full md:max-w-40" >
+    <div className="w-fit md:max-w-40" >
       <Button
         variant='secondary'
         onClick={() => resetSearch()}
       >
-        Reset Filters
+        Reset
       </Button>
     </div>
   )

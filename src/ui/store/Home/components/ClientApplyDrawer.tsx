@@ -63,7 +63,7 @@ export function ClientApplyDrawer({ showModel, setShowModel }: { showModel: bool
                             {/* <DrawerDescription className="mt-1 text-sm"> */}
                             {/* </DrawerDescription> */}
                         </DrawerHeader>
-                        <form action={handleSubmit} className="h-fit min-h-[60vh] flex flex-col justify-between" ref={formRef}>
+                        <form action={handleSubmit} className="h-full min-h-[60vh] flex flex-col justify-between" ref={formRef}>
                             <DrawerBody>
                                 <div className="space-y-1 mt-4">
                                     <TextInput {...{ placeholder: 'your name/company name', required: true }} />
@@ -82,7 +82,8 @@ export function ClientApplyDrawer({ showModel, setShowModel }: { showModel: bool
                                 <div className="w-full mt-4">
                                     <textarea
                                         name="textarea"
-                                        id="texarea" cols={6}
+                                        id="texarea"
+                                        rows={10}
                                         className="w-full border border-gray-300 dark:border-gray-800 rounded-md bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-500 cursor-pointer p-2"
                                         placeholder="your message"
                                         required
@@ -92,14 +93,14 @@ export function ClientApplyDrawer({ showModel, setShowModel }: { showModel: bool
                             <DrawerFooter className="mt-6">
                                 <DrawerClose asChild>
                                     <Button
-                                        className="mt-2 w-full sm:mt-0 sm:w-fit"
+                                        className="mt-2 w-full sm:mt-0 sm:w-fit px-8 py-4 rounded-full"
                                         variant="secondary"
                                     >
                                         cancel
                                     </Button>
                                 </DrawerClose>
-                                <Button className="w-full sm:w-fit" onClick={() => null}>
-                                    send
+                                <Button className="w-full sm:w-fit px-8 py-4 rounded-full" onClick={() => null}>
+                                    Apply
                                 </Button>
                             </DrawerFooter>
                         </form>

@@ -431,7 +431,8 @@ export async function fetchProcurementManagerAnalytics({ year }: { year: string 
             },
             { $unwind: '$item_info' },
             { $project: { total_amount: { $multiply: ['$unit_price', '$quantity'] }, item_type: '$item_info.type' } },
-            { $group: { _id: '$item_type', total_spent: { $sum: '$total_amount' } } }
+            { $group: { _id: '$item_type', total_spent: { $sum: '$total_amount' } } },
+            { $sort: { _id: 1 } }
         ])
 
         const transportationExpenditures = await ProcurementExpenditureModel.aggregate([
@@ -445,8 +446,7 @@ export async function fetchProcurementManagerAnalytics({ year }: { year: string 
         ])
 
         console.log({
-            expenditures: formatCurrency(expenditures[0].total_spent),
-            transportationExpenditures: formatCurrency(transportationExpenditures[0].total_spent)
+            topItems
         })
 
         return {
@@ -719,7 +719,9 @@ export async function fetchFilteredInvoices(
             { $sort: { due_date: -1 } },
             { $skip: offset },
             { $limit: ITEMS_PER_PAGE }
-        ]);
+        ])
+
+        console.log({ invoices })
 
         const formatedInvoices = invoices.map((invoice) => {
             return {
@@ -914,7 +916,6 @@ export async function fetchFilteredInventory(
 ) {
     noStore()
 
-
     const offset = (currentPage - 1) * ITEMS_PER_PAGE
 
     try {
@@ -963,14 +964,21 @@ export async function fetchFilteredInventory(
                 }
             },
             {
+                $lookup: {
+                    from: 'branches',  // The name of the Client collection
+                    localField: 'branch_id',
+                    foreignField: '_id',
+                    as: 'branch_info'
+                }
+            },
+            { $unwind: '$branch_info' },
+            {
                 $match: matchQuery
             },
             { $sort: { quantity: -1 } },
             { $skip: offset },
             { $limit: ITEMS_PER_PAGE }
-        ]);
-
-        console.log('arr length', inventory.length)
+        ])
 
         const formatedInventory = inventory.map((invoice) => {
             return {
@@ -1179,8 +1187,9 @@ export async function fetchFilteredInventoryPages(
             { $count: 'total' }  // Instead of returning documents, just return the count
         ]);
 
-        const totalResults = totalDocuments.length > 0 ? totalDocuments[0].total : 0;
+        console.log({ totalDocuments })
 
+        const totalResults = totalDocuments.length > 0 ? totalDocuments[0].total : 0;
 
         const totalPages = Math.ceil(Number(totalResults) / ITEMS_PER_PAGE)
 

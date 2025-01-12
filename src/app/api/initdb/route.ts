@@ -95,12 +95,12 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PUT(req: NextRequest) {
-    // return NextResponse.json({ message: 'eary return. no seeding happened' })
+    return NextResponse.json({ message: 'eary return. no seeding happened' })
 
     try {
         connectDB()
 
-        let res = await populateProducts()
+        let res = await populateInventory()
 
         if (res) {
             return NextResponse.json(res)

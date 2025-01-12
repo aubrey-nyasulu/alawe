@@ -1,18 +1,27 @@
 'use client';
 
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { signIn } from 'next-auth/react'
 import { Button } from '@/tremorComponents/Button'
 import { useFormState, useFormStatus } from 'react-dom';
 import { cx } from '@/lib/utils';
+import StoreContext from '@/context/StoreStateProvider';
 // import { authenticate } from '@/actions/invoiceActions';
 
 export default function LoginForm() {
+  const { autoFillData } = useContext(StoreContext)
+
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   // const router = useRouter()
+
+  useEffect(() => {
+    setEmail(autoFillData.email)
+
+    setPassword(autoFillData.password)
+  }, [autoFillData])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -41,25 +50,23 @@ export default function LoginForm() {
     <>
       {error && <p style={{ color: 'red' }} className='mb-4'> {error} </p>
       }
-      <form onSubmit={handleSubmit} className='w-[400px] flex flex-col gap-8' >
-        <div className='w-full' >
-          <input
-            type="email"
-            placeholder='email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className='p-4 py-3 border border-[#e0e0e0] w-full rounded-md'
-          />
-        </div>
-        < div className='w-full' >
+      <form onSubmit={handleSubmit} className='w-full flex flex-col gap-6' >
+        <input
+          type="email"
+          placeholder='email'
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          className='px-6 h-[60px] border border-[#e0e0e0] w-full rounded-md'
+        />
+        < div className='w-full mb-4' >
           <input
             type="password"
             placeholder='password'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className='p-4 py-3 border border-[#e0e0e0] w-full rounded-md'
+            className='px-6 h-[60px] border border-[#e0e0e0] w-full rounded-md'
           />
         </div>
         <LoginButton {...{ isSubmitting }} />

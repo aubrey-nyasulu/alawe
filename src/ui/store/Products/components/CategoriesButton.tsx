@@ -11,7 +11,7 @@ export default function CategoriesButton() {
     return (
         <Button
             variant='secondary'
-            className='rounded-full px-6 py-4 gap-2 hidden md:flex'
+            className='rounded-full px-6 py-4 gap-2 w-full md:w-fit md:flex'
             onClick={() => setFiltersOpen(prevState => !prevState)}
         >
             <CategoriesIcon />

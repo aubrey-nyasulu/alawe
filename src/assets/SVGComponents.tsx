@@ -366,18 +366,18 @@ export const CartIcon = ({ color = '#000', width = "2m", height = '2em' }) => (
     </svg>
 )
 
-export const FilterIcon = () => (
+export const FilterIcon = ({ color = '#0C0310', height = '1.5em', width = '1.5em' }: { color?: string, width?: string, height?: string }) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
-        width="1.5em"
-        height="1.5em"
+        width={width}
+        height={height}
     >
         <title>{"Adjustment"}</title>
         <g fill="none" fillRule="evenodd">
             <path d="M0 0h24v24H0z" />
             <path
-                stroke="#0C0310"
+                stroke={color}
                 strokeLinecap="round"
                 strokeWidth={2}
                 d="M4 7h8M4 17h2M18 7h2M13 17h7"
@@ -386,7 +386,7 @@ export const FilterIcon = () => (
                 cx={15}
                 cy={7}
                 r={3}
-                stroke="#0C0310"
+                stroke={color}
                 strokeLinecap="round"
                 strokeWidth={2}
             />
@@ -394,7 +394,7 @@ export const FilterIcon = () => (
                 cx={9}
                 cy={17}
                 r={3}
-                stroke="#0C0310"
+                stroke={color}
                 strokeLinecap="round"
                 strokeWidth={2}
             />

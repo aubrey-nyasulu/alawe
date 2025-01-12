@@ -8,7 +8,7 @@ export default function WhyUsSection() {
     return (
         <section
             id='about'
-            className='w-[calc(100vw_-_8px)] mx-auto langingpage-container px-4 py-4 lg:px-16 lg:py-12 mt-20 flex flex-col items-center justify-center gap-12 pt-8 bg-white rounded-[32px] shadow-sm'
+            className='w-[calc(100vw_-_8px)] mx-auto langingpage-container px-4 py-4 lg:px-16 lg:py-12 mt-20 flex flex-col items-center justify-center gap-12 pt-8 bg-white rounded-[32px] shadow-sm ring-4 ring-black/20 ring-offset-2'
         >
             <h2 className='text-3xl font-semibold '>Why Us?</h2>
             <div className='flex gap-8 md:gap-24 items-center md:flex-row flex-col justify-center'>

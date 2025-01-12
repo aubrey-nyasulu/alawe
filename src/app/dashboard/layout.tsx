@@ -27,11 +27,11 @@ export default async function DashboardLayout({ children }: { children: React.Re
                     // user: {_id, email, role, username}
                 }
             }>
-                <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
+                <div className="w-full flex h-screen flex-col md:flex-row md:overflow-hidden">
                     <div className="w-full flex-none md:w-64">
                         <SideNav />
                     </div>
-                    <div className="flex-grow md:overflow-y-auto relative md: overflow-x-hidden">
+                    <div className="w-full flex-grow md:overflow-y-auto relative md: overflow-x-hidden">
                         {children}
                     </div>
                 </div>

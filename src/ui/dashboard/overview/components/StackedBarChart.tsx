@@ -110,8 +110,9 @@ export function StackedBarChart({ ordersFullfilmentRates }: { ordersFullfilmentR
                 colors={["amber", "primary",]}
                 valueFormatter={valueFormatter}
                 yAxisWidth={35}
-                showLegend={false}
+                // showLegend={false}
                 customTooltip={Tooltip}
+                onValueChange={(v) => console.log(v)}
             />
             <BarChart
                 className="h-80 sm:hidden"
@@ -122,9 +123,10 @@ export function StackedBarChart({ ordersFullfilmentRates }: { ordersFullfilmentR
                 colors={["amber", "primary",]}
                 valueFormatter={valueFormatter}
                 showYAxis={false}
-                showLegend={false}
+                // showLegend={false}
                 startEndOnly={true}
                 customTooltip={Tooltip}
+                onValueChange={(v) => console.log(v)}
             />
         </div>
     );

@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation"
 import TabsCreateInvoiceContent from "../components/TabsCreateInvoiceContent"
 import { Branch, Client, Employee } from "@/types"
 import { FetchSalariesReturnType } from "@/lib/dbdirect"
-import { RiAddBoxLine } from "@remixicon/react"
+import { RiAddBoxLine, RiReceiptLine } from "@remixicon/react"
 
 
 
@@ -51,14 +51,9 @@ export default function BranchManagerInvoiceTabs({
                 currentsection.length
                     ? (
                         <Tabs defaultValue={currentsection}>
-                            <TabsList variant="line" className="bg-white dark:bg-[#090E1A] shadow-sm pt-[52px] px-8 gap-8 sticky top-0 z-40">
+                            <TabsList variant="line" className="bg-white dark:bg-[#090E1A] shadow-sm pt-[52px] px-2 md:px-8 gap-8 sticky top-0 z-40">
                                 <TabsTrigger value="invoices" className="inline-flex gap-1 group">
-                                    <a href="#createInvoice" className="hidden group-data-[state=active]:block overflow-hidden">
-                                        <InvoiceIcon {...{ color: '#fa4040' }} />
-                                    </a>
-                                    <a href="#createInvoice" className="hidden group-data-[state=inactive]:block overflow-hidden">
-                                        <InvoiceIcon {...{ color: '#606060' }} />
-                                    </a>
+                                    <RiReceiptLine className="size-5 text-inherit" />
                                     <a href="#invoices">
                                         Invoices
                                     </a>
@@ -70,7 +65,7 @@ export default function BranchManagerInvoiceTabs({
                                     </a>
                                 </TabsTrigger>
                             </TabsList>
-                            <div className="mt-0 px-8 py-4">
+                            <div className="mt-0 px-2 md:px-8 py-4">
                                 <TabsContent value="invoices">
                                     {children}
                                 </TabsContent>
@@ -81,8 +76,17 @@ export default function BranchManagerInvoiceTabs({
                         </Tabs>
                     )
                     : (
-                        <div className="absolute top-10 left-10">
-                            <p>Loading...</p>
+                        <div className="absolute top-[50%] left-[50%] md:left-[40%] -translate-x-[50%] -translate-y-[50%]">
+                            <div className="flex-col gap-4 w-full flex items-center justify-center">
+                                <div
+                                    className="w-20 h-20 border-4 border-transparent text-primary text-4xl animate-spin flex items-center justify-center border-t-primary rounded-full"
+                                >
+                                    <div
+                                        className="w-16 h-16 border-4 border-transparent text-red-400 text-2xl animate-spin flex items-center justify-center border-t-red-400 rounded-full"
+                                    ></div>
+                                </div>
+                            </div>
+
                         </div>
                     )
             }

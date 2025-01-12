@@ -9,11 +9,11 @@ export default function Filters({ currentPage, query }: { currentPage: number, q
     const { categories, currentCategory, setCurrentCategory, filtersOpen, updateStoreState } = useContext(StoreContext)
 
     return (
-        <div className={cx('p-0 w-0 overflow-hidden hidden md:block', filtersOpen && 'w-[300px] p-4')}>
-            <div className='space-y-4'>
+        <div className={cx('p-0 w-fit md:w-0 h-0 md:h-full overflow-hidden flex ', filtersOpen && 'md:w-[300px] h-fit p-4')}>
+            <div className='w-fit flex flex-row md:flex-col gap-4'>
                 <Button
                     variant='secondary'
-                    className={cx('px-8 py-4 rounded-full w-full', currentCategory === '' && 'text-primary border-primary')}
+                    className={cx('px-8 py-4 rounded-full w-fit md:w-full', currentCategory === '' && 'text-primary border-primary')}
                     onClick={() => {
                         setCurrentCategory('')
                         updateStoreState({ category: '', currentPage: Number(currentPage) || 1, query })
@@ -27,7 +27,7 @@ export default function Filters({ currentPage, query }: { currentPage: number, q
                         <Button
                             key={category}
                             variant='secondary'
-                            className={cx('px-8 py-4 rounded-full w-full', currentCategory === category && 'text-primary border-primary')}
+                            className={cx('px-8 py-4 rounded-full w-fit md:w-full', currentCategory === category && 'text-primary border-primary')}
                             onClick={() => {
                                 setCurrentCategory(category)
                                 updateStoreState({ category, currentPage: Number(currentPage) || 1, query })

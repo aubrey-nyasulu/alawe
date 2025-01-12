@@ -52,16 +52,14 @@ export default async function InvoicesTable({
             <tbody className=" rounded-lg bg-[#f5f6f9] dark:bg-gray-900 text-gray-900 dark:text-gray-50">
               {invoices?.map((invoice: any, i: number) => (
                 <tr
-                  key={invoice._id}
+                  key={invoice._id._id}
                   className="relative w-full  border-b-2 border-b-white dark:border-b-gray-950 py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg   "
                 >
                   <td className="whitespace-nowrap py-3 pl-6 pr-3 sticky left-0 bg-[#f5f6f9] dark:bg-gray-900 z-20 ">
                     <div className="flex items-center gap-3">
                       <div className="w-7 h-7 bg-gray-400 rounded-full"></div>
                       <p>
-                        {invoice.client_id.firstname}
-                        {' '}
-                        {invoice.client_id.lastname}
+                        {invoice.client_id.name}
                       </p>
                     </div>
                   </td>

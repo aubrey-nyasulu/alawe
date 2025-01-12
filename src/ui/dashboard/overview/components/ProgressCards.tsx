@@ -61,17 +61,17 @@ export const ProgressCards = ({ data }: { data: { cardTitle: string, percentValu
                     onClick={translateLeft}
                     disabled={
                         cardsDivWith <= parentDivWidhth || cardsDivWith < (Math.abs(cardsDivPosition) + (cardwidth + (numberOfCards * 16)))}
-                    className={cx('p-0 absolute -left-3 shadow-none bg-[#0001] dark:bg-[#fff1] rounded-full', cardsDivWith <= parentDivWidhth && 'opacity-0', cardsDivWith < (Math.abs(cardsDivPosition) + (cardwidth + (numberOfCards * 16))) && 'opacity-20')}
+                    className={cx('p-0 absolute -right-3 shadow-none bg-[#0001] dark:bg-[#fff1] rounded-full', cardsDivWith <= parentDivWidhth && 'opacity-0', cardsDivWith < (Math.abs(cardsDivPosition) + (cardwidth + (numberOfCards * 16))) && 'opacity-0')}
                 >
-                    <RiArrowLeftSLine className={'size-10 text-[#0009] dark:text-[#fff9]'} />
+                    <RiArrowRightSLine className={'size-10 text-[#0009] dark:text-[#fff9]'} />
                 </Button>
                 <Button
                     variant='custom'
                     onClick={translateRight}
                     disabled={cardsDivWith <= parentDivWidhth || cardsDivPosition >= 0}
-                    className={cx('p-0 absolute -right-3 shadow-none bg-[#0001] dark:bg-[#fff1] rounded-full', cardsDivPosition >= 0 && 'opacity-20', cardsDivWith <= parentDivWidhth && 'opacity-0')}
+                    className={cx('p-0 absolute -left-3 shadow-none bg-[#0001] dark:bg-[#fff1] rounded-full', cardsDivPosition >= 0 && 'opacity-0', cardsDivWith <= parentDivWidhth && 'opacity-0')}
                 >
-                    <RiArrowRightSLine className={'size-10 text-[#0009] dark:text-[#fff9]'} />
+                    <RiArrowLeftSLine className={'size-10 text-[#0009] dark:text-[#fff9]'} />
                 </Button>
             </div>
             <div

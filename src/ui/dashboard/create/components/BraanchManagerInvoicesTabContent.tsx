@@ -9,6 +9,10 @@ import { Card } from '@/tremorComponents/Card';
 import useServerSession from '@/customHooks/useServerSession';
 import { User } from '@/types';
 import { ResetFilters, SelectCityFilter, SelectYearFilter } from '../../overview/components/OverviewFilters';
+import { FilterIcon } from '@/assets/SVGComponents';
+import { Button } from '@/tremorComponents/Button';
+import FilterButton from './Filters';
+import Filters from './Filters';
 
 export default async function BraanchManagerInvoicesTabContent({
     searchParams,
@@ -42,46 +46,8 @@ export default async function BraanchManagerInvoicesTabContent({
 
     return (
         <div className="w-full ">
-            <Card className="flex gap-4  flex-wrap md:flex-row md:items-center justify-between p-4 md:px-8  sticky top-20 z-30">
-                <div className="flex-1 max-w-[400px]">
-                    <Search placeholder="Search invoices..." />
-                </div>
-                <div className="flex items-center gap-4">
-                    <SelectYearFilter {...{
-                        data: [
-                            {
-                                label: '2024',
-                                value: '2024'
-                            },
-                            {
-                                label: '2023',
-                                value: '2023'
-                            },
-                            {
-                                label: '2022',
-                                value: '2022'
-                            },
-                            {
-                                label: '2021',
-                                value: '2021'
-                            },
-                            {
-                                label: '2020',
-                                value: '2020'
-                            },
-                        ],
-                        defaultValue: searchParams?.year ?? undefined
-                    }} />
+            <Filters year={searchParams?.year ?? undefined} />
 
-                    <SelectCityFilter {...{
-                        data: cities,
-                        defaultValue: searchParams?.city ?? undefined
-                    }} />
-
-                    <ResetFilters />
-                </div>
-                {/* <CreateInvoice {...{ canCreate: canEdit }} /> */}
-            </Card>
             <div className='w-full '>
                 <Suspense key={query + currentPage} fallback={<InvoicesTableSkeleton />}>
                     <Table {...{ query, currentPage, canEdit }} />

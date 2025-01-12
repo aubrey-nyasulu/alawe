@@ -49,7 +49,7 @@ export function CartDrawer({ showModel, setShowModel }: { showModel: boolean, se
 
     return (
         <>
-            <div className="flex justify-center">
+            <div className="flex justify-center z-[99999]">
                 <Drawer
                     open={showModel}
                     onOpenChange={(modalOpened) => {
@@ -69,7 +69,7 @@ export function CartDrawer({ showModel, setShowModel }: { showModel: boolean, se
                             {/* <DrawerDescription className="mt-1 text-sm"> */}
                             {/* </DrawerDescription> */}
                         </DrawerHeader>
-                        <form action={handleSubmit} className="h-fit  flex flex-col justify-between" ref={formRef}>
+                        <form action={handleSubmit} className="h-full  flex flex-col justify-between" ref={formRef}>
                             <DrawerBody className="py-0">
                                 <div className="w-full h-full flex gap-4 flex-col justify-between">
                                     <div className="w-full mt-4 space-y-2">
@@ -127,7 +127,7 @@ export function CartDrawer({ showModel, setShowModel }: { showModel: boolean, se
                                     </div>
                                 </div>
                             </DrawerBody>
-                            <DrawerFooter className="mt-6">
+                            <DrawerFooter className="mt-6 gap-3 flex-col">
                                 <DrawerClose asChild>
                                     <Button
                                         className="mt-2 w-full sm:mt-0 sm:w-fit px-8 py-4 rounded-full"
@@ -136,8 +136,9 @@ export function CartDrawer({ showModel, setShowModel }: { showModel: boolean, se
                                         cancel
                                     </Button>
                                 </DrawerClose>
+
                                 <Button className="w-full sm:w-fit px-8 py-4 rounded-full" onClick={() => null}>
-                                    Buy
+                                    Purchase
                                 </Button>
                             </DrawerFooter>
                         </form>

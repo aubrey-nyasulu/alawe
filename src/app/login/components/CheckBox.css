@@ -1,0 +1,35 @@
+.animated-checkbox_container {
+    width: 100%;
+    height: 60px;
+    padding-inline: 4px;
+
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.animated-checkbox_container input {
+    display: none;
+}
+
+.animated-checkbox_container svg {
+    overflow: visible;
+}
+
+.animated-checkbox_container .path {
+    fill: none;
+    stroke: #212121;
+    stroke-width: 6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: stroke-dasharray 0.5s ease, stroke-dashoffset 0.5s ease;
+    stroke-dasharray: 241 9999999;
+    stroke-dashoffset: 0;
+}
+
+.animated-checkbox_container input:checked~svg .path {
+    stroke-dasharray: 70.5096664428711 9999999;
+    stroke-dashoffset: -262.2723388671875;
+    stroke: green;
+}

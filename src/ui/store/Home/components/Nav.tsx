@@ -53,14 +53,14 @@ export default function Nav() {
                 <div className='flex items-center gap-2 md:gap-4'>
                     <Cart />
 
-                    <Link
+                    <a
                         href="/login"
                         className='hidden md:block'
                     >
                         <Button variant='secondary' className='bg-transparent md:p-4 w-fit h-fit hover:bg-primary hover:border-white hover:text-white rounded-full  ' >
                             <RiUser3Line />
                         </Button>
-                    </Link>
+                    </a>
 
                     <div className='md:hidden flex gap-2 items-center '>
                         <div className='md:hidden  flex gap-2 items-center'>

@@ -8,6 +8,7 @@ import { SelectComponent } from '@/ui/dashboard/components/SelectComponent';
 import { fetchBranches } from '@/lib/dbdirect';
 import { Card } from '@/tremorComponents/Card';
 import { ResetFilters, SelectBranchFilter } from '../overview/components/OverviewFilters';
+import Filters from './components/Filters';
 
 export default async function InventoryPage({
     searchParams,
@@ -36,17 +37,9 @@ export default async function InventoryPage({
     // const totalPages = 1
 
     return (
-        <div className="w-full p-4">
-            <Card className="flex gap-4  flex-wrap md:flex-row md:items-center justify-between p-4 md:px-8    items-center   px-8  sticky top-0 z-40">
-                <div className="flex-1 max-w-[400px]">
-                    <Search placeholder="Search Inventory..." />
-                </div>
-                {/* <div className="max-w-40"> */}
-                <div className="flex items-center gap-4">
-                    <SelectBranchFilter {...{ data, placeholder: 'Select Branch' }} />
-                    <ResetFilters />
-                </div>
-            </Card>
+        <div className="w-full p-4 px-2 md:px-4 ">
+            <Filters data={data} />
+
             <div className='w-full '>
                 <Suspense key={query + currentPage} fallback={<InvoicesTableSkeleton />}>
                     <InventoryTable query={query} branch={branch} currentPage={currentPage} />

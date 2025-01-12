@@ -9,7 +9,7 @@ import Hero from "./components/Hero";
 
 export default function LandingPage() {
     return (
-        <main>
+        <>
             <Hero />
             <FeaturedProductsSection />
             <BulkDiscounts />
@@ -18,6 +18,6 @@ export default function LandingPage() {
             {/* <SectionTwo />
             <SectionThree />
             <ContactSection /> */}
-        </main>
+        </>
     )
 }

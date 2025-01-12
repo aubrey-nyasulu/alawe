@@ -18,6 +18,14 @@ type StoreContextTypes = {
     totalPages: number,
     setTotalPages: Dispatch<SetStateAction<number>>
     query: string,
+    autoFillData: {
+        email: string,
+        password: string
+    },
+    setAutoFillData: Dispatch<SetStateAction<{
+        email: string,
+        password: string
+    }>>
     setQuery: Dispatch<SetStateAction<string>>
     updateStoreState: (params: UpdateStoreStateParams) => any
 }
@@ -35,6 +43,11 @@ const initialState: StoreContextTypes = {
     setCurrentCategory: () => null,
     query: '',
     setQuery: () => null,
+    autoFillData: {
+        email: '',
+        password: ''
+    },
+    setAutoFillData: () => null,
     updateStoreState: () => null
 }
 
@@ -47,6 +60,7 @@ export function StoreContextProvider({ children }: { children: ReactNode }) {
     const [currentCategory, setCurrentCategory] = useState('')
     const [totalPages, setTotalPages] = useState(0)
     const [query, setQuery] = useState('')
+    const [autoFillData, setAutoFillData] = useState({ email: '', password: '' })
 
     const updateStoreState = async ({ category, query, currentPage }: { category?: string, query?: string, currentPage?: number }) => {
         const { products, categories, totalPages } = await fetchStoreProducts({ category, query, currentPage })
@@ -76,6 +90,8 @@ export function StoreContextProvider({ children }: { children: ReactNode }) {
             setCurrentCategory,
             setTotalPages,
             setQuery,
+            autoFillData,
+            setAutoFillData,
             updateStoreState
         }}>
             {children}

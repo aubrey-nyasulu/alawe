@@ -3,10 +3,14 @@ import {
     RadioCardIndicator,
     RadioCardItem,
 } from "@/tremorComponents/RadioCardGroup"
+import { useState } from "react"
 
 export const NotificationsRadioCardGroup = () => {
+    const [filterValue, setFilterValue] = useState('all')
+
     const handleClick = (value: string) => {
         console.log(value)
+        setFilterValue(value)
     }
 
     return (
@@ -17,6 +21,7 @@ export const NotificationsRadioCardGroup = () => {
                         value="all"
                         className="flex items-center gap-3"
                         onClick={e => handleClick('all')}
+                        checked={filterValue === 'all'}
                     >
                         <RadioCardIndicator />
                         <span>All</span>
@@ -25,6 +30,7 @@ export const NotificationsRadioCardGroup = () => {
                         value="account"
                         className="flex items-center gap-3"
                         onClick={e => handleClick('account')}
+                        checked={filterValue === 'account'}
                     >
                         <RadioCardIndicator />
                         <span>Account</span>
@@ -33,6 +39,7 @@ export const NotificationsRadioCardGroup = () => {
                         value="3"
                         className="flex items-center gap-3"
                         onClick={e => handleClick('security')}
+                        checked={filterValue === 'security'}
                     >
                         <RadioCardIndicator />
                         <span>Security</span>

@@ -16,6 +16,7 @@ import SuppliersTable from '../../suppliers/components/table';
 import LatestInvoicesTable from '../components/LatestInvoicesTable';
 import TopSuppliersTable from '../components/TopSuppliersTable';
 import { ResetFilters, SelectYearFilter } from '../components/OverviewFilters';
+import TopItemsTable from '../components/TopItemsTable';
 
 export default async function ProcurementManagerOverView({
     searchParams,
@@ -37,7 +38,7 @@ export default async function ProcurementManagerOverView({
             cardTitle: expenditure._id,
             numalator: formatCurrency(expenditure.total_spent),
             denominator: formatCurrency(total_expenditure),
-            percentValue: Number((expenditure.total_spent * 100 / total_expenditure).toFixed(2)),
+            percentValue: Number((expenditure.total_spent * 100 / total_expenditure).toFixed(1)),
             invert: true
         }
     })
@@ -60,9 +61,8 @@ export default async function ProcurementManagerOverView({
 
     return (
         <main className='container max-w-[1120px]'>
-            <div className='px-4 py-4'>
-                <Card className="flex gap-12 items-center justify-start p-4 px-8  sticky top-0 z-40">
-                    {/* <h1 className={`${lusitana.className} text-2xl font-bold`}>Inventory</h1> */}
+            <div className='px-2 md:px-4 py-4'>
+                <Card className="flex gap-2 md:gap-12 items-center justify-between md:justify-start p-4 px-4 md:px-8 sticky top-0 z-40">
                     <div className="max-w-40">
                         <SelectYearFilter {...{
                             data: [
@@ -102,7 +102,7 @@ export default async function ProcurementManagerOverView({
                     <div className='flex gap-4 flex-col md:flex-row items-start w-full '>
                         <div className='md:flex-[3] w-full'>
                             <Suspense fallback={<CardsSkeleton />}>
-                                <LatestInvoicesTable {...{ currentPage: 1, query: '', title: 'Top Items', topItems }} />
+                                <TopItemsTable {...{ currentPage: 1, query: '', title: 'Top Items', topItems }} />
                             </Suspense>
                         </div>
                         <div className='md:flex-[2] w-full'>

@@ -39,7 +39,7 @@ export default function CreateTabs({ Clients, Branches, Salaries, Employees }: {
                 currentsection.length
                     ? (
                         <Tabs defaultValue={currentsection}>
-                            <TabsList variant="line" className="bg-white dark:bg-[#090E1A] shadow-sm pt-[52px] px-8 gap-8 sticky top-0 z-40">
+                            <TabsList variant="line" className="bg-white dark:bg-[#090E1A] shadow-sm pt-[52px] px-2 md:px-8 gap-8 sticky top-0 z-40">
                                 <TabsTrigger value="createUser" className="inline-flex gap-1 group">
                                     <a href="#createUser" className="hidden group-data-[state=active]:block overflow-hidden">
                                         <CreatUserIcon {...{ color: '#fa4040', width: "1.3em" }} />
@@ -52,7 +52,7 @@ export default function CreateTabs({ Clients, Branches, Salaries, Employees }: {
                                     </a>
                                 </TabsTrigger>
                             </TabsList>
-                            <div className="mt-4 px-8 py-4">
+                            <div className="mt-4 px-2 md:px-8 py-2 md:py-4">
                                 <TabsContent value="createUser">
                                     <TabsCreateEmployeeContent {...{ Branches, Salaries, Employees }} />
                                 </TabsContent>

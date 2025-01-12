@@ -77,8 +77,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                     type={isPassword ? typeState : type}
                     className={cx(
                         inputStyles({ hasError, enableStepper }),
+                        'h-[60px] px-6',
                         {
-                            "pl-8": isSearch,
+                            "px-6": isSearch,
                             "pr-10": isPassword,
                         },
                         inputClassName,

@@ -20,8 +20,6 @@ export const AdminBarChart = ({ chartdata }: {
     categories = Object.keys(categories)
   }
 
-  console.log({ categories })
-
   return <BarChart
     className="h-80"
     data={chartdata}
