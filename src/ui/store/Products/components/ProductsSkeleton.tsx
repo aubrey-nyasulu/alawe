@@ -18,7 +18,7 @@ export default function ProductsSkeleton() {
 function Card() {
 
     return (
-        <div className={cx('md:max-w-[250px] md:min-w-[200px] flex-1 animate-pulse')}>
+        <div className={cx('w-full md:max-w-[250px] md:min-w-[200px] flex-1 animate-pulse')}>
             <div className='flex-1 w-full rounded-[12px] overflow-hidden ring-1 ring-black/20 ring-offset-2 aspect-[4/3]  '>
             </div>
             <div className='pt-4 px-2 flex gap-4 items-center justify-between'>

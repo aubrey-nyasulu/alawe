@@ -24,7 +24,7 @@ export default function FeaturedProductsSection() {
                 href='/products'
                 className="w-fit h-fit"
             >
-                <Button className="md:px-8 md:py-4 w-fit h-fit bg-primary rounded-full text-white ring ring-offset-2 ring-primary/50 hover:ring-orange-600">More Products</Button>
+                <Button className='px-8 py-4 w-fit h-fit bg-primary rounded-full text-white ring ring-offset-2 ring-primary/30 hover:ring-orange-700' >More Products</Button>
             </Link>
         </section>
     )

@@ -127,7 +127,7 @@ export function CartDrawer({ showModel, setShowModel }: { showModel: boolean, se
                                     </div>
                                 </div>
                             </DrawerBody>
-                            <DrawerFooter className="mt-6 gap-3 flex-col">
+                            <DrawerFooter className="mt-6 gap-2 flex-col-reverse">
                                 <DrawerClose asChild>
                                     <Button
                                         className="mt-2 w-full sm:mt-0 sm:w-fit px-8 py-4 rounded-full"

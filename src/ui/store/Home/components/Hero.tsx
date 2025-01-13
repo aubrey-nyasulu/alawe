@@ -12,7 +12,7 @@ export default function Hero() {
                 <p className='text-gray-600 pt-2'>At Alawe Meat Merchants, we are committed to providing the highest quality halal meat products.</p>
                 {/* <div className=' flex gap-4 flex-col'> */}
                 <Link href="#bulk-order" className='w-fit h-fit'>
-                    <Button className='md:px-8 md:py-4 w-fit h-fit bg-primary rounded-full text-white mt-8 ring ring-offset-2 ring-primary/50 hover:ring-orange-600' >
+                    <Button className='px-8 py-4 w-fit h-fit bg-primary rounded-full text-white mt-8 ring ring-offset-2 ring-primary/30 hover:ring-orange-700' >
                         Discover More
                     </Button>
                 </Link>

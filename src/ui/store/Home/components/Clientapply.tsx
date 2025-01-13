@@ -10,7 +10,7 @@ export default function ClientApply() {
     return (
         <>
             <Button
-                className='md:px-8 md:py-4 w-fit h-fit bg-primary rounded-full text-white mt-8 ring ring-offset-2 ring-primary/50 hover:ring-orange-600'
+                className='mt-8 px-8 py-4 w-fit h-fit bg-primary rounded-full text-white ring ring-offset-2 ring-primary/30 hover:ring-orange-700'
                 onClick={() => setShowModel(true)}
             >
                 Become a Client
