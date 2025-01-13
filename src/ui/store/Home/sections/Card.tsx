@@ -18,7 +18,7 @@ export default function Card({ image, name, price }: { image: StaticImageData, n
             <div className='flex-1 w-full h-fit rounded-[12px] overflow-hidden ring-1 ring-black/20 ring-offset-2 '>
                 <Image
                     src={image}
-                    alt='sausage image'
+                    alt={name + ' image'}
                     width={2000}
                     height={2000}
                     placeholder='blur'
