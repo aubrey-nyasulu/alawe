@@ -5,7 +5,7 @@ export default function AboutUsSection() {
     return (
         <section
             id='about'
-            className='langingpage-container px-4 lg:px-0 mt-20 flex flex-col md:flex-row items-center justify-between gap-16 pt-8 text-center md:text-start'
+            className='langingpage-container px-4 lg:px-0 mt-20 flex flex-col md:flex-row items-center justify-between gap-8 md:gap-16 pt-8 text-center md:text-start'
         >
             <div className='w-full flex flex-col gap-2'>
                 <h2 className='text-xl md:text-3xl font-extrabold'>About Us</h2>

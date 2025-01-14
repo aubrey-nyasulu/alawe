@@ -38,7 +38,7 @@ export function LandingPageMobileMenuDrawer({ showMenu, setShowMenu }: { showMen
                                 <ul className='pt-32 w-full h-full items-center gap-8 flex flex-col text-center '>
                                     <Link
                                         href={"/"}
-                                        className={cx('hover:text-primary w-full p-2 px-3 rounded-full', active === 'home' && 'bg-[#323232] text-white')}
+                                        className={cx('hover:text-primary w-full py-4 px-8 rounded-full', active === 'home' && 'bg-[#323232] text-white')}
                                         onClick={() => {
                                             setActive('home')
                                             setShowMenu(false)
@@ -48,7 +48,7 @@ export function LandingPageMobileMenuDrawer({ showMenu, setShowMenu }: { showMen
                                     </Link>
                                     <Link
                                         href={"/products"}
-                                        className={cx('hover:text-primary w-full p-2 px-3 rounded-full ', active === 'about' && 'bg-[#323232] text-white')}
+                                        className={cx('hover:text-primary w-full py-4 px-8 rounded-full ', active === 'about' && 'bg-[#323232] text-white')}
                                         onClick={() => {
                                             setActive('about')
                                             setShowMenu(false)
@@ -58,7 +58,7 @@ export function LandingPageMobileMenuDrawer({ showMenu, setShowMenu }: { showMen
                                     </Link>
                                     <Link
                                         href={"/login"}
-                                        className={cx('block justify-self-end hover:text-primary w-full p-2 px-3 rounded-full', active === 'bulk-order' && 'bg-[#323232] text-white')}
+                                        className={cx('block justify-self-end hover:text-primary w-full py-4 px-8 rounded-full', active === 'bulk-order' && 'bg-[#323232] text-white')}
                                         onClick={() => {
                                             setActive('bulk-order')
                                             setShowMenu(false)

@@ -41,14 +41,14 @@ export default function Filters({ currentPage, query }: { currentPage: number, q
     // }, [filtersOpen])
 
     return (
-        <div className={cx("w-screen md:w-fit overflow-x-auto md:overflow-x-hidden z-30")}>
+        <div className={cx("w-screen md:w-fit overflow-x-auto md:overflow-x-hidden z-30 mb-4")}>
             <div
                 // ref={filteresRef}
                 className={cx('p-0 w-fit md:w-0 h-0 md:h-full overflow-hidden flex ', filtersOpen && 'md:w-[300px] h-fit p-4')}>
                 <div className='w-fit flex flex-row md:flex-col gap-4'>
                     <Button
                         variant='secondary'
-                        className={cx('px-8 py-4 rounded-full w-fit md:w-full', currentCategory === '' && 'text-primary border-primary')}
+                        className={cx('px-8 py-4 rounded-full w-fit md:w-full text-stone-500', currentCategory === '' && 'text-black border-stone-500')}
                         onClick={() => {
                             setCurrentCategory('')
                             updateStoreState({ category: '', currentPage: Number(currentPage) || 1, query })
@@ -62,7 +62,7 @@ export default function Filters({ currentPage, query }: { currentPage: number, q
                             <Button
                                 key={category}
                                 variant='secondary'
-                                className={cx('px-8 py-4 rounded-full w-fit md:w-full', currentCategory === category && 'text-primary border-primary')}
+                                className={cx('px-8 py-4 rounded-full w-fit md:w-full text-stone-500', currentCategory === category && 'text-black border-stone-500')}
                                 onClick={() => {
                                     setCurrentCategory(category)
                                     updateStoreState({ category, currentPage: Number(currentPage) || 1, query })
