@@ -224,3 +224,5 @@ export function capitalise(str: string) {
 export function calculatePercentage(num1: number, num2: number, toFixedValue = 2) {
   return Number(((num1 / num2) * 100).toFixed(toFixedValue))
 }
+
+export const passIDs = ['123457', '1234']

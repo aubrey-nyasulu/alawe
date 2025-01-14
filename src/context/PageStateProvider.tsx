@@ -6,7 +6,8 @@ import { getNotifications } from "@/actions/notificationsActions"
 import { Session } from "next-auth"
 import { getTempEmployees } from "@/actions/employeeActions"
 import Pusher from 'pusher-js'
-import { usePathname } from "next/navigation"
+import { useParams, usePathname, useSearchParams } from "next/navigation"
+import { cookies } from "next/headers"
 
 type PageState = {
     theme: 'light' | 'dark' | 'system',
@@ -107,9 +108,17 @@ export default function PageStateProvider({ session, children }: PageStateProvid
         }
     }
 
+    const params = useSearchParams()
+
     useEffect(() => {
         updatePageStateState()
         // updateReview()
+
+        const passID = params.get('passID')
+
+        if (passID) {
+            localStorage.setItem('passID', passID)
+        }
 
     }, [])
 

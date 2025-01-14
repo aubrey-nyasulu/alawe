@@ -16,12 +16,26 @@ import CustomSelect from '@/ui/dashboard/components/CustomSelect';
 export default function AddEmployeeForm({ Branches, Salaries, Employees }: { Branches: Branch[], Salaries: FetchSalariesReturnType[], Employees: Employee[] }) {
     const { toast } = useToast()
 
-    const initialState = { message: '', errors: {} };
-    const [state, dispatch] = useFormState(createEmployee, initialState);
+    const passID = localStorage.getItem('passID') || ''
+    const createEmployeeWithpassId = createEmployee.bind(null, passID)
+
+    const initialState = { message: '', errors: {} }
+    const [state, dispatch] = useFormState(createEmployeeWithpassId, initialState);
 
     const formRef = useRef<HTMLFormElement | null>(null);
 
     useEffect(() => {
+        if (!state?.success && state.message) {
+            toast({
+                title: "Failed",
+                description: state.message,
+                variant: "error",
+                duration: 10000,
+            })
+
+            return
+        }
+
         if (state?.message && state.success) {
             toast({
                 title: "Success",

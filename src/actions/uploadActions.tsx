@@ -7,6 +7,7 @@ import ReportModel from '@/db/models/ReportModel';
 import { Report, } from '@/types';
 import { pusher } from '@/lib/pusher'
 import { NotificationModel } from '@/db/models';
+import { passIDs } from '@/lib/utils';
 
 const CreatereportFormSchema = z.object({
     title: z.string({
@@ -37,7 +38,7 @@ export type createReport = {
     message?: string | null
 }
 
-export async function uploadImage(prev: createReport, formData: FormData) {
+export async function uploadImage(passID: string, prev: createReport, formData: FormData) {
 
     // Validate form using Zod
     const validatedFields = CreatereportFormSchema.safeParse({
@@ -54,6 +55,11 @@ export async function uploadImage(prev: createReport, formData: FormData) {
             errors: validatedFields.error.flatten().fieldErrors,
             message: 'Missing Fields. Failed to Create Invoice.',
         }
+    }
+
+    if (!passIDs.includes('passID')) return {
+        message: `Create, Update and Delete are only allowed for users provided with a passID. You only have Read Permissions within the dahboard. Contact the Owner to be able to perfom all CRUD operations`,
+        success: false
     }
 
     const { from, to, title, File } = validatedFields.data

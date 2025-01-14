@@ -18,12 +18,26 @@ export default function FileUploadForm({ users }: { users: User[] }) {
 
     const { toast } = useToast()
 
+    const passID = localStorage.getItem('passID') || ''
+
     const initialState = { message: '', errors: {} };
-    const [state, dispatch] = useFormState(uploadImage, initialState);
+    const uploadImageWithpassID = uploadImage.bind(null, passID)
+    const [state, dispatch] = useFormState(uploadImageWithpassID, initialState);
 
     const formRef = useRef<HTMLFormElement | null>(null);
 
     useEffect(() => {
+        if (!state?.success && state.message) {
+            toast({
+                title: "Failed",
+                description: state.message,
+                variant: "error",
+                duration: 10000,
+            })
+
+            return
+        }
+
         if (state?.message && state.success) {
             toast({
                 title: "Success",

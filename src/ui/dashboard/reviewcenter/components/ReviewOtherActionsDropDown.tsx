@@ -32,17 +32,19 @@ export default function ReviewOtherActionsDropDown({ targetId }: { targetId: str
 
     const { toast } = useToast()
 
+    const passID = localStorage.getItem('passID') || ''
+
     const handleApprove = async () => {
         try {
             console.log('approving')
-            const res = await approveEmployee(user._id, targetId)
+            const res = await approveEmployee(user._id, targetId, passID)
 
             console.log({ res })
 
             toast({
-                title: "Success",
-                description: 'user approval a success',
-                variant: "success",
+                title: res === 'Employee approved' ? 'success' : 'Failed',
+                description: res,
+                variant: res === 'Employee approved' ? 'success' : 'error',
                 duration: 10000,
             })
             if (updatePageStateState) {
@@ -61,12 +63,8 @@ export default function ReviewOtherActionsDropDown({ targetId }: { targetId: str
         <div className={cx("w-fit flex items-center justify-start")}>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    < button
-                        className="cursor-pointer"
-                    >
-                        < button className="cursor-pointer" >
-                            <RiMoreLine className="rotate-90 text-gray-900 dark:text-gray-50" />
-                        </button>
+                    < button className="cursor-pointer" >
+                        <RiMoreLine className="rotate-90 text-gray-900 dark:text-gray-50" />
                     </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>

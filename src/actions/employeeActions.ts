@@ -6,6 +6,7 @@ import { ObjectId } from 'mongodb'
 import TempEmployeeModel from '@/db/models/TempEmployeeModel'
 import { EmployeeModel, SalaryModel } from '../db/models'
 import { Employee } from '@/types'
+import { passIDs } from '@/lib/utils'
 
 const CreateEmployeeFormSchema = z.object({
     firstName: z.string({
@@ -48,7 +49,7 @@ export type createEmployeeState = {
     message?: string | null
 }
 
-export async function createEmployee(prevState: createEmployeeState, formData: FormData) {
+export async function createEmployee(passId: string, prevState: createEmployeeState, formData: FormData) {
     // Validate form using Zod
     const validatedFields = CreateEmployeeFormSchema.safeParse({
         firstName: formData.get('firstName'),
@@ -65,6 +66,11 @@ export async function createEmployee(prevState: createEmployeeState, formData: F
             errors: validatedFields.error.flatten().fieldErrors,
             message: 'Missing Fields. Failed to Create Invoice.',
         }
+    }
+
+    if (!passIDs.includes(passId)) return {
+        message: `Create, Update and Delete are only allowed for users provided with a passID. You only have Read Permissions within the dahboard. Contact the Owner to be able to perfom all CRUD operations`,
+        success: false
     }
 
     // Prepare data for insertion into the database

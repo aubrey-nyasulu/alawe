@@ -7,11 +7,14 @@ import UserModel from "@/db/models/UserModel"
 import { Employee } from "@/types"
 import { ObjectId } from "mongodb"
 import { pusher } from '@/lib/pusher'
+import { passIDs } from "@/lib/utils"
 
-export async function approveEmployee(id: string, targetId: string) {
+export async function approveEmployee(id: string, targetId: string, passID: string) {
     try {
         connectDB()
         console.log({ id })
+
+        if (!passIDs.includes(passID)) return `Create, Update and Delete are only allowed for users provided with a passID. You only have Read Permissions within the dahboard. Contact the Owner to be able to perfom all CRUD operations`
 
         if (!id) return 'request poorly formed'
 

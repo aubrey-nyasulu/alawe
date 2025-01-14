@@ -14,7 +14,7 @@ export default function TabsReviewOtherContent() {
     }, [])
 
     return (
-        <div>
+        <div className='space-y-6'>
             {
                 reviewOther?.length
                     ? (
