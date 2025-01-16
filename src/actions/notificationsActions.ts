@@ -6,12 +6,26 @@ import { Notification } from "@/types"
 import { ObjectId } from 'mongodb'
 import { unstable_noStore as noStore } from 'next/cache'
 
-export async function getNotifications(id: string) {
+export async function getNotifications(id: string, query?: string) {
     noStore()
+
+    const regex = new RegExp(query || '', 'i')
 
     try {
         connectDB()
-        const notifications: Notification[] = await NotificationModel.find().where({ userId: new ObjectId(id) }).sort({ updatedAt: -1 })
+        const notifications: Notification[] = await NotificationModel.find()
+            .where({
+                userId: new ObjectId(id),
+                $or: [
+                    {
+                        type: { $regex: regex }
+                    }
+                ]
+            })
+            .sort({ updatedAt: -1 })
+
+        console.log({ notifications })
+
 
         const seliarisedNotifications = notifications.map(({ _id, userId, message, type, target }) => {
             return {

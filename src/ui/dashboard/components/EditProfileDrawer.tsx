@@ -42,13 +42,13 @@ export function EditProfileDrawer() {
     const [confirmPassword, setConfirmPassword] = useState<string | undefined>('')
     const { toast } = useToast()
 
-    const passID = localStorage.getItem('passID') || ''
-
     const handleSubmit = async (formaData: FormData) => {
 
         if (!formaData.get('password')) return alert('password is required')
 
         try {
+            const passID = localStorage.getItem('passID') || ''
+
             const updateEmployeeWithId = updateEmployee.bind(null, user._id, passID)
             const res = await updateEmployeeWithId(formaData)
 

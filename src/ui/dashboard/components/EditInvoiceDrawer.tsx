@@ -32,8 +32,10 @@ export function EditInvoiceDrawer() {
     const { editInvoiceModalShow, setEditInvoiceModalShow } = useContext(PageStateContext)
     const { toast } = useToast()
 
+    const passID = localStorage.getItem('passID') || ''
+    const updateInvoiceWithId = updateInvoice.bind(null, editInvoiceModalShow.id, passID);
+
     const initialState = { message: '', errors: {} };
-    const updateInvoiceWithId = updateInvoice.bind(null, editInvoiceModalShow.id);
     const [state, dispatch] = useFormState(updateInvoiceWithId, initialState);
 
     useEffect(() => {
@@ -54,6 +56,17 @@ export function EditInvoiceDrawer() {
     }, [editInvoiceModalShow.id])
 
     useEffect(() => {
+        if (!state?.success && state.message) {
+            toast({
+                title: "Failed",
+                description: state.message,
+                variant: "error",
+                duration: 10000,
+            })
+
+            return
+        }
+
         if (state?.message && state.success) {
             toast({
                 title: "Success",

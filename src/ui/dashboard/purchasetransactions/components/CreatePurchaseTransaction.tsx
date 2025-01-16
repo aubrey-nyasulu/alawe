@@ -11,15 +11,30 @@ import { RiAddLine } from '@remixicon/react';
 import { months, years } from '@/lib/utils';
 
 export default function CreatePurchaseTransaction({ Suppliers, items }: { Suppliers: Supplier[], items: Item[] }) {
+    const passID = localStorage.getItem('passID') || ''
+    const createPurchaseTransactionWithPassID = createPurchaseTransaction.bind(null, passID)
+
     const initialState = { message: '', errors: {} };
-    const [state, dispatch] = useFormState(createPurchaseTransaction, initialState);
+    const [state, dispatch] = useFormState(createPurchaseTransactionWithPassID, initialState);
+
     const { toast } = useToast();
     const formRef = useRef<HTMLFormElement | null>(null);
 
     // State for managing purchased items
-    const [purchasedItems, setPurchasedItems] = useState([{ quantity: '', unit_price: '', month: '', year: '', item_id: '' }])
+    const [purchasedItems, setPurchasedItems] = useState([{ quantity: '', unit_price: '', item_id: '' }])
 
     useEffect(() => {
+        if (!state?.success && state.message) {
+            toast({
+                title: "Failed",
+                description: state.message,
+                variant: "error",
+                duration: 10000,
+            })
+
+            return
+        }
+
         if (state?.message && state.success) {
             toast({
                 title: 'Success',
@@ -37,7 +52,7 @@ export default function CreatePurchaseTransaction({ Suppliers, items }: { Suppli
 
     // Handle adding a new purchased item field
     const handleAddItem = () => {
-        setPurchasedItems([...purchasedItems, { quantity: '', unit_price: '', month: '', year: '', item_id: '' }]);
+        setPurchasedItems([...purchasedItems, { quantity: '', unit_price: '', item_id: '' }]);
     };
 
     // Handle input changes in purchased items
@@ -56,8 +71,10 @@ export default function CreatePurchaseTransaction({ Suppliers, items }: { Suppli
     const handleSubmit = (formData: FormData) => {
         formData.append('purchasedItems', JSON.stringify(purchasedItems))
 
+        console.log('purchasedItems ====>', { purchasedItems: formData.get('purchasedItems') })
+
         dispatch(formData)
-        setPurchasedItems([{ quantity: '', unit_price: '', month: '', year: '', item_id: '' }])
+        setPurchasedItems([{ quantity: '', unit_price: '', item_id: '' }])
     }
 
     return (
@@ -105,8 +122,63 @@ export default function CreatePurchaseTransaction({ Suppliers, items }: { Suppli
                     )}
                 </div>
 
+                <div className="block w-full mt-2">
+                    <CustomSelect
+                        id="itemId"
+                        name="month"
+                    >
+                        <option value="" disabled>
+                            Select a Month
+                        </option>
+                        {
+                            months.map(month => (
+                                <option
+                                    key={month}
+                                    value={month}
+
+                                >
+                                    {month}
+                                </option>
+                            ))}
+                    </CustomSelect>
+                </div>
+                {state.errors?.purchased_items && (
+                    <p className="mt-2 text-sm text-red-500">
+                        {
+                            state.errors.purchased_items.find(error => error.includes('Please select a month.'))
+                        }
+                    </p>
+                )}
+                <div className="block w-full mt-2">
+                    <CustomSelect
+                        id="itemId"
+                        name="year"
+                    >
+                        <option value="" disabled>
+                            Select a Year
+                        </option>
+                        {
+                            years.map(year => (
+                                <option
+                                    key={year}
+                                    value={year}
+
+                                >
+                                    {year}
+                                </option>
+                            ))}
+                    </CustomSelect>
+                </div>
+                {state.errors?.purchased_items && (
+                    <p className="mt-2 text-sm text-red-500">
+                        {
+                            state.errors.purchased_items.find(error => error.includes('Please select a year.'))
+                        }
+                    </p>
+                )}
+
                 {/* Dynamically Generated Purchased Items */}
-                <div>
+                <div className='mt-4'>
                     {purchasedItems.map((item, index) => (
                         <div
                             key={index}
@@ -142,62 +214,7 @@ export default function CreatePurchaseTransaction({ Suppliers, items }: { Suppli
                                     }
                                 </p>
                             )}
-                            <div className="block w-full mt-2">
-                                <CustomSelect
-                                    id="itemId"
-                                    name="month"
-                                    OnChange={(e: any) => handleItemChange(index, e)}
-                                >
-                                    <option value="" disabled>
-                                        Select a Month
-                                    </option>
-                                    {
-                                        months.map(month => (
-                                            <option
-                                                key={month}
-                                                value={month}
 
-                                            >
-                                                {month}
-                                            </option>
-                                        ))}
-                                </CustomSelect>
-                            </div>
-                            {state.errors?.purchased_items && (
-                                <p className="mt-2 text-sm text-red-500">
-                                    {
-                                        state.errors.purchased_items.find(error => error.includes('Please select a month.'))
-                                    }
-                                </p>
-                            )}
-                            <div className="block w-full mt-2">
-                                <CustomSelect
-                                    id="itemId"
-                                    name="year"
-                                    OnChange={(e: any) => handleItemChange(index, e)}
-                                >
-                                    <option value="" disabled>
-                                        Select a Year
-                                    </option>
-                                    {
-                                        years.map(year => (
-                                            <option
-                                                key={year}
-                                                value={year}
-
-                                            >
-                                                {year}
-                                            </option>
-                                        ))}
-                                </CustomSelect>
-                            </div>
-                            {state.errors?.purchased_items && (
-                                <p className="mt-2 text-sm text-red-500">
-                                    {
-                                        state.errors.purchased_items.find(error => error.includes('Please select a year.'))
-                                    }
-                                </p>
-                            )}
                             <div className="block w-full mt-2">
                                 <CustomSelect
                                     id="itemId"

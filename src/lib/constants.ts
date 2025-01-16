@@ -14,17 +14,16 @@ export const CEOAnalyticsLinks = [
 
 export const CEOWorksSpaceLinks = [
     { name: 'Review Center', href: '/dashboard/reviewcenter' },
+    {
+        name: 'Reports',
+        href: '/dashboard/reports',
+
+    },
     { name: 'Notifications', href: '/dashboard/notifications' },
 ];
 
 export const adminAnalyticsLinks = [
     { name: 'Analytics', href: '/dashboard' },
-    // {
-    //     name: 'Invoices',
-    //     href: '/dashboard/invoices',
-    //     
-    // },
-    // { name: 'Inventory', href: '/dashboard/inventory },
 ];
 
 export const adminworksSpaceLinks = [

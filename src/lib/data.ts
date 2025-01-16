@@ -507,9 +507,7 @@ export async function fetchProducts({ category, query, currentPage = 1 }: { cate
 
     const itemsPerPage = 12
 
-    console.log({ currentPage })
     const offset = Math.abs(currentPage - 1) * itemsPerPage
-    console.log({ offset })
 
     const regex = new RegExp(category || '', 'i')
     const regex2 = new RegExp(query || '', 'i')

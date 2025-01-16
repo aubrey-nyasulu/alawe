@@ -13,7 +13,9 @@ import {
   RiBarcodeLine,
   RiTicketLine,
   RiReceiptLine,
-  RiFile3Line
+  RiFile3Line,
+  RiAddBoxLine,
+  RiAddLine
 } from '@remixicon/react';
 
 export default function NavLinks({ links, }: {
@@ -77,7 +79,9 @@ export default function NavLinks({ links, }: {
                             ? <RiReceiptLine className='size-5' />
                             : link.href === '/dashboard/reports'
                               ? <RiFile3Line className='size-5' />
-                              : null
+                              : link.href === '/dashboard/create'
+                                ? <RiAddLine className='size-5' />
+                                : null
                 }
               </div>
               <p className=" text-sm ">{link.name}</p>

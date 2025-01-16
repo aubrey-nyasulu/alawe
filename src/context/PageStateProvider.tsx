@@ -6,7 +6,7 @@ import { getNotifications } from "@/actions/notificationsActions"
 import { Session } from "next-auth"
 import { getTempEmployees } from "@/actions/employeeActions"
 import Pusher from 'pusher-js'
-import { useParams, usePathname, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 import { cookies } from "next/headers"
 
 type PageState = {
@@ -22,7 +22,8 @@ type PageState = {
     setReviewOther: Dispatch<SetStateAction<Employee[]>>
     notifications: Notification[]
     setNotifications: Dispatch<SetStateAction<Notification[]>>
-    updatePageStateState?(): Promise<boolean>
+    updateNotifications: (query?: string) => Promise<boolean>
+    updatePageStateState?(notificationsFilter?: string): Promise<boolean>
 }
 
 const initialPageState: PageState = {
@@ -37,6 +38,7 @@ const initialPageState: PageState = {
     reviewOther: [],
     setReviewOther: () => null,
     notifications: [],
+    updateNotifications: () => new Promise(r => r(true)),
     setNotifications: () => null,
 }
 
@@ -54,6 +56,7 @@ export default function PageStateProvider({ session, children }: PageStateProvid
     const [editInvoiceModalShow, setEditInvoiceModalShow] = useState<{ open: boolean, id: string }>({ open: false, id: '' })
     const [showMenu, setShowMenu] = useState<boolean>(false)
     const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('system')
+    const [notificationFilter, setNotificationFilter] = useState('All')
 
     const user = session?.user as User
 
@@ -73,10 +76,12 @@ export default function PageStateProvider({ session, children }: PageStateProvid
         }
     }
 
-    const updateNotifications = async () => {
+    const updateNotifications = async (query?: string) => {
+        query = query?.toLowerCase() === 'all' ? '' : query
+
         try {
             if (user?._id) {
-                const data = await getNotifications(user._id)
+                const data = await getNotifications(user._id, query)
                 setNotifications([...data])
 
                 return true
@@ -90,9 +95,9 @@ export default function PageStateProvider({ session, children }: PageStateProvid
         }
     }
 
-    async function updatePageStateState() {
+    async function updatePageStateState(notificationsFilter: string) {
         try {
-            let res = await updateNotifications()
+            let res = await updateNotifications(notificationsFilter)
 
             if (!res) throw new Error('failed to init page state. An error occured while trying to fetch notifications')
 
@@ -111,8 +116,9 @@ export default function PageStateProvider({ session, children }: PageStateProvid
     const params = useSearchParams()
 
     useEffect(() => {
-        updatePageStateState()
-        // updateReview()
+        if (!window) return
+        updatePageStateState(params.get('notifications') || '')
+        updateReview()
 
         const passID = params.get('passID')
 
@@ -122,33 +128,7 @@ export default function PageStateProvider({ session, children }: PageStateProvid
 
     }, [])
 
-    // useEffect(() => {
-    //     const eventSource = new EventSource('/api/realtime/notifications/dynamicSlug')
 
-    //     eventSource.onmessage = (event) => {
-    //         const data = JSON.parse(event.data)
-    //         if (data?.fullDocument) {
-    //             const { _id, userId, message, type, target } = data.fullDocument
-    //             console.log('Real-time data:', { _id, userId, message, type, target })
-
-    //             setNotifications([...notifications, { _id, userId, message, type, target }])
-    //         }
-    //     }
-
-    //     return () => {
-    //         eventSource.close()
-    //     }
-    // }, [])
-
-    const pathname = usePathname()
-    useEffect(() => {
-        if (pathname.startsWith('/dasboard')) {
-            const boltDiv = document.querySelector('.bpFabIcon')
-            if (boltDiv) {
-                document.body.removeChild(boltDiv)
-            }
-        }
-    }, []);
 
     useEffect(() => {
         // Initialize Pusher
@@ -240,6 +220,7 @@ export default function PageStateProvider({ session, children }: PageStateProvid
                 setEditInvoiceModalShow,
                 editProfileModalShow,
                 setEditProfileModalShow,
+                updateNotifications,
                 updatePageStateState
             }
         }>
@@ -247,3 +228,27 @@ export default function PageStateProvider({ session, children }: PageStateProvid
         </PageStateContext.Provider>
     )
 }
+
+
+
+
+
+
+
+// useEffect(() => {
+//     const eventSource = new EventSource('/api/realtime/notifications/dynamicSlug')
+
+//     eventSource.onmessage = (event) => {
+//         const data = JSON.parse(event.data)
+//         if (data?.fullDocument) {
+//             const { _id, userId, message, type, target } = data.fullDocument
+//             console.log('Real-time data:', { _id, userId, message, type, target })
+
+//             setNotifications([...notifications, { _id, userId, message, type, target }])
+//         }
+//     }
+
+//     return () => {
+//         eventSource.close()
+//     }
+// }, [])

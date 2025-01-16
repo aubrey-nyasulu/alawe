@@ -57,7 +57,7 @@ export async function uploadImage(passID: string, prev: createReport, formData: 
         }
     }
 
-    if (!passIDs.includes('passID')) return {
+    if (!passIDs.includes(passID)) return {
         message: `Create, Update and Delete are only allowed for users provided with a passID. You only have Read Permissions within the dahboard. Contact the Owner to be able to perfom all CRUD operations`,
         success: false
     }

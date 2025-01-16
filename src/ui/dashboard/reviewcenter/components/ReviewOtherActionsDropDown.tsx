@@ -16,7 +16,7 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
 } from "@/tremorComponents/DropdownMenu"
-import { approveEmployee } from "@/actions/approveactions"
+import { approveEmployee, declineEmployee } from "@/actions/approveactions"
 import { RiCheckLine, RiMoreLine } from "@remixicon/react";
 import { PageStateContext } from "@/context/PageStateProvider"
 import { useToast } from "@/customHooks/useToast"
@@ -32,9 +32,10 @@ export default function ReviewOtherActionsDropDown({ targetId }: { targetId: str
 
     const { toast } = useToast()
 
-    const passID = localStorage.getItem('passID') || ''
 
     const handleApprove = async () => {
+        const passID = localStorage.getItem('passID') || ''
+
         try {
             console.log('approving')
             const res = await approveEmployee(user._id, targetId, passID)
@@ -45,6 +46,33 @@ export default function ReviewOtherActionsDropDown({ targetId }: { targetId: str
                 title: res === 'Employee approved' ? 'success' : 'Failed',
                 description: res,
                 variant: res === 'Employee approved' ? 'success' : 'error',
+                duration: 10000,
+            })
+            if (updatePageStateState) {
+                console.log('in update page post review other')
+                await updatePageStateState()
+            }
+
+            revalidatePath('/dashboard/reviewcenter')
+            revalidatePath('/dashboard/notifications')
+        } catch (error) {
+            console.log('failed to approve')
+        }
+    }
+
+    const handleDecline = async () => {
+        const passID = localStorage.getItem('passID') || ''
+
+        try {
+            console.log('approving')
+            const res = await declineEmployee(user._id, targetId, passID)
+
+            console.log({ res })
+
+            toast({
+                title: res === 'Employee declined' ? 'success' : 'Failed',
+                description: res,
+                variant: res === 'Employee declined' ? 'success' : 'error',
                 duration: 10000,
             })
             if (updatePageStateState) {
@@ -83,7 +111,10 @@ export default function ReviewOtherActionsDropDown({ targetId }: { targetId: str
                                 </DropdownMenuIconWrapper>
                             </DropdownMenuItem>
                         </button>
-                        <button className="w-full">
+                        <button
+                            className="w-full"
+                            onClick={handleDecline}
+                        >
                             <DropdownMenuItem className="w-full flex items-center gap-x-1 justify-between text-red-500" >
                                 Decline
                                 <DropdownMenuIconWrapper>

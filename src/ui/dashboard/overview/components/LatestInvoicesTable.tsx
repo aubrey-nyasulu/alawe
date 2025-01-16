@@ -3,7 +3,8 @@ import { fetchFilteredInventory, fetchLatestPurchasedItems, fetchLatestPurchaseT
 import { Card } from '@/tremorComponents/Card';
 
 export default async function LatestInvoicesTable({ title }: {
-    title?: string, topItems: {
+    title?: string,
+    topItems: {
         quantity: number,
         avg_price: number,
         item_name: string,

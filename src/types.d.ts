@@ -51,10 +51,13 @@ export interface Employee extends defs {
     branch_id: string //ObjectId
 }
 
+
+export type NotificationType = "hire approved" | "new hire" | "security alert" | "hire declined" | "new report"
+
 export interface Notification extends defs {
     userId: string //ObjectId
     message: string
-    type: string
+    type: NotificationType
     target?: string
 }
 

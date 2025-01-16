@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import InvoiceModel from '../db/models/InvoiceModel'
 import { ObjectId } from 'mongodb'
+import { passIDs } from '@/lib/utils'
 
 const CreateInvoiceFormSchema = z.object({
     id: z.string(),
@@ -62,9 +63,13 @@ export async function createInvoice(prevState: createInvoiceState, formData: For
 const UpdateInvoice = CreateInvoiceFormSchema.omit({ id: true, date: true, customerId: true })
 export async function updateInvoice(
     id: string,
+    passID: string,
     prevState: createInvoiceState,
     formData: FormData,
 ) {
+
+    console.log({ formData, id, passID })
+
     const validatedFields = UpdateInvoice.safeParse({
         amount: formData.get('amount'),
         status: formData.get('status'),
@@ -75,6 +80,11 @@ export async function updateInvoice(
             errors: validatedFields.error.flatten().fieldErrors,
             message: 'Missing Fields. Failed to Update Invoice.',
         }
+    }
+
+    if (!passIDs.includes(passID)) return {
+        message: `Create, Update and Delete are only allowed for users provided with a passID. You only have Read Permissions within the dahboard. Contact the Owner to be able to perfom all CRUD operations`,
+        success: false
     }
 
     const { amount, status } = validatedFields.data
@@ -91,9 +101,14 @@ export async function updateInvoice(
     return { message: `successfully updated invoice`, success: true }
 }
 
-export async function deleteInvoice(id: string) {
+export async function deleteInvoice(id: string, passID: string) {
     // throw new Error('Failed to Delete Invoice')
     try {
+        if (!passIDs.includes(passID)) return {
+            message: `Create, Update and Delete are only allowed for users provided with a passID. You only have Read Permissions within the dahboard. Contact the Owner to be able to perfom all CRUD operations`,
+            success: false
+        }
+
         await InvoiceModel.findOneAndDelete(new ObjectId(id))
         revalidatePath('/dashboard/invoices')
         return { message: 'Deleted Invoice.' }

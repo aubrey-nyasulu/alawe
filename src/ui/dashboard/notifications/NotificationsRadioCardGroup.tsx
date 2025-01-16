@@ -1,16 +1,51 @@
+'use client'
+
+import { PageStateContext } from "@/context/PageStateProvider"
 import {
     RadioCardGroup,
     RadioCardIndicator,
     RadioCardItem,
 } from "@/tremorComponents/RadioCardGroup"
-import { useState } from "react"
+import { NotificationType } from "@/types"
+import { usePathname, useRouter } from 'next/navigation'
+import { useContext, useEffect, useState } from "react"
 
-export const NotificationsRadioCardGroup = () => {
-    const [filterValue, setFilterValue] = useState('all')
+export const NotificationsRadioCardGroup = ({
+    searchParams,
+}: {
+    searchParams?: {
+        notifications?: string,
+        page?: string,
+    };
+}) => {
+    const { notifications } = useContext(PageStateContext)
 
-    const handleClick = (value: string) => {
-        console.log(value)
+    const pathname = usePathname()
+    const { replace } = useRouter()
+
+    // const handleSearch = useDebouncedCallback((term) => {
+    const handleSearch = (term: NotificationType | 'all') => {
+        const params = new URLSearchParams(searchParams!);
+        params.set('page', '1');
+
+        if (term) {
+            params.set('notifications', term);
+        } else {
+            params.delete('notifications');
+        }
+        replace(`${pathname}?${params.toString()}`);
+    }
+
+    const [filterValue, setFilterValue] = useState<string>('all')
+
+    useEffect(() => {
+        setFilterValue(searchParams?.notifications || 'all')
+    }, [searchParams])
+
+    const handleClick = (value: NotificationType | 'all') => {
         setFilterValue(value)
+
+        handleSearch(value)
     }
 
     return (
@@ -29,20 +64,29 @@ export const NotificationsRadioCardGroup = () => {
                     <RadioCardItem
                         value="account"
                         className="flex items-center gap-3"
-                        onClick={e => handleClick('account')}
-                        checked={filterValue === 'account'}
+                        onClick={e => handleClick('security alert')}
+                        checked={filterValue === 'security alert'}
                     >
                         <RadioCardIndicator />
                         <span>Account</span>
                     </RadioCardItem>
-                    <RadioCardItem
+                    {/* <RadioCardItem
                         value="3"
                         className="flex items-center gap-3"
-                        onClick={e => handleClick('security')}
-                        checked={filterValue === 'security'}
+                        onClick={e => handleClick('security alert')}
+                        checked={filterValue === 'security alert'}
                     >
                         <RadioCardIndicator />
                         <span>Security</span>
+                    </RadioCardItem> */}
+                    <RadioCardItem
+                        value="3"
+                        className="flex items-center gap-3"
+                        onClick={e => handleClick('new report')}
+                        checked={filterValue === 'new report'}
+                    >
+                        <RadioCardIndicator />
+                        <span>Report</span>
                     </RadioCardItem>
                 </RadioCardGroup>
             </fieldset>

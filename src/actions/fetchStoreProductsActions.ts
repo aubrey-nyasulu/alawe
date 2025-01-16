@@ -10,8 +10,6 @@ export async function fetchStoreProducts({ category, currentPage, query }: { cat
 
         const { products, categories, totalPages } = await fetchProducts({ category, currentPage, query })
 
-        console.log({ totalPages })
-
         return { products, categories, totalPages }
     } catch (error) {
         console.log('failed to approve user', error)

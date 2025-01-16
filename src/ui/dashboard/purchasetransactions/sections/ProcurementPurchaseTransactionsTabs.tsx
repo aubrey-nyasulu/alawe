@@ -39,8 +39,6 @@ export default function ProcurementPurchaseTransactionsTabs({
 
     const pathname = usePathname()
 
-
-
     return (
         <>
             {
