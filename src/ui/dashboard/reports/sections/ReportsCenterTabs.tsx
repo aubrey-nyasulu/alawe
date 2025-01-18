@@ -3,7 +3,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/tremorComponents/Tabs"
 import { ReactNode, useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
-import { RiAddBoxLine, RiFile3Line } from "@remixicon/react"
+import { RiAddBoxLine, RiFile3Line, RiFileAddLine, RiGitRepositoryCommitsLine } from "@remixicon/react"
 import TabReportsContent from "../compoents/TabReportsContent"
 import { Report } from "@/types"
 
@@ -11,13 +11,11 @@ import { Report } from "@/types"
 
 
 export default function ReportsCenterTabs({
-    children, reports
+    children, reports, reportsType
 }: {
     children: ReactNode,
-    reports: {
-        sent: Report[];
-        received: Report[];
-    }
+    reports: { from: string, title: string, documentName: string, downloadableUrl: string }[],
+    reportsType: string
 }) {
     const [currentsection, setCurrentSection] = useState('')
 
@@ -48,19 +46,19 @@ export default function ReportsCenterTabs({
                                 <a href="#reports">
                                     <TabsTrigger value="reports" className="inline-flex gap-1 group">
                                         <RiFile3Line className="size-4" />
-                                        Report
+                                        Reports
                                     </TabsTrigger>
                                 </a>
                                 <a href="#createReport">
                                     <TabsTrigger value="createReport" className="inline-flex gap-1 group">
-                                        <RiAddBoxLine className="size-5 text-inherit" />
-                                        Create Report
+                                        <RiGitRepositoryCommitsLine className="size-5 text-inherit" />
+                                        Send Report
                                     </TabsTrigger>
                                 </a>
                             </TabsList>
                             <div className="mt-0 px-2 md:px-8 py-4">
                                 <TabsContent value="reports">
-                                    <TabReportsContent {...{ reports }} />
+                                    <TabReportsContent {...{ reports, reportsType }} />
                                 </TabsContent>
                                 <TabsContent value="createReport">
                                     {children}

@@ -23,7 +23,7 @@ export async function updateEmployee(id: string, passID: string, formData: FormD
         if (!oldpassword) return 'old password is required'
         if (!newpassword) return 'new password is required'
         if (!confirmpassword) return 'confirm password is required'
-        if (newpassword === oldpassword) return 'you can not change password to the your current password'
+        if (newpassword === oldpassword) return 'you can not change password to the same password'
         if (newpassword !== confirmpassword) return 'new password and confirm password does not match'
 
         const passIdExists = await verifyPassId(passID)

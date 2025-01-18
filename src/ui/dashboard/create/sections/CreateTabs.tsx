@@ -42,7 +42,7 @@ export default function CreateTabs({ Clients, Branches, Salaries, Employees }: {
                                 <TabsTrigger value="createUser" className="inline-flex gap-1 group">
                                     <RiUser3Line className="size-5" />
                                     <a href="#createUser">
-                                        User
+                                        Add New Employee
                                     </a>
                                 </TabsTrigger>
                             </TabsList>

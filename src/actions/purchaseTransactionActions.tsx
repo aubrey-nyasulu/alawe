@@ -4,6 +4,7 @@ import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
 import { PurchasedItemsModel, PurchaseTransactionModel } from '@/db/models'
 import { verifyPassId } from './authenticateActions'
+import { ObjectId } from 'mongodb'
 
 const CreatePurchaseFormSchema = z.object({
     supplier_id: z.string({
@@ -80,7 +81,7 @@ export async function createPurchaseTransaction(passID: string, prevState: creat
 
     console.log({ purchase_total, supplier_id, purchased_items, month, year })
 
-    const purchaseTransaction = await PurchaseTransactionModel.create({ purchase_total, supplier_id, year, month })
+    const purchaseTransaction = await PurchaseTransactionModel.create({ purchase_total, supplier_id: new ObjectId(supplier_id), year, month })
 
     if (purchaseTransaction) {
         const purchasedItemsWithTransactioId = purchased_items.map(purchased_item => (

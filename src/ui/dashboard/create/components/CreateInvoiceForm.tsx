@@ -140,7 +140,7 @@ export default function CreateInvoiceForm({ Clients }: { Clients: Client[] }) {
                 </fieldset>
             </div>
             <div className="mt-6 flex justify-end gap-4">
-                <Button type="submit" {...{ className: 'rounded-full hover:bg-primary dark:hover:bg-primary hover:text-white', variant: 'secondary' }}>Create Invoice</Button>
+                <Button type="submit" {...{ className: 'rounded-full hover:bg-primary dark:hover:bg-primary hover:text-white px-8 py-4', variant: 'secondary' }}>Create Invoice</Button>
             </div>
         </form>
     );

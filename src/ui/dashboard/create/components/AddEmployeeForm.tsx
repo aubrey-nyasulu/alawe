@@ -54,9 +54,9 @@ export default function AddEmployeeForm({ Branches, Salaries, Employees }: { Bra
         <form action={dispatch} ref={formRef} >
             <Toaster />
             <div className="rounded-md bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 p-4 md:p-6">
-                <div className="flex gap-8 items-center mb-4">
-                    <div className='flex-1'>
-                        <TextInput {...{ placeholder: "First Name", name: "firstName", id: 'firstname', type: 'text' }} />
+                <div className="w-full flex flex-col md:flex-row gap-4 md:gap-8 items-center mb-4">
+                    <div className='flex-1 w-full'>
+                        <TextInput {...{ placeholder: "First Name", name: "firstName", id: 'firstname', type: 'text' }} className='w-full' />
                         <div id="FirstName-error" aria-live="polite" aria-atomic="true">
                             {(state?.errors && state.errors?.firstName) &&
                                 state.errors.firstName.map((error: string, index: number) => (
@@ -66,8 +66,8 @@ export default function AddEmployeeForm({ Branches, Salaries, Employees }: { Bra
                                 ))}
                         </div>
                     </div>
-                    <div className='flex-1'>
-                        <TextInput {...{ placeholder: "Last Name", name: "lastName", id: 'lastname' }} />
+                    <div className='flex-1 w-full'>
+                        <TextInput {...{ placeholder: "Last Name", name: "lastName", id: 'lastname' }} className='w-full' />
                         <div id="LastName-error" aria-live="polite" aria-atomic="true">
                             {(state?.errors && state.errors?.lastName) &&
                                 state.errors.lastName.map((error: string, index: number) => (
@@ -79,7 +79,7 @@ export default function AddEmployeeForm({ Branches, Salaries, Employees }: { Bra
                     </div>
                 </div>
                 <div className='mb-4'>
-                    <EmailInput {...{ placeholder: "Your Email here", name: "email", id: 'email' }} />
+                    <EmailInput {...{ placeholder: "Email", name: "email", id: 'email' }} />
                     <div id="email-error" aria-live="polite" aria-atomic="true">
                         {(state?.errors && state.errors?.email) &&
                             state.errors.email.map((error: string, index: number) => (
@@ -159,7 +159,7 @@ export default function AddEmployeeForm({ Branches, Salaries, Employees }: { Bra
                 </div>
             </div>
             <div className="mt-6 flex justify-end gap-4">
-                <Button type="submit" {...{ className: 'rounded-full hover:bg-primary hover:text-white', variant: 'secondary' }}>Add Employee</Button>
+                <Button type="submit" {...{ className: 'rounded-full hover:bg-primary hover:text-white px-8 py-4', variant: 'secondary' }}>Add Employee</Button>
             </div>
         </form>
     );

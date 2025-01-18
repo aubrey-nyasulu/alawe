@@ -1,18 +1,12 @@
-import Pagination from '@/ui/dashboard/invoices/components/pagination';
-import Search from '@/ui/dashboard/components/search';
-import Table from '@/ui/dashboard/invoices/components/table';
-import { CreateInvoice } from '@/ui/dashboard/invoices/components/buttons';
-import { InvoicesTableSkeleton } from '@/ui/dashboard/components/skeletons';
-import { Suspense } from 'react';
-import { fetchCities, fetchInvoicesPages } from '@/lib/data';
-import { Card } from '@/tremorComponents/Card';
-import useServerSession from '@/customHooks/useServerSession';
-import { User } from '@/types';
-import { ResetFilters, SelectCityFilter, SelectYearFilter } from '../../overview/components/OverviewFilters';
-import { FilterIcon } from '@/assets/SVGComponents';
-import { Button } from '@/tremorComponents/Button';
-import FilterButton from './Filters';
-import Filters from './Filters';
+import Pagination from '@/ui/dashboard/invoices/components/pagination'
+import Table from '@/ui/dashboard/invoices/components/table'
+import { InvoicesTableSkeleton } from '@/ui/dashboard/components/skeletons'
+import { Suspense } from 'react'
+import { fetchCities, fetchInvoicesPages } from '@/lib/data'
+import useServerSession from '@/customHooks/useServerSession'
+import { User } from '@/types'
+import { ResetFilters, SelectYearFilter } from '../../overview/components/OverviewFilters'
+import Filters from './Filters'
 
 export default async function BraanchManagerInvoicesTabContent({
     searchParams,
@@ -34,6 +28,7 @@ export default async function BraanchManagerInvoicesTabContent({
     ))
 
     const query = searchParams?.query || searchParams?.year || searchParams?.city || '';
+    const year = searchParams?.year
     const currentPage = Number(searchParams?.page) || 1;
 
     const totalPages = await fetchInvoicesPages(query);
@@ -46,7 +41,35 @@ export default async function BraanchManagerInvoicesTabContent({
 
     return (
         <div className="w-full ">
-            <Filters year={searchParams?.year ?? undefined} />
+            <Filters {...{ searchPlaceholder: 'Search Invoices...' }} >
+                <SelectYearFilter {...{
+                    data: [
+                        {
+                            label: '2024',
+                            value: '2024'
+                        },
+                        {
+                            label: '2023',
+                            value: '2023'
+                        },
+                        {
+                            label: '2022',
+                            value: '2022'
+                        },
+                        {
+                            label: '2021',
+                            value: '2021'
+                        },
+                        {
+                            label: '2020',
+                            value: '2020'
+                        },
+                    ],
+                    defaultValue: year
+                }} />
+
+                <ResetFilters />
+            </Filters>
 
             <div className='w-full '>
                 <Suspense key={query + currentPage} fallback={<InvoicesTableSkeleton />}>

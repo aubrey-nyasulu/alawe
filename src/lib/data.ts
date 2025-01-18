@@ -20,6 +20,7 @@ import ExpenditureModel from '@/db/models/ExpenditureModel'
 import ProcurementExpenditureModel from '@/db/models/ProcurementExpenditureModel'
 import OrdersModel from '@/db/models/OrdersModel'
 import AdminAnalyticsModel from '@/db/models/AdminAnalyticsModel'
+import { PipelineStage } from 'mongoose'
 
 const ITEMS_PER_PAGE = 8
 
@@ -1587,44 +1588,78 @@ export const getTopPerformingSuppliers = async (limit: number = 10) => {
     }
 }
 
-export async function fetchReports(id: string): Promise<{ sent: any[], received: any[] }> {
+export async function fetchReports({ id, query, reportsType }: { id: string, reportsType: string, query: string }): Promise<any[]> {
+
+    console.log({ query })
+
+    const regex = new RegExp(query, 'i')
+
+    console.log({ regex })
+
     try {
         await connectDB()
 
-        const sent: any[] = await ReportModel.find().where('from').equals(id).populate('to')
-        const received: any[] = await ReportModel.find().where('to').equals(id).populate('from')
+        let pipeline: PipelineStage[] = []
 
-        let serializedSent: any = []
-        if (sent.length) {
-            serializedSent = sent.map(({ _id, title, to, documentName, downloadableUrl }) => (
+        if (reportsType === 'received') {
+            pipeline.push({
+                $match: { to: new ObjectId(id) }
+            })
+        } else if (reportsType === 'sent') {
+            pipeline.push({
+                $match: { from: new ObjectId(id) }
+            })
+        } else {
+            pipeline.push(
                 {
-                    _id: _id?.toString(),
-                    title,
-                    to: { _id: to._id.toString(), email: to.email, role: to.role.toString(), username: to.username },
-                    documentName,
-                    downloadableUrl
+                    $sort: { title: 1 }
                 }
-            ))
+            )
         }
 
-        let serializedReceived: any[] = []
-        if (received.length) {
-            serializedReceived = received.map(({ _id, title, from, to, documentName, downloadableUrl }) => (
-                {
-                    _id: _id?.toString(),
-                    title,
-                    from: { _id: from._id.toString(), email: from.email, role: from.role.toString(), username: from.username },
-                    documentName,
-                    downloadableUrl
+        pipeline = [
+            ...pipeline,
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'from',
+                    foreignField: '_id',
+                    as: 'from'
                 }
-            ))
-        }
+            },
+            {
+                $unwind: '$from'
+            },
+            {
+                $project: {
+                    _id: 0, from: '$from.username', title: 1, documentName: 1, downloadableUrl: 1
+                }
+            },
+            {
+                $match: {
+                    $or: [
+                        {
+                            title: { $regex: regex },
+                        },
+                        {
+                            documentName: { $regex: regex },
+                        },
+                        {
+                            downloadableUrl: { $regex: regex },
+                        },
+                        {
+                            from: { $regex: regex },
+                        }
+                    ]
+                }
+            }
+        ]
 
-        return {
-            sent: serializedSent.reverse(),
-            received: serializedReceived.reverse(),
-        }
+        const reports: { from: string, title: string, documentName: string, downloadableUrl: string }[] = await ReportModel.aggregate(pipeline)
 
+        console.log({ reports })
+
+        return reports
     } catch (error) {
         console.log(error)
 
@@ -1638,7 +1673,8 @@ export async function fetchUsers(): Promise<User[]> {
 
         const users: User[] = await UserModel.find()
 
-        return users.map(({ _id, username, role, email }) => ({ _id: _id.toString(), username, role, email }))
+        // @ts-ignore
+        return users.map(({ _id, username, role, email }) => ({ _id: _id.toString(), username, role: role.toString(), email }))
     } catch (error) {
         console.log(error)
 

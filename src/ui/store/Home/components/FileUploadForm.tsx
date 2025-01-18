@@ -112,7 +112,13 @@ export default function FileUploadForm({ users }: { users: User[] }) {
                                 className='border border-gray-300 dark:border-gray-800 rounded-md bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-500 cursor-pointer p-2' />
                         </div>
                         <div className='w-full flex justify-end'>
-                            <Button type='submit' >Send</Button>
+                            <Button
+                                type='submit'
+                                variant='secondary'
+                                className='px-8 py-4 rounded-full'
+                            >
+                                Send
+                            </Button>
                         </div>
                     </div>
                 </div>

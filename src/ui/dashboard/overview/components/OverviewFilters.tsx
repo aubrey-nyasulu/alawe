@@ -117,28 +117,66 @@ export function SelectBranchFilter({ data, defaultValue }: {
   )
 }
 
-export function ResetFilters() {
+export function ResetFilters({ preserve }: { preserve?: string }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
 
   const resetSearch = () => {
-    const params = new URLSearchParams(searchParams!);
+    // paramsNames.forEach(paramName => {
+    //   params.delete(paramName)
+    // })
 
-    params.delete('year');
-    params.delete('city');
-    params.delete('branch_id');
-    replace(`${pathname}?${params.toString()}`);
+    if (preserve) replace(`${pathname}?${preserve}`);
+    else replace(`${pathname}`);
   }
 
   return (
-    <div className="w-fit md:max-w-40" >
-      <Button
-        variant='secondary'
-        onClick={() => resetSearch()}
-      >
-        Reset
-      </Button>
+    <Button
+      variant='secondary'
+      className="w-full md:w-fit py-3 px-6"
+      onClick={() => resetSearch()}
+    >
+      Reset
+    </Button>
+  )
+}
+
+export function DynamicFilter({ data, defaultValue, disabled, name, placeholder }: {
+  name: string,
+  data: {
+    value: string;
+    label: string;
+  }[],
+  defaultValue?: string,
+  disabled?: boolean | undefined,
+  placeholder?: string
+}) {
+
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
+
+  const handleSearch = (term: string) => {
+    const params = new URLSearchParams(searchParams!);
+    params.set(name, '');
+
+    if (term) {
+      params.set(name, term);
+    }
+    replace(`${pathname}?${params.toString()}`);
+  }
+
+  // useEffect(() => { }, [defaultValue])
+
+  return (
+    <div className="w-full md:max-w-40">
+      <SelectComponent
+        disabled={disabled}
+        {...{ data, placeholder: placeholder || 'Filter' }}
+        OnValueChange={handleSearch}
+        value={defaultValue}
+      />
     </div>
   )
 }

@@ -27,7 +27,7 @@ export default function Search({ placeholder, className }: { placeholder: string
     <div className="relative w-full min-w-64">
       <input
         type='search'
-        className={cx("peer block w-full rounded-md bg-white dark:bg-gray-950 dark:text-white text-gray-950 border border-gray-300 dark:border-gray-800 py-3 pl-6 text-sm outline-2 placeholder:text-gray-500", className)}
+        className={cx("peer block w-full rounded-md bg-white dark:bg-gray-950 dark:text-white text-gray-950 border border-gray-300 dark:border-gray-800 py-3 px-4 text-sm outline-2 outline-primary/40 placeholder:text-gray-500", className)}
         placeholder={placeholder}
         onChange={(e) => {
           handleSearch(e.target.value);

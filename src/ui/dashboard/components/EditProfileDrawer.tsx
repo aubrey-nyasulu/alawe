@@ -112,6 +112,7 @@ export function EditProfileDrawer() {
                             <DrawerBody>
                                 <div className="space-y-1 mt-4">
                                     <Label
+                                        className="pl-4 opacity-50"
                                         htmlFor="email"
                                     >
                                         Email
@@ -124,10 +125,12 @@ export function EditProfileDrawer() {
                                         onChange={(el) => {
                                             setEmail(el.target.value)
                                         }}
+                                        required={true}
                                     />
                                 </div>
                                 <div className="space-y-1 mt-4">
                                     <Label
+                                        className="pl-4 opacity-50"
                                         htmlFor="email"
                                     >
                                         Old Password
@@ -139,10 +142,12 @@ export function EditProfileDrawer() {
                                         onChange={(el) => {
                                             setOldPassword(el.target.value)
                                         }}
+                                        required={true}
                                     />
                                 </div>
                                 <div className="space-y-1 mt-4">
                                     <Label
+                                        className="pl-4 opacity-50"
                                         htmlFor="email"
                                     >
                                         New Password
@@ -154,10 +159,12 @@ export function EditProfileDrawer() {
                                         onChange={(el) => {
                                             setPassword(el.target.value)
                                         }}
+                                        required={true}
                                     />
                                 </div>
                                 <div className="space-y-1 mt-4">
                                     <Label
+                                        className="pl-4 opacity-50"
                                         htmlFor="email"
                                     >
                                         Confirm
@@ -169,19 +176,20 @@ export function EditProfileDrawer() {
                                         onChange={(el) => {
                                             setConfirmPassword(el.target.value)
                                         }}
+                                        required={true}
                                     />
                                 </div>
                             </DrawerBody>
                             <DrawerFooter className="mt-6">
                                 <DrawerClose asChild>
                                     <Button
-                                        className="mt-2 w-full sm:mt-0 sm:w-fit"
+                                        className="mt-2 w-full sm:mt-0 sm:w-fit px-8 py-4 rounded-full"
                                         variant="secondary"
                                     >
                                         Go back
                                     </Button>
                                 </DrawerClose>
-                                <Button className="w-full sm:w-fit" onClick={() => null}>
+                                <Button className="w-full sm:w-fit px-8 py-4 rounded-full" onClick={() => null}>
                                     Save
                                 </Button>
                             </DrawerFooter>

@@ -27,7 +27,7 @@ export const adminAnalyticsLinks = [
 ];
 
 export const adminworksSpaceLinks = [
-    { name: 'Create', href: '/dashboard/create', },
+    { name: 'Add', href: '/dashboard/create', },
     {
         name: 'Reports',
         href: '/dashboard/reports',

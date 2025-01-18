@@ -1,14 +1,11 @@
-import Pagination from '@/ui/dashboard/invoices/components/pagination';
-import Search from '@/ui/dashboard/components/search';
-import InventoryTable from '@/ui/dashboard/inventory/components/InventoryTable';
-import { InvoicesTableSkeleton } from '@/ui/dashboard/components/skeletons';
-import { Suspense } from 'react';
-import { fetchFilteredInventoryPages } from '@/lib/data';
-import { SelectComponent } from '@/ui/dashboard/components/SelectComponent';
-import { fetchBranches } from '@/lib/dbdirect';
-import { Card } from '@/tremorComponents/Card';
-import { ResetFilters, SelectBranchFilter } from '../overview/components/OverviewFilters';
-import Filters from './components/Filters';
+import Pagination from '@/ui/dashboard/invoices/components/pagination'
+import InventoryTable from '@/ui/dashboard/inventory/components/InventoryTable'
+import { InvoicesTableSkeleton } from '@/ui/dashboard/components/skeletons'
+import { Suspense } from 'react'
+import { fetchFilteredInventoryPages } from '@/lib/data'
+import { fetchBranches } from '@/lib/dbdirect'
+import Filters from '../create/components/Filters'
+import { SelectBranchFilter, ResetFilters } from '../overview/components/OverviewFilters'
 
 export default async function InventoryPage({
     searchParams,
@@ -37,8 +34,12 @@ export default async function InventoryPage({
     // const totalPages = 1
 
     return (
-        <div className="w-full p-4 px-2 md:px-4 ">
-            <Filters data={data} />
+        <div className="w-full px-2 py-4 md:p-4 ">
+            <Filters {...{ searchPlaceholder: 'Search Inventory...', className: 'top-0' }}>
+                <SelectBranchFilter {...{ data, placeholder: 'Select Branch' }} />
+
+                <ResetFilters />
+            </Filters>
 
             <div className='w-full '>
                 <Suspense key={query + currentPage} fallback={<InvoicesTableSkeleton />}>

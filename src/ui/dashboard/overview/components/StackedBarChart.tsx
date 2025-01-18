@@ -37,7 +37,7 @@ const valueFormatter = (number: number) => {
 };
 
 const status = {
-    "Fullfilled": "bg-amber-500 dark:bg-amber-500",
+    "Fullfilled": "bg-emerald-500 dark:bg-emerald-500",
     "Unfullfilled": "bg-primary dark:bg-primary",
 }
 
@@ -56,7 +56,7 @@ const Tooltip = ({ payload, active, label }: TooltipProps) => {
 
     return (
         <>
-            <div className="w-60 rounded-md border border-gray-500/10  bg-amber-500 px-4 py-1.5 text-sm shadow-md dark:border-gray-400/20 dark:bg-gray-900">
+            <div className="w-60 rounded-md border border-gray-500/10  bg-emerald-600 px-4 py-1.5 text-sm shadow-md dark:border-gray-400/20 dark:bg-gray-900">
                 <p className="flex items-center justify-between">
                     <span className="text-gray-50 dark:text-gray-50">
                         Date
@@ -106,8 +106,7 @@ export function StackedBarChart({ ordersFullfilmentRates }: { ordersFullfilmentR
                 data={formattedArray}
                 index="date"
                 categories={["Fullfilled", "Unfullfilled"]}
-                type="stacked"
-                colors={["amber", "primary",]}
+                colors={["emerald", "primary",]}
                 valueFormatter={valueFormatter}
                 yAxisWidth={35}
                 // showLegend={false}
@@ -119,8 +118,7 @@ export function StackedBarChart({ ordersFullfilmentRates }: { ordersFullfilmentR
                 data={formattedArray}
                 index="date"
                 categories={["Fullfilled", "Unfullfilled"]}
-                type="stacked"
-                colors={["amber", "primary",]}
+                colors={["emerald", "primary",]}
                 valueFormatter={valueFormatter}
                 showYAxis={false}
                 // showLegend={false}
