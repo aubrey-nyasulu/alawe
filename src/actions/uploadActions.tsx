@@ -1,13 +1,13 @@
 'use server';
 
 import { z } from 'zod'
-// import { put } from '@vercel/blob';
+import { put } from '@vercel/blob';
 import { revalidatePath } from 'next/cache';
 import ReportModel from '@/db/models/ReportModel';
 import { Report, } from '@/types';
 import { pusher } from '@/lib/pusher'
 import { NotificationModel } from '@/db/models';
-import { passIDs } from '@/lib/utils';
+import { verifyPassId } from './authenticateActions';
 
 const CreatereportFormSchema = z.object({
     title: z.string({
@@ -57,24 +57,18 @@ export async function uploadImage(passID: string, prev: createReport, formData: 
         }
     }
 
-    if (!passIDs.includes(passID)) return {
-        message: `Create, Update and Delete are only allowed for users provided with a passID. You only have Read Permissions within the dahboard. Contact the Owner to be able to perfom all CRUD operations`,
-        success: false
-    }
+    const passIdExists = await verifyPassId(passID)
+
+
+    if (!passIdExists.isValid) return { message: `Create, Update and Delete are only allowed for users provided with a passID. You only have Read Permissions within the dahboard. Contact the Owner to be able to perfom all CRUD operations`, success: false }
 
     const { from, to, title, File } = validatedFields.data
 
     if (from.toString() === to.toString()) return { message: `you can not send to yourself`, success: false }
 
-    // const blob = await put(File.name, File, {
-    //     access: 'public',
-    // });
-
-    const blob = {
-        title: 'title',
-        pathname: 'pathname',
-        downloadUrl: 'downloadUrl'
-    }
+    const blob = await put(File.name, File, {
+        access: 'public',
+    });
 
     const report: Report = {
         title,

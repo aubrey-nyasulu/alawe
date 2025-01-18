@@ -31,7 +31,9 @@ export function ClientApplyDrawer({ showModel, setShowModel }: { showModel: bool
     const [oldPassword, setOldPassword] = useState<string | undefined>('')
     const [password, setPassword] = useState<string | undefined>('')
     const [confirmPassword, setConfirmPassword] = useState<string | undefined>('')
+
     const { toast } = useToast()
+
     const formRef = useRef<HTMLFormElement>(null)
 
     const handleSubmit = async (formaData: FormData) => {

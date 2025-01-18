@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import InvoiceModel from '../db/models/InvoiceModel'
 import { ObjectId } from 'mongodb'
-import { passIDs } from '@/lib/utils'
+import { verifyPassId } from './authenticateActions'
 
 const CreateInvoiceFormSchema = z.object({
     id: z.string(),
@@ -82,10 +82,10 @@ export async function updateInvoice(
         }
     }
 
-    if (!passIDs.includes(passID)) return {
-        message: `Create, Update and Delete are only allowed for users provided with a passID. You only have Read Permissions within the dahboard. Contact the Owner to be able to perfom all CRUD operations`,
-        success: false
-    }
+    const passIdExists = await verifyPassId(passID)
+
+
+    if (!passIdExists.isValid) return { message: `Create, Update and Delete are only allowed for users provided with a passID. You only have Read Permissions within the dahboard. Contact the Owner to be able to perfom all CRUD operations`, success: false }
 
     const { amount, status } = validatedFields.data
     const amountInCents = Math.round(amount * 100)
@@ -104,10 +104,10 @@ export async function updateInvoice(
 export async function deleteInvoice(id: string, passID: string) {
     // throw new Error('Failed to Delete Invoice')
     try {
-        if (!passIDs.includes(passID)) return {
-            message: `Create, Update and Delete are only allowed for users provided with a passID. You only have Read Permissions within the dahboard. Contact the Owner to be able to perfom all CRUD operations`,
-            success: false
-        }
+        const passIdExists = await verifyPassId(passID)
+
+
+        if (!passIdExists.isValid) return { message: `Create, Update and Delete are only allowed for users provided with a passID. You only have Read Permissions within the dahboard. Contact the Owner to be able to perfom all CRUD operations`, success: false }
 
         await InvoiceModel.findOneAndDelete(new ObjectId(id))
         revalidatePath('/dashboard/invoices')

@@ -418,3 +418,21 @@ export const CategoriesIcon = () => (
         </g>
     </svg>
 )
+
+export const CookieIcon = () => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        width="1.5em"
+        height="1.5em"
+    >
+        <path
+            stroke="#000"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M9 16h.01M12 11h.01M7 10h.01M15 16h.01M21 12a9 9 0 1 1-9-9c0 2.761 1.79 5 4 5 0 2.21 2.239 4 5 4Z"
+        />
+    </svg>
+)

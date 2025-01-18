@@ -119,13 +119,6 @@ export default function PageStateProvider({ session, children }: PageStateProvid
         if (!window) return
         updatePageStateState(params.get('notifications') || '')
         updateReview()
-
-        const passID = params.get('passID')
-
-        if (passID) {
-            localStorage.setItem('passID', passID)
-        }
-
     }, [])
 
 

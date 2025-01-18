@@ -70,21 +70,8 @@ export function StoreContextProvider({ children }: { children: ReactNode }) {
         setTotalPages(totalPages)
     }
 
-    // const params = useSearchParams()
-
     useEffect(() => {
         if (!window) return
-        const queryString = window.location.search
-
-        const searchParams = new URLSearchParams(queryString)
-
-        const passID = searchParams.get('passID')
-
-        console.log({ passID })
-
-        if (typeof passID === 'string') {
-            localStorage.setItem('passID', passID)
-        }
 
         updateStoreState({ category: '', query: '', currentPage: 1 })
     }, [])

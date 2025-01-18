@@ -5,7 +5,6 @@ import bcrypt from 'bcryptjs'
 import { JWT } from 'next-auth/jwt'
 import connectDB from '@/db/config/connectDB'
 import { UserRoleModel } from '@/db/models'
-import { ObjectId } from "mongodb"
 
 export const authOptions: AuthOptions = {
     providers: [

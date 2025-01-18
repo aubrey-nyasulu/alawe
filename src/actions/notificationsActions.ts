@@ -24,9 +24,6 @@ export async function getNotifications(id: string, query?: string) {
             })
             .sort({ updatedAt: -1 })
 
-        console.log({ notifications })
-
-
         const seliarisedNotifications = notifications.map(({ _id, userId, message, type, target }) => {
             return {
                 _id: _id?.toString(), userId: userId.toString(), message, type, target: target?.toString()

@@ -3,7 +3,7 @@
 import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
 import { PurchasedItemsModel, PurchaseTransactionModel } from '@/db/models'
-import { passIDs } from '@/lib/utils'
+import { verifyPassId } from './authenticateActions'
 
 const CreatePurchaseFormSchema = z.object({
     supplier_id: z.string({
@@ -71,10 +71,9 @@ export async function createPurchaseTransaction(passID: string, prevState: creat
         }
     }
 
-    if (!passIDs.includes(passID)) return {
-        message: `Create, Update and Delete are only allowed for users provided with a passID. You only have Read Permissions within the dahboard. Contact the Owner to be able to perfom all CRUD operations`,
-        success: false
-    }
+    const passIdExists = await verifyPassId(passID)
+
+    if (!passIdExists.isValid) return { message: `Create, Update and Delete are only allowed for users provided with a passID. You only have Read Permissions within the dahboard. Contact the Owner to be able to perfom all CRUD operations`, success: false }
 
     // Prepare data for insertion into the database
     const { purchase_total, supplier_id, purchased_items, month, year } = validatedFields.data

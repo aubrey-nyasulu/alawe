@@ -43,11 +43,10 @@ export function EditProfileDrawer() {
     const { toast } = useToast()
 
     const handleSubmit = async (formaData: FormData) => {
-
-        if (!formaData.get('password')) return alert('password is required')
-
         try {
             const passID = localStorage.getItem('passID') || ''
+
+            console.log({ passID })
 
             const updateEmployeeWithId = updateEmployee.bind(null, user._id, passID)
             const res = await updateEmployeeWithId(formaData)
@@ -61,6 +60,11 @@ export function EditProfileDrawer() {
                 })
                 const updatedNotifications = await getNotifications(user._id)
                 setNotifications(updatedNotifications)
+
+                setOldPassword('')
+                setPassword('')
+                setConfirmPassword('')
+
                 setEditProfileModalShow(false)
             }
             else {
@@ -144,8 +148,8 @@ export function EditProfileDrawer() {
                                         New Password
                                     </Label>
                                     <PasswordInput
-                                        id="password"
-                                        name="password"
+                                        id="newpassword"
+                                        name="newpassword"
                                         value={password}
                                         onChange={(el) => {
                                             setPassword(el.target.value)
@@ -159,8 +163,8 @@ export function EditProfileDrawer() {
                                         Confirm
                                     </Label>
                                     <PasswordInput
-                                        id="confirm"
-                                        name="confirm"
+                                        id="confirmpassword"
+                                        name="confirmpassword"
                                         value={confirmPassword}
                                         onChange={(el) => {
                                             setConfirmPassword(el.target.value)

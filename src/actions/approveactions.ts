@@ -7,13 +7,16 @@ import UserModel from "@/db/models/UserModel"
 import { Employee } from "@/types"
 import { ObjectId } from "mongodb"
 import { pusher } from '@/lib/pusher'
-import { passIDs } from "@/lib/utils"
+import { verifyPassId } from "./authenticateActions"
 
 export async function approveEmployee(id: string, targetId: string, passID: string) {
     try {
         connectDB()
 
-        if (!passIDs.includes(passID)) return `Create, Update and Delete are only allowed for users provided with a passID. You only have Read Permissions within the dahboard. Contact the Owner to be able to perfom all CRUD operations`
+        const passIdExists = await verifyPassId(passID)
+
+
+        if (!passIdExists.isValid) return `Create, Update and Delete are only allowed for users provided with a passID. You only have Read Permissions within the dahboard. Contact the Owner to be able to perfom all CRUD operations`
 
         if (!id) return 'request poorly formed'
 
@@ -82,7 +85,7 @@ export async function declineEmployee(id: string, targetId: string, passID: stri
     try {
         connectDB()
 
-        if (!passIDs.includes(passID)) return `Create, Update and Delete are only allowed for users provided with a passID. You only have Read Permissions within the dahboard. Contact the Owner to be able to perfom all CRUD operations`
+        // if (!passIDs.includes(passID)) return `Create, Update and Delete are only allowed for users provided with a passID. You only have Read Permissions within the dahboard. Contact the Owner to be able to perfom all CRUD operations`
 
         if (!id) return 'request poorly formed'
 
