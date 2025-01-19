@@ -26,14 +26,14 @@ export default function Cart() {
 
     return (
         <div className="relative">
-            <div className='absolute right-0 bg-primary text-white w-6 h-6 rounded-full grid place-content-center z-40'>
-                <small>{totalItems}</small>
-            </div>
-
             <Button
-                className='bg-transparent shadow-none'
+                className='bg-transparent shadow-none h-full'
                 onClick={() => setShowModel(prevState => !prevState)}
             >
+                <div className='absolute top-0 right-0 bg-primary text-white w-6 h-6 rounded-full grid place-content-center z-40'>
+                    <small>{totalItems}</small>
+                </div>
+
                 <CartIcon {...{ width: '2.2em', height: '2.2em' }} />
             </Button>
 

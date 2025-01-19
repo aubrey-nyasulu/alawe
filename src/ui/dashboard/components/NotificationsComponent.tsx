@@ -24,7 +24,7 @@ export default function NotificationsComponent() {
             <div className='relative text-gray-900 dark:text-gray-50'>
                 {
                     notificationsCount &&
-                    <div className={cx('absolute w-4 h-4 p-1 -top-[6px] -left-[6px] rounded-full bg-primary grid place-content-center text-white ', pathname === '/notifications' && 'bg-white text-primary')}>
+                    <div className={cx('absolute w-6 h-6 p-1 -top-[12px] -left-[12px] rounded-full bg-primary grid place-content-center text-white ', pathname === '/notifications' && 'bg-white text-primary')}>
                         <small className='text-xs font-semibold'>{notificationsCount}</small>
                     </div>
                 }

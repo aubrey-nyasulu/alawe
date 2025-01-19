@@ -3,9 +3,10 @@ import { DynamicFilter, ResetFilters } from "@/ui/dashboard/overview/components/
 import { CreateUserCard } from "../../create/components/CreateUserCard";
 import { Button } from "@/tremorComponents/Button";
 import Filters from "../../create/components/Filters";
+import TimePassed from "@/app/dashboard/notifications/TimePassed";
 
 export default function TabReportsContent({ reports, reportsType }: {
-    reports: { from?: string, to?: string, title: string, documentName: string, downloadableUrl: string }[],
+    reports: { from?: string, to?: string, title: string, documentName: string, downloadableUrl: string, createdAt: string | Date }[],
     reportsType: string
 }) {
     return (
@@ -45,9 +46,15 @@ export default function TabReportsContent({ reports, reportsType }: {
                                                             {report.title}
                                                         </h2>
 
-                                                        <small className="opacity-30">
-                                                            {reportsType === 'received' ? 'Received from' : 'Sent to'}: {reportsType === 'received' ? report.from : report.to}
-                                                        </small>
+                                                        <div className="opacity-50 flex items-center gap-2">
+                                                            <small >
+                                                                {reportsType === 'received' ? 'Received from' : 'Sent to'}: {reportsType === 'received' ? report.from : report.to}
+                                                            </small>
+
+                                                            <small>
+                                                                <TimePassed inputDate={new Date(report.createdAt)} />
+                                                            </small>
+                                                        </div>
                                                     </div>
                                                     <div className="flex items-center justify-between">
                                                         <a href={report.downloadableUrl} download>

@@ -1621,7 +1621,7 @@ export async function fetchReports({ id, query, reportsType }: { id: string, rep
                 },
                 {
                     $project: {
-                        _id: 0, from: '$from.username', title: 1, documentName: 1, downloadableUrl: 1
+                        _id: 0, from: '$from.username', title: 1, documentName: 1, downloadableUrl: 1, createdAt: 1
                     }
                 },
                 {
@@ -1641,7 +1641,12 @@ export async function fetchReports({ id, query, reportsType }: { id: string, rep
                             }
                         ]
                     }
-                }
+                },
+                {
+                    $sort: {
+                        createdAt: -1
+                    }
+                },
             ]
         } else if (reportsType === 'sent') {
             // pipeline.push({
@@ -1665,7 +1670,7 @@ export async function fetchReports({ id, query, reportsType }: { id: string, rep
                 },
                 {
                     $project: {
-                        _id: 0, to: '$to.username', title: 1, documentName: 1, downloadableUrl: 1
+                        _id: 0, to: '$to.username', title: 1, documentName: 1, downloadableUrl: 1, createdAt: 1
                     }
                 },
                 {
@@ -1685,7 +1690,12 @@ export async function fetchReports({ id, query, reportsType }: { id: string, rep
                             }
                         ]
                     }
-                }
+                },
+                {
+                    $sort: {
+                        createdAt: -1
+                    }
+                },
             ]
         } else {
             pipeline.push(
@@ -1696,8 +1706,7 @@ export async function fetchReports({ id, query, reportsType }: { id: string, rep
         }
 
 
-
-        const reports: { from?: string, to?: string, title: string, documentName: string, downloadableUrl: string }[] = await ReportModel.aggregate(pipeline)
+        const reports: { from?: string, to?: string, title: string, documentName: string, downloadableUrl: string, createdAt: string | Date }[] = await ReportModel.aggregate(pipeline)
 
         console.log({ reports })
 

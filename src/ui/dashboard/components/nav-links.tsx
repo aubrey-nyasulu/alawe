@@ -61,7 +61,7 @@ export default function NavLinks({ links, }: {
                   (
                     link.name === "Notifications" && (notificationsCount > 0)
                   ) &&
-                  <div className={cx('absolute w-4 h-4 p-1 -top-[8px] -left-[8px] rounded-full bg-primary grid place-content-center text-white ', pathname === link.href && 'bg-white text-primary')}>
+                  <div className={cx('absolute w-6 h-6 p-1 -top-[12px] -left-[12px] rounded-full bg-primary grid place-content-center text-white ', pathname === link.href && 'bg-white text-primary')}>
                     <small className='text-xs font-semibold'>{notificationsCount}</small>
                   </div>
                 }

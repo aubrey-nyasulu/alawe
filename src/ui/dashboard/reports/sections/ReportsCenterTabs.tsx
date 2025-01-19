@@ -11,7 +11,7 @@ export default function ReportsCenterTabs({
     children, reports, reportsType, isCEO
 }: {
     children: ReactNode,
-    reports: { from?: string, to?: string, title: string, documentName: string, downloadableUrl: string }[],
+    reports: { from?: string, to?: string, title: string, documentName: string, downloadableUrl: string, createdAt: string | Date }[],
     reportsType: string,
     isCEO: boolean
 }) {
