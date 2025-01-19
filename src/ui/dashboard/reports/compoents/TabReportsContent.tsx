@@ -36,13 +36,17 @@ export default function TabReportsContent({ reports, reportsType }: {
                                     const fileType = fileTypeFromExt(ext)
 
                                     return (
-                                        <Card key={report.title + index} className="p-3 gap-0 flex items-center justify-between relative  ">
+                                        <Card key={report.title + index} className="p-3 pt-8 gap-0 flex items-center justify-between relative  ">
                                             <small className="absolute w-fit h-8 bg-gray-200 dark:bg-gray-800 -top-3 grid place-content-center px-4 rounded-full">{fileType} Document</small>
-                                            <div className="flex flex-col items-center justify-between">
-                                                <h2 className="capitalize font-semibold">{
-                                                    reportsType === 'received' ? 'From' : 'To'}: {reportsType === 'received' ? report.from : report.to}</h2>
+                                            <div className="flex flex-col gap-1">
+                                                <h2 className="capitalize font-semibold">
+                                                    {report.title}
+                                                </h2>
+
+                                                <small className="opacity-30">
+                                                    {reportsType === 'received' ? 'Received from' : 'Sent to'}: {reportsType === 'received' ? report.from : report.to}
+                                                </small>
                                             </div>
-                                            <small className="px-2 hidden md:block">{report.title}</small>
                                             <div className="flex items-center justify-between">
                                                 <a href={report.downloadableUrl} download>
                                                     <Button variant="secondary" className="md:px-8 md:py-4 px-4 py-3 rounded-full">

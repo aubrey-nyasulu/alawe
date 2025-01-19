@@ -56,7 +56,7 @@ export function LandingPageMobileMenuDrawer({ showMenu, setShowMenu }: { showMen
                                     >
                                         Products
                                     </Link>
-                                    <Link
+                                    <a
                                         href={"/login"}
                                         className={cx('block justify-self-end hover:text-primary w-full py-4 px-8 rounded-full', active === 'bulk-order' && 'bg-[#323232] text-white')}
                                         onClick={() => {
@@ -65,7 +65,7 @@ export function LandingPageMobileMenuDrawer({ showMenu, setShowMenu }: { showMen
                                         }}
                                     >
                                         Login
-                                    </Link>
+                                    </a>
                                 </ul>
                             </div>
                         </DrawerBody>
