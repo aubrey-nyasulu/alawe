@@ -1,7 +1,6 @@
 'use server'
 
 import { z } from 'zod'
-import { revalidatePath } from 'next/cache'
 import { ObjectId } from 'mongodb'
 import TempEmployeeModel from '@/db/models/TempEmployeeModel'
 import { EmployeeModel, SalaryModel } from '../db/models'
@@ -60,6 +59,8 @@ export async function createEmployee(passID: string, prevState: createEmployeeSt
         reportsTo: formData.get('reportsTo'),
     })
 
+    console.log('innnnnnnn!!!!!!!')
+
     // If form validation fails, return errors early. Otherwise, continue.
     if (!validatedFields.success) {
         return {
@@ -79,12 +80,33 @@ export async function createEmployee(passID: string, prevState: createEmployeeSt
     const { amount } = await SalaryModel.findById(new ObjectId(salary))
     const salaryAmount = Number(amount)
 
-    const newEmployee = await TempEmployeeModel.create({ firstname: firstName, lastname: lastName, email, branch_id: new ObjectId(branchID), salary: salaryAmount, reports_to: new ObjectId(reportsTo) })
-    // const newEmployee = await EmployeeModel.create({ firstname: firstName, lastname: lastName, email, branch_id: new ObjectId(branchID), salary: salaryAmount, reports_to: new ObjectId(reportsTo) })
+    try {
+        console.log('about to add employee')
 
-    // Revalidate the cache for the invoices page and redirect the user.
-    revalidatePath('/dashboard/create')
-    return { message: `added ${firstName} ${lastName} successfully. Waiting for CEO to approve`, success: true }
+        let user = await TempEmployeeModel.find().where({ email })
+
+        if (user.length > 0) {
+            return { message: `Failed to add employee, email is already taken`, success: false }
+        }
+        user = await EmployeeModel.find().where({ email })
+
+        if (user.length > 0) {
+            return { message: `Failed to add employee, email is already taken`, success: false }
+        }
+
+        const res = await TempEmployeeModel.create({ firstname: firstName, lastname: lastName, email, branch_id: new ObjectId(branchID), salary: salaryAmount, reports_to: new ObjectId(reportsTo) })
+
+        console.log('led', { res })
+
+        if (res) {
+            return { message: `added ${firstName} ${lastName} successfully. Waiting for CEO to approve`, success: true }
+        } else {
+            return { message: `Some Error occured`, success: false }
+        }
+
+    } catch (error: any) {
+        return { message: `Failed to add empl0yee, please try again after some minutes.`, success: false }
+    }
 }
 
 export async function getTempEmployees() {

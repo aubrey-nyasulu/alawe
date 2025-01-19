@@ -8,8 +8,8 @@ export type BranchType = "Office" | "Shop" | "Factory" | "Storage"
 type defs = {
     [key: string]: any
     _id?: string
-    createdAt?: Date
-    updatedAt?: Date
+    createdAt?: Date | string
+    updatedAt?: Date | string
 }
 
 export interface Branch extends defs {
@@ -25,7 +25,7 @@ export interface User extends defs {
     _id: string
     username: string
     email: string
-    role: UserRole // ObjectId
+    role: UserRole | string // ObjectId
 }
 
 

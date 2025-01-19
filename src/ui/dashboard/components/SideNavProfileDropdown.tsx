@@ -19,7 +19,7 @@ import {
   DropdownMenuRadioItem,
 } from "@/tremorComponents/DropdownMenu"
 import { deleteInvoice } from "@/actions/invoiceActions"
-import { RiMore2Line, RiLogoutBoxLine, RiColorFilterLine, RiSunLine, RiMoonLine, RiComputerLine, RiProfileLine, RiArrowUpSLine, RiArrowDownSLine } from "@remixicon/react";
+import { RiMore2Line, RiLogoutBoxLine, RiColorFilterLine, RiSunLine, RiMoonLine, RiComputerLine, RiProfileLine, RiArrowUpSLine, RiArrowDownSLine, RiUser2Line, RiUser3Line, RiUser4Line } from "@remixicon/react";
 import { useContext, useEffect, useState } from "react"
 import { DoubleCaret } from "@/assets/SVGComponents"
 import { signOut } from 'next-auth/react'
@@ -27,7 +27,6 @@ import { PageStateContext } from "@/context/PageStateProvider"
 import { Button } from "@/tremorComponents/Button"
 
 export default function SideNavProfileDropdown({ username, role }: { username?: string, role?: string }) {
-
   const { theme, handleThemeChange, setEditProfileModalShow, } = useContext(PageStateContext)
 
   return (
@@ -36,7 +35,7 @@ export default function SideNavProfileDropdown({ username, role }: { username?: 
         <DropdownMenuTrigger className="px-0 w-full" asChild>
           <button className='w-full gap-4 flex items-center justify-between md:px-4 md:py-4  text-gray-900 dark:text-gray-50 md:hover:bg-gray-100 dark:md:hover:bg-gray-800'
           >
-            <div className='w-10 h-10 rounded-full bg-slate-200 grid place-content-center text-start text-black'>UN</div>
+            <div className='w-10 h-10 rounded-full bg-slate-200 grid place-content-center text-start text-black'>{username?.split(' ').map(name => name[0].toUpperCase()).join('')}</div>
 
             <div className="text-start hidden md:block flex-1">
               {
@@ -58,11 +57,11 @@ export default function SideNavProfileDropdown({ username, role }: { username?: 
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent >
-          <DropdownMenuLabel>Tilawe Meat Merchants</DropdownMenuLabel>
+          <DropdownMenuLabel>{username} - {role}</DropdownMenuLabel>
 
           <DropdownMenuSeparator />
 
-          <DropdownMenuGroup>
+          <DropdownMenuGroup className="space-y-2 md:space-y-0">
             <DropdownMenuSubMenu>
               <DropdownMenuSubMenuTrigger>
                 <span className="flex items-center gap-x-2">
@@ -112,17 +111,19 @@ export default function SideNavProfileDropdown({ username, role }: { username?: 
 
               </DropdownMenuSubMenuContent>
             </DropdownMenuSubMenu>
+
             <button
               className="w-full"
               onClick={() => setEditProfileModalShow(true)}
             >
               <DropdownMenuItem >
                 <span className="flex items-center gap-x-2">
-                  <RiProfileLine className="size-4 text-inherit" />
-                  Update Profile
+                  <RiUser4Line className="size-4 text-inherit" />
+                  Profile Settings
                 </span>
               </DropdownMenuItem>
             </button>
+
             <button
               className="w-full"
               onClick={() => signOut()}

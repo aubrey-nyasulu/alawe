@@ -95,6 +95,17 @@ export function DeleteInvoice({ id, passID }: { id: string, passID: string }) {
 
       return
     }
+
+    if (res?.success && res?.message) {
+      toast({
+        title: "Successfull",
+        description: res.message,
+        variant: "success",
+        duration: 10000,
+      })
+
+      return
+    }
   }
 
   return (

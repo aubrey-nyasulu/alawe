@@ -4,7 +4,7 @@ import NavLinks from '@/ui/dashboard/components/nav-links';
 import { CEOAnalyticsLinks, CEOWorksSpaceLinks, adminAnalyticsLinks, adminworksSpaceLinks, BranchManagerAnalyticsLinks, BranchManagerWorksSpaceLinks, ProcurementManagerAnalyticsLinks, ProcurementManagerWorksSpaceLinks, SupplyChainManagerWorksSpaceLinks, SupplyChainManagerAnalyticsLinks } from '@/lib/constants';
 import { UserRole } from '@/types';
 
-export default function SideNavLinks({ role, _id }: { role: UserRole, _id: string }) {
+export default function SideNavLinks({ role, _id }: { role: UserRole | string, _id: string }) {
     const userLinks = role === "Company Manager"
         ? [CEOAnalyticsLinks, CEOWorksSpaceLinks]
         : role === "Admin"

@@ -13,7 +13,13 @@ import { Toaster } from "@/ui/dashboard/components/Toaster"
 import CustomSelect from '@/ui/dashboard/components/CustomSelect';
 
 
-export default function AddEmployeeForm({ Branches, Salaries, Employees }: { Branches: Branch[], Salaries: FetchSalariesReturnType[], Employees: Employee[] }) {
+export default function AddEmployeeForm({ Branches, Salaries, Users }: {
+    Branches: Branch[], Salaries: FetchSalariesReturnType[], Users: {
+        _id: string
+        username: string
+        role: string
+    }[]
+}) {
     const { toast } = useToast()
 
     const passID = localStorage.getItem('passID') || ''
@@ -25,6 +31,8 @@ export default function AddEmployeeForm({ Branches, Salaries, Employees }: { Bra
     const formRef = useRef<HTMLFormElement | null>(null);
 
     useEffect(() => {
+        console.log({ state })
+
         if (!state?.success && state.message) {
             toast({
                 title: "Failed",
@@ -56,7 +64,7 @@ export default function AddEmployeeForm({ Branches, Salaries, Employees }: { Bra
             <div className="rounded-md bg-gray-50 dark:bg-gray-950 border border-gray-300 dark:border-gray-800 p-4 md:p-6">
                 <div className="w-full flex flex-col md:flex-row gap-4 md:gap-8 items-center mb-4">
                     <div className='flex-1 w-full'>
-                        <TextInput {...{ placeholder: "First Name", name: "firstName", id: 'firstname', type: 'text' }} className='w-full' />
+                        <TextInput {...{ placeholder: "First Name", name: "firstName", id: 'firstname', type: 'text' }} className='w-full' required />
                         <div id="FirstName-error" aria-live="polite" aria-atomic="true">
                             {(state?.errors && state.errors?.firstName) &&
                                 state.errors.firstName.map((error: string, index: number) => (
@@ -67,7 +75,7 @@ export default function AddEmployeeForm({ Branches, Salaries, Employees }: { Bra
                         </div>
                     </div>
                     <div className='flex-1 w-full'>
-                        <TextInput {...{ placeholder: "Last Name", name: "lastName", id: 'lastname' }} className='w-full' />
+                        <TextInput {...{ placeholder: "Last Name", name: "lastName", id: 'lastname' }} className='w-full' required />
                         <div id="LastName-error" aria-live="polite" aria-atomic="true">
                             {(state?.errors && state.errors?.lastName) &&
                                 state.errors.lastName.map((error: string, index: number) => (
@@ -79,7 +87,7 @@ export default function AddEmployeeForm({ Branches, Salaries, Employees }: { Bra
                     </div>
                 </div>
                 <div className='mb-4'>
-                    <EmailInput {...{ placeholder: "Email", name: "email", id: 'email' }} />
+                    <EmailInput {...{ placeholder: "Email", name: "email", id: 'email' }} required />
                     <div id="email-error" aria-live="polite" aria-atomic="true">
                         {(state?.errors && state.errors?.email) &&
                             state.errors.email.map((error: string, index: number) => (
@@ -138,13 +146,13 @@ export default function AddEmployeeForm({ Branches, Salaries, Employees }: { Bra
                         <option value="" disabled>
                             Reports To
                         </option>
-                        {Employees.map((employee, index) => (
+                        {Users.map(({ _id, username, role }, index) => (
                             <option
                                 key={index}
-                                value={employee._id}
+                                value={_id}
                                 className='hover:bg-primary'
                             >
-                                {employee.firstname + ' - ' + employee.lastname}
+                                {username + ' - ' + role}
                             </option>
                         ))}
                     </CustomSelect>

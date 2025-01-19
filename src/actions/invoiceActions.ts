@@ -111,7 +111,7 @@ export async function deleteInvoice(id: string, passID: string) {
 
         await InvoiceModel.findOneAndDelete(new ObjectId(id))
         revalidatePath('/dashboard/invoices')
-        return { message: 'Deleted Invoice.' }
+        return { success: true, message: 'Deleted Invoice.' }
     } catch (error) {
         return { message: 'Database Error: Failed to Delete Invoice.' }
     }

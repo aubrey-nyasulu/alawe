@@ -28,7 +28,7 @@ const TempEmployeeSchema = new Schema({
     },
     reports_to: {
         type: Schema.Types.ObjectId,
-        ref: 'Employee'
+        ref: 'User'
     },
     branch_id: {
         type: Schema.Types.ObjectId,

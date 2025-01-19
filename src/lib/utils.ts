@@ -224,3 +224,29 @@ export function capitalise(str: string) {
 export function calculatePercentage(num1: number, num2: number, toFixedValue = 2) {
   return Number(((num1 / num2) * 100).toFixed(toFixedValue))
 }
+
+export function timeAgo(inputDate: Date | string | number): string {
+  const date = new Date(inputDate)
+  const now = new Date()
+  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000)
+
+  if (diffInSeconds < 60) return `${diffInSeconds}s` // seconds ago
+
+  const diffInMinutes = Math.floor(diffInSeconds / 60)
+  if (diffInMinutes < 60) return `${diffInMinutes}min` // minutes ago
+
+  const diffInHours = Math.floor(diffInMinutes / 60)
+  if (diffInHours < 24) return `${diffInHours}hr` // hours ago
+
+  const diffInDays = Math.floor(diffInHours / 24)
+  if (diffInDays < 7) return `${diffInDays}d` // days ago
+
+  const diffInWeeks = Math.floor(diffInDays / 7)
+  if (diffInWeeks < 4) return `${diffInWeeks}w` // weeks ago
+
+  const diffInMonths = Math.floor(diffInDays / 30)
+  if (diffInMonths < 12) return `${diffInMonths}mon` // months ago
+
+  const diffInYears = Math.floor(diffInDays / 365)
+  return `${diffInYears}y` // years ago
+}

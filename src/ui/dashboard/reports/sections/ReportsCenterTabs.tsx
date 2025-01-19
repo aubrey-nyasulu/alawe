@@ -5,17 +5,15 @@ import { ReactNode, useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
 import { RiAddBoxLine, RiFile3Line, RiFileAddLine, RiGitRepositoryCommitsLine } from "@remixicon/react"
 import TabReportsContent from "../compoents/TabReportsContent"
-import { Report } from "@/types"
-
-
 
 
 export default function ReportsCenterTabs({
-    children, reports, reportsType
+    children, reports, reportsType, isCEO
 }: {
     children: ReactNode,
     reports: { from?: string, to?: string, title: string, documentName: string, downloadableUrl: string }[],
-    reportsType: string
+    reportsType: string,
+    isCEO: boolean
 }) {
     const [currentsection, setCurrentSection] = useState('')
 
@@ -49,20 +47,26 @@ export default function ReportsCenterTabs({
                                         Reports
                                     </TabsTrigger>
                                 </a>
-                                <a href="#createReport">
-                                    <TabsTrigger value="createReport" className="inline-flex gap-1 group">
-                                        <RiGitRepositoryCommitsLine className="size-5 text-inherit" />
-                                        Send Report
-                                    </TabsTrigger>
-                                </a>
+                                {
+                                    isCEO &&
+                                    <a href="#createReport">
+                                        <TabsTrigger value="createReport" className="inline-flex gap-1 group">
+                                            <RiGitRepositoryCommitsLine className="size-5 text-inherit" />
+                                            Send Report
+                                        </TabsTrigger>
+                                    </a>
+                                }
                             </TabsList>
                             <div className="mt-0 px-2 md:px-8 py-4">
                                 <TabsContent value="reports">
                                     <TabReportsContent {...{ reports, reportsType }} />
                                 </TabsContent>
-                                <TabsContent value="createReport">
-                                    {children}
-                                </TabsContent>
+                                {
+                                    isCEO &&
+                                    <TabsContent value="createReport">
+                                        {children}
+                                    </TabsContent>
+                                }
                             </div>
                         </Tabs>
                     )

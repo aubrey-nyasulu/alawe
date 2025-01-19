@@ -32,7 +32,8 @@ export function EditInvoiceDrawer() {
     const { editInvoiceModalShow, setEditInvoiceModalShow } = useContext(PageStateContext)
     const { toast } = useToast()
 
-    const passID = localStorage.getItem('passID') || ''
+    const passID = (() => window ? localStorage.getItem('passID') || '' : "")()
+
     const updateInvoiceWithId = updateInvoice.bind(null, editInvoiceModalShow.id, passID);
 
     const initialState = { message: '', errors: {} };

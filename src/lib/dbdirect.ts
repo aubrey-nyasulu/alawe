@@ -15,7 +15,8 @@ import {
     Revenue,
     SalesTransaction,
     Salary,
-    Notification
+    Notification,
+    User
 } from '@/types'
 import {
     RevenueModel,
@@ -43,6 +44,7 @@ import { ObjectId } from 'mongodb';
 connectDB()
 
 import { unstable_noStore as noStore } from 'next/cache';
+import UserModel from '@/db/models/UserModel';
 
 export type FetchRevenueReturnType = {
     [K in keyof Revenue]: K extends 'revenue' ? string : Revenue[K]
@@ -178,6 +180,38 @@ export async function fetchImployees(): Promise<Employee[]> {
         const data: Employee[] = await EmployeeModel.find()
 
         return data.map(({ _id, firstname, lastname, email, branch_id }) => ({ _id: _id?.toString(), firstname, lastname, email, branch_id: branch_id.toString() }))
+    } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to fetch revenue data.');
+    }
+}
+
+export async function fetchUsers(): Promise<{ _id: string, username: string, role: string }[]> {
+    noStore();
+
+    try {
+        connectDB()
+        const data: { _id: string, username: string, role: string }[] = await UserModel.aggregate([
+            {
+                $lookup: {
+                    from: 'userroles',
+                    localField: 'role',
+                    foreignField: '_id',
+                    as: 'role'
+                }
+            },
+            {
+                $unwind: '$role'
+            },
+            {
+                $project: {
+                    username: 1,
+                    role: '$role.role',
+                }
+            }
+        ])
+
+        return data.map(user => ({ ...user, _id: user._id.toString() }))
     } catch (error) {
         console.error('Database Error:', error);
         throw new Error('Failed to fetch revenue data.');

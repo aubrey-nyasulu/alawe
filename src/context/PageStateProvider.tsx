@@ -121,8 +121,6 @@ export default function PageStateProvider({ session, children }: PageStateProvid
         updateReview()
     }, [])
 
-
-
     useEffect(() => {
         // Initialize Pusher
         const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY || '', {
@@ -134,6 +132,7 @@ export default function PageStateProvider({ session, children }: PageStateProvid
 
         // Listen for 'new-notification' events
         channel.bind('new-notification', async (data: { message: string }) => {
+            console.log('subscribed')
             //   setNotifications((prev) => ([...prev, data.message])
             let res = await updateNotifications()
         })

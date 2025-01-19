@@ -277,8 +277,6 @@ export async function fetchAdminAnalytics({ year }: { year: string }) {
             }
         ])
 
-        console.log('fugure', chartdata)
-
         return {
             usageAnalytics: usageAnalytics[0],
             chartdata

@@ -12,7 +12,13 @@ import { RiUser3Line } from "@remixicon/react"
 
 
 
-export default function CreateTabs({ Clients, Branches, Salaries, Employees }: { Clients: Client[], Branches: Branch[], Salaries: FetchSalariesReturnType[], Employees: Employee[] }) {
+export default function CreateTabs({ Clients, Branches, Salaries, Users }: {
+    Clients: Client[], Branches: Branch[], Salaries: FetchSalariesReturnType[], Users: {
+        _id: string
+        username: string
+        role: string
+    }[]
+}) {
     const [currentsection, setCurrentSection] = useState('')
 
     useEffect(() => {
@@ -48,7 +54,7 @@ export default function CreateTabs({ Clients, Branches, Salaries, Employees }: {
                             </TabsList>
                             <div className="mt-4 px-2 md:px-8 py-2 md:py-4">
                                 <TabsContent value="createUser">
-                                    <TabsCreateEmployeeContent {...{ Branches, Salaries, Employees }} />
+                                    <TabsCreateEmployeeContent {...{ Branches, Salaries, Users }} />
                                 </TabsContent>
                             </div>
                         </Tabs>

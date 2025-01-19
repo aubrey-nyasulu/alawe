@@ -1,4 +1,3 @@
-
 import { fetchReports, fetchUsers } from "@/lib/data";
 import { CreateUserCard } from "../create/components/CreateUserCard";
 import ReportsCenterTabs from "./sections/ReportsCenterTabs";
@@ -18,6 +17,8 @@ export default async function ReportsPage({
 
     const user = session?.user as User
 
+    const isCEO = user.role !== 'Company Manager'
+
     const reportsType = searchParams?.reportsType || 'received'
     const query = searchParams?.query || ''
 
@@ -26,7 +27,7 @@ export default async function ReportsPage({
 
     return (
         <div className="w-full ">
-            <ReportsCenterTabs {...{ reports, reportsType }}>
+            <ReportsCenterTabs {...{ reports, reportsType, isCEO }}>
                 <CreateUserCard {...{ title: 'Report', subTitle: 'Create Report' }}>
                     <FileUploadForm {...{ users }} />
                 </CreateUserCard>

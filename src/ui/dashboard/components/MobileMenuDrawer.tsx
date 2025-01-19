@@ -21,7 +21,7 @@ import SideNavLinks from "./SideNavLinks"
 
 
 
-export function MobileMenuDrawer({ role, _id }: { role: UserRole, _id: string }) {
+export function MobileMenuDrawer({ role, _id }: { role: UserRole | string, _id: string }) {
 
     const { data: session } = useSession()
     const user = session?.user as User
