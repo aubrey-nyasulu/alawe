@@ -48,7 +48,7 @@ export default function Filters({ currentPage, query }: { currentPage: number, q
                 <div className='w-fit flex flex-row md:flex-col gap-4'>
                     <Button
                         variant='secondary'
-                        className={cx('px-8 py-4 rounded-full w-fit md:w-full text-stone-500', currentCategory === '' && 'text-black border-stone-500')}
+                        className={cx('px-8 py-4 rounded-full w-fit md:w-full text-stone-500 hover:text-black', currentCategory === '' && 'text-black border-stone-500')}
                         onClick={() => {
                             setCurrentCategory('')
                             updateStoreState({ category: '', currentPage: Number(currentPage) || 1, query })
@@ -62,7 +62,7 @@ export default function Filters({ currentPage, query }: { currentPage: number, q
                             <Button
                                 key={category}
                                 variant='secondary'
-                                className={cx('px-8 py-4 rounded-full w-fit md:w-full text-stone-500', currentCategory === category && 'text-black border-stone-500')}
+                                className={cx('px-8 py-4 rounded-full w-fit md:w-full text-stone-500 hover:text-black', currentCategory === category && 'text-black border-stone-500')}
                                 onClick={() => {
                                     setCurrentCategory(category)
                                     updateStoreState({ category, currentPage: Number(currentPage) || 1, query })

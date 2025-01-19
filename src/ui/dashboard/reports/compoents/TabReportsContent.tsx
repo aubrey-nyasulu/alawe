@@ -25,42 +25,45 @@ export default function TabReportsContent({ reports, reportsType }: {
 
             <div className="w-full space-y-4 mt-4">
                 <CreateUserCard {...{ title: reportsType, subTitle: '' }}>
-                    <div className="w-full space-y-4">
-                        {
-                            reports.length
-                                ? reports.map((report, index) => {
+                    {
+                        reports.length
+                            ? (
+                                < div className="w-full space-y-6 mt-3">
+                                    {
+                                        reports.map((report, index) => {
 
-                                    const nameArr = report.documentName.split('.')
-                                    const ext = nameArr[nameArr.length - 1]
+                                            const nameArr = report.documentName.split('.')
+                                            const ext = nameArr[nameArr.length - 1]
 
-                                    const fileType = fileTypeFromExt(ext)
+                                            const fileType = fileTypeFromExt(ext)
 
-                                    return (
-                                        <Card key={report.title + index} className="p-3 pt-8 gap-0 flex items-center justify-between relative  ">
-                                            <small className="absolute w-fit h-8 bg-gray-200 dark:bg-gray-800 -top-3 grid place-content-center px-4 rounded-full">{fileType} Document</small>
-                                            <div className="flex flex-col gap-1">
-                                                <h2 className="capitalize font-semibold">
-                                                    {report.title}
-                                                </h2>
+                                            return (
+                                                <Card key={report.title + index} className="p-3 pt-8 gap-0 flex items-center justify-between relative  ">
+                                                    <small className="absolute w-fit h-8 bg-gray-100 dark:bg-gray-900 -top-3 grid place-content-center px-4 rounded-full">{fileType} Document</small>
+                                                    <div className="flex flex-col gap-1">
+                                                        <h2 className="capitalize font-semibold">
+                                                            {report.title}
+                                                        </h2>
 
-                                                <small className="opacity-30">
-                                                    {reportsType === 'received' ? 'Received from' : 'Sent to'}: {reportsType === 'received' ? report.from : report.to}
-                                                </small>
-                                            </div>
-                                            <div className="flex items-center justify-between">
-                                                <a href={report.downloadableUrl} download>
-                                                    <Button variant="secondary" className="md:px-8 md:py-4 px-4 py-3 rounded-full">
-                                                        download
-                                                    </Button>
-                                                </a>
-                                            </div>
-                                        </Card>
-                                    )
-                                })
-
-                                : <p className="p-4 pt-0 opacity-50">You currently have 0 total reports {reportsType} </p>
-                        }
-                    </div>
+                                                        <small className="opacity-30">
+                                                            {reportsType === 'received' ? 'Received from' : 'Sent to'}: {reportsType === 'received' ? report.from : report.to}
+                                                        </small>
+                                                    </div>
+                                                    <div className="flex items-center justify-between">
+                                                        <a href={report.downloadableUrl} download>
+                                                            <Button variant="secondary" className="md:px-8 md:py-4 px-4 py-3 rounded-full">
+                                                                download
+                                                            </Button>
+                                                        </a>
+                                                    </div>
+                                                </Card>
+                                            )
+                                        })
+                                    }
+                                </div>
+                            )
+                            : <p className="p-4 pt-0 opacity-50">0 reports {reportsType} </p>
+                    }
                 </CreateUserCard>
             </div>
         </>
