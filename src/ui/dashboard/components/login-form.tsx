@@ -3,7 +3,6 @@
 import { useContext, useEffect, useState } from 'react'
 import { signIn } from 'next-auth/react'
 import { Button } from '@/tremorComponents/Button'
-import { useFormState, useFormStatus } from 'react-dom';
 import { cx } from '@/lib/utils';
 import StoreContext from '@/context/StoreStateProvider';
 // import { authenticate } from '@/actions/invoiceActions';
@@ -35,8 +34,15 @@ export default function LoginForm() {
       password
     })
 
+    console.log('\n\n\n\n', res, '\n\n\n\n')
+
     if (res?.error) {
-      setError('Invalid email or password')
+      if (res.status !== 401) {
+        setError('The servers did not respond in time, please make sure you are connected to the internet')
+      } else {
+        setError('Invalid email or password')
+      }
+
       setIsSubmitting(false)
     } else {
       // Redirect on successful login
@@ -48,7 +54,7 @@ export default function LoginForm() {
 
   return (
     <>
-      {error && <p style={{ color: 'red' }} className='mb-4'> {error} </p>
+      {error && <p style={{ color: 'red' }} className='mb-4 text-center'> {error} </p>
       }
       <form onSubmit={handleSubmit} className='w-full flex flex-col gap-6' >
         <input

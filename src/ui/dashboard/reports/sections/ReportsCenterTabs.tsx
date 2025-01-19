@@ -14,7 +14,7 @@ export default function ReportsCenterTabs({
     children, reports, reportsType
 }: {
     children: ReactNode,
-    reports: { from: string, title: string, documentName: string, downloadableUrl: string }[],
+    reports: { from?: string, to?: string, title: string, documentName: string, downloadableUrl: string }[],
     reportsType: string
 }) {
     const [currentsection, setCurrentSection] = useState('')

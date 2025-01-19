@@ -5,7 +5,7 @@ import { Button } from "@/tremorComponents/Button";
 import Filters from "../../create/components/Filters";
 
 export default function TabReportsContent({ reports, reportsType }: {
-    reports: { from: string, title: string, documentName: string, downloadableUrl: string }[],
+    reports: { from?: string, to?: string, title: string, documentName: string, downloadableUrl: string }[],
     reportsType: string
 }) {
     return (
@@ -27,30 +27,34 @@ export default function TabReportsContent({ reports, reportsType }: {
                 <CreateUserCard {...{ title: reportsType, subTitle: '' }}>
                     <div className="w-full space-y-4">
                         {
-                            reports.map((report, index) => {
+                            reports.length
+                                ? reports.map((report, index) => {
 
-                                const nameArr = report.documentName.split('.')
-                                const ext = nameArr[nameArr.length - 1]
+                                    const nameArr = report.documentName.split('.')
+                                    const ext = nameArr[nameArr.length - 1]
 
-                                const fileType = fileTypeFromExt(ext)
+                                    const fileType = fileTypeFromExt(ext)
 
-                                return (
-                                    <Card key={report.title + index} className="p-3 gap-0 flex items-center justify-between  ">
-                                        {/* <small>date</small> */}
-                                        <div className="flex flex-col items-center justify-between">
-                                            <h2 className="capitalize font-semibold">{report.title}</h2>
-                                        </div>
-                                        <small className="px-2 hidden md:block">{fileType} Document</small>
-                                        <div className="flex items-center justify-between">
-                                            <a href={report.downloadableUrl} download>
-                                                <Button variant="secondary" className="md:px-8 md:py-4 px-4 py-3 rounded-full">
-                                                    download
-                                                </Button>
-                                            </a>
-                                        </div>
-                                    </Card>
-                                )
-                            })
+                                    return (
+                                        <Card key={report.title + index} className="p-3 gap-0 flex items-center justify-between relative  ">
+                                            <small className="absolute w-fit h-8 bg-gray-200 dark:bg-gray-800 -top-3 grid place-content-center px-4 rounded-full">{fileType} Document</small>
+                                            <div className="flex flex-col items-center justify-between">
+                                                <h2 className="capitalize font-semibold">{
+                                                    reportsType === 'received' ? 'From' : 'To'}: {reportsType === 'received' ? report.from : report.to}</h2>
+                                            </div>
+                                            <small className="px-2 hidden md:block">{report.title}</small>
+                                            <div className="flex items-center justify-between">
+                                                <a href={report.downloadableUrl} download>
+                                                    <Button variant="secondary" className="md:px-8 md:py-4 px-4 py-3 rounded-full">
+                                                        download
+                                                    </Button>
+                                                </a>
+                                            </div>
+                                        </Card>
+                                    )
+                                })
+
+                                : <p className="p-4 pt-0 opacity-50">You currently have 0 total reports {reportsType} </p>
                         }
                     </div>
                 </CreateUserCard>
@@ -59,11 +63,21 @@ export default function TabReportsContent({ reports, reportsType }: {
     )
 }
 
-
-function fileTypeFromExt(ext: string) {
+function fileTypeFromExt(ext: string): string {
     switch (ext.toLowerCase()) {
         case 'docx': return 'Microsoft Word'
+        case 'doc': return 'Microsoft Word'
         case 'pdf': return 'PDF'
-        default: return ext
+        case 'xlsx': return 'Microsoft Excel Spreadsheet'
+        case 'xls': return 'Microsoft Excel Spreadsheet'
+        case 'pptx': return 'Microsoft PowerPoint Presentation'
+        case 'ppt': return 'Microsoft PowerPoint Presentation'
+        case 'csv': return 'Comma-Separated Values'
+        case 'txt': return 'Plain Text File'
+        case 'rtf': return 'Rich Text Format'
+        case 'odt': return 'OpenDocument Text'
+        case 'ods': return 'OpenDocument Spreadsheet'
+        case 'odp': return 'OpenDocument Presentation File'
+        default: return `Unknown or Unsupported File Type (${ext})`
     }
 }

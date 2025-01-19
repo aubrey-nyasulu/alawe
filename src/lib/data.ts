@@ -1602,13 +1602,93 @@ export async function fetchReports({ id, query, reportsType }: { id: string, rep
         let pipeline: PipelineStage[] = []
 
         if (reportsType === 'received') {
-            pipeline.push({
-                $match: { to: new ObjectId(id) }
-            })
+            // pipeline.push({
+            //     $match: { to: new ObjectId(id) }
+            // })
+
+            pipeline = [
+                {
+                    $match: { to: new ObjectId(id) }
+                },
+                {
+                    $lookup: {
+                        from: 'users',
+                        localField: 'from',
+                        foreignField: '_id',
+                        as: 'from'
+                    }
+                },
+                {
+                    $unwind: '$from'
+                },
+                {
+                    $project: {
+                        _id: 0, from: '$from.username', title: 1, documentName: 1, downloadableUrl: 1
+                    }
+                },
+                {
+                    $match: {
+                        $or: [
+                            {
+                                title: { $regex: regex },
+                            },
+                            {
+                                documentName: { $regex: regex },
+                            },
+                            {
+                                downloadableUrl: { $regex: regex },
+                            },
+                            {
+                                from: { $regex: regex },
+                            }
+                        ]
+                    }
+                }
+            ]
         } else if (reportsType === 'sent') {
-            pipeline.push({
-                $match: { from: new ObjectId(id) }
-            })
+            // pipeline.push({
+            //     $match: { from: new ObjectId(id) }
+            // })
+
+            pipeline = [
+                {
+                    $match: { from: new ObjectId(id) }
+                },
+                {
+                    $lookup: {
+                        from: 'users',
+                        localField: 'to',
+                        foreignField: '_id',
+                        as: 'to'
+                    }
+                },
+                {
+                    $unwind: '$to'
+                },
+                {
+                    $project: {
+                        _id: 0, to: '$to.username', title: 1, documentName: 1, downloadableUrl: 1
+                    }
+                },
+                {
+                    $match: {
+                        $or: [
+                            {
+                                title: { $regex: regex },
+                            },
+                            {
+                                documentName: { $regex: regex },
+                            },
+                            {
+                                downloadableUrl: { $regex: regex },
+                            },
+                            {
+                                to: { $regex: regex },
+                            }
+                        ]
+                    }
+                }
+            ]
         } else {
             pipeline.push(
                 {
@@ -1617,45 +1697,9 @@ export async function fetchReports({ id, query, reportsType }: { id: string, rep
             )
         }
 
-        pipeline = [
-            ...pipeline,
-            {
-                $lookup: {
-                    from: 'users',
-                    localField: 'from',
-                    foreignField: '_id',
-                    as: 'from'
-                }
-            },
-            {
-                $unwind: '$from'
-            },
-            {
-                $project: {
-                    _id: 0, from: '$from.username', title: 1, documentName: 1, downloadableUrl: 1
-                }
-            },
-            {
-                $match: {
-                    $or: [
-                        {
-                            title: { $regex: regex },
-                        },
-                        {
-                            documentName: { $regex: regex },
-                        },
-                        {
-                            downloadableUrl: { $regex: regex },
-                        },
-                        {
-                            from: { $regex: regex },
-                        }
-                    ]
-                }
-            }
-        ]
 
-        const reports: { from: string, title: string, documentName: string, downloadableUrl: string }[] = await ReportModel.aggregate(pipeline)
+
+        const reports: { from?: string, to?: string, title: string, documentName: string, downloadableUrl: string }[] = await ReportModel.aggregate(pipeline)
 
         console.log({ reports })
 
