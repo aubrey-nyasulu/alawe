@@ -1,23 +1,17 @@
-import ContactSection from "./sections/ContactSection";
-import FeaturedProductsSection from "./sections/FeaturedProductsSection";
-import BulkDiscounts from "./sections/BulkDiscounts";
-import AboutUsSection from "./sections/AboutUsSection";
-import SectionThree from "./sections/SectionThree";
-import SectionTwo from "./sections/SectionTwo";
-import WhyUsSection from "./sections/WhyUsSection";
-import Hero from "./components/Hero";
+import FeaturedProductsSection from "./sections/FeaturedProductsSection"
+import AboutUsSection from "./sections/AboutUsSection"
+import BulkDiscounts from "./sections/BulkDiscounts"
+import WhyUsSection from "./sections/WhyUsSection"
+import HeroSection from "./sections/HeroSection"
 
 export default function LandingPage() {
     return (
         <>
-            <Hero />
+            <HeroSection />
             <FeaturedProductsSection />
             <BulkDiscounts />
             <WhyUsSection />
             <AboutUsSection />
-            {/* <SectionTwo />
-            <SectionThree />
-            <ContactSection /> */}
         </>
     )
 }

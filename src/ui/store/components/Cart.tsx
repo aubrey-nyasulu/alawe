@@ -1,9 +1,10 @@
-import { CartIcon } from '@/assets/SVGComponents';
 import React, { useContext, useEffect, useState } from 'react';
-import { CartDrawer } from './CartDrawer';
+
 import { Button } from '@/tremorComponents/Button';
-import { setConfig } from 'next/config';
+
+import { CartIcon } from '@/assets/SVGComponents';
 import CartContext from '@/context/CartStateProvider';
+import { CartDrawer } from './CartDrawer';
 
 export default function Cart() {
     const [showModel, setShowModel] = useState(false)
@@ -15,6 +16,7 @@ export default function Cart() {
 
         const element = document.querySelector('.bpFab') as HTMLDivElement
 
+        // todo - test if this is necessary
         if (element) {
             if (showModel) {
                 element.style.opacity = '0'

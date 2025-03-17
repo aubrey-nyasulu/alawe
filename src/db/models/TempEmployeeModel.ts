@@ -55,8 +55,8 @@ TempEmployeeSchema.pre('save', async function (next) {
 
     await NotificationModel.create(notification)
 
-    next();
-});
+    next()
+})
 
 const TempEmployeeModel = models?.TempUser || model('TempUser', TempEmployeeSchema)
 export default TempEmployeeModel

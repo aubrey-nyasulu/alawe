@@ -13,25 +13,11 @@ import {
     DrawerHeader,
     DrawerTitle,
 } from "@/tremorComponents/Drawer"
-import { EmailInput, PasswordInput, TextInput } from "@/ui/dashboard/components/InputComponents"
-import { Label } from "@/tremorComponents/Label"
+
+import { EmailInput, TextInput } from "@/ui/components/InputComponents"
 import { useToast } from "@/customHooks/useToast"
 
-type StateType = [boolean, () => void, () => void, () => void] & {
-    state: boolean
-    open: () => void
-    close: () => void
-    toggle: () => void
-}
-
 export function ClientApplyDrawer({ showModel, setShowModel }: { showModel: boolean, setShowModel: Dispatch<SetStateAction<boolean>> }) {
-
-
-    const [email, setEmail] = useState<string | undefined>('')
-    const [oldPassword, setOldPassword] = useState<string | undefined>('')
-    const [password, setPassword] = useState<string | undefined>('')
-    const [confirmPassword, setConfirmPassword] = useState<string | undefined>('')
-
     const { toast } = useToast()
 
     const formRef = useRef<HTMLFormElement>(null)
@@ -45,6 +31,7 @@ export function ClientApplyDrawer({ showModel, setShowModel }: { showModel: bool
         })
 
         if (formRef.current) formRef.current.reset()
+
         setShowModel(false)
     }
 
@@ -62,25 +49,30 @@ export function ClientApplyDrawer({ showModel, setShowModel }: { showModel: bool
                     <DrawerContent className="sm:max-w-lg">
                         <DrawerHeader>
                             <DrawerTitle>Insert Information</DrawerTitle>
-                            {/* <DrawerDescription className="mt-1 text-sm"> */}
-                            {/* </DrawerDescription> */}
+                            <DrawerDescription className="mt-1 text-sm hidden">
+                                Drawer description
+                            </DrawerDescription>
                         </DrawerHeader>
-                        <form action={handleSubmit} className="h-full min-h-[60vh] flex flex-col justify-between" ref={formRef}>
+
+                        <form
+                            action={handleSubmit}
+                            ref={formRef}
+                            className="h-full min-h-[60vh] flex flex-col justify-between"
+                        >
                             <DrawerBody>
                                 <div className="space-y-1 mt-4">
                                     <TextInput {...{ placeholder: 'your name/company name', required: true }} />
                                 </div>
+
                                 <div className="space-y-1 mt-4">
                                     <EmailInput
                                         id="email"
                                         name="email"
                                         placeholder={'your email here'}
-                                        onChange={(el: any) => {
-                                            setEmail(el.target.value)
-                                        }}
                                         required={true}
                                     />
                                 </div>
+
                                 <div className="w-full mt-4">
                                     <textarea
                                         name="textarea"
@@ -92,15 +84,17 @@ export function ClientApplyDrawer({ showModel, setShowModel }: { showModel: bool
                                     ></textarea>
                                 </div>
                             </DrawerBody>
+
                             <DrawerFooter className="mt-6">
                                 <DrawerClose asChild>
                                     <Button
-                                        className="mt-2 w-full sm:mt-0 sm:w-fit px-8 py-4 rounded-full"
                                         variant="secondary"
+                                        className="mt-2 w-full sm:mt-0 sm:w-fit px-8 py-4 rounded-full"
                                     >
                                         cancel
                                     </Button>
                                 </DrawerClose>
+
                                 <Button className="w-full sm:w-fit px-8 py-4 rounded-full" onClick={() => null}>
                                     Apply
                                 </Button>

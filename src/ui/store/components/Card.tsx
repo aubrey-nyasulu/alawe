@@ -1,10 +1,12 @@
 'use client'
 
-import Image, { StaticImageData } from 'next/image'
-import { Button } from '@/tremorComponents/Button'
-import CardSelect from './CardSelect'
 import { useContext, useState } from 'react'
+import Image, { StaticImageData } from 'next/image'
+
+import { Button } from '@/tremorComponents/Button'
+
 import CartContext from '@/context/CartStateProvider'
+import CardSelect from './CardSelect'
 
 export default function Card({ image, name, price }: { image: StaticImageData, name: string, price: number }) {
     const [value, setValue] = useState(0)
@@ -25,9 +27,9 @@ export default function Card({ image, name, price }: { image: StaticImageData, n
                     className='w-full aspect-[4/3] hover:scale-110'
                 />
             </div>
+
             <div className='pt-4 px-2 flex gap-4 items-center justify-between'>
                 <p className=''>{name}</p>
-
                 <p>MK{price}</p>
             </div>
 
@@ -40,11 +42,11 @@ export default function Card({ image, name, price }: { image: StaticImageData, n
                         Dispatch({ type: 'ADD', payload: { quantity: 1, name, price } })
                     }}
                 >
-                    Add to Cart</Button>
+                    Add to Cart
+                </Button>
 
                 <div className='w-fit'>
                     <CardSelect {...{
-                        // @ts-ignore
                         data: (!card?.quantity || card?.quantity < 19)
                             ? Array.from({ length: 20 }, (_, i) => (i).toString())
                             : Array.from(
@@ -55,10 +57,16 @@ export default function Card({ image, name, price }: { image: StaticImageData, n
                                     return (val).toString()
                                 }
                             ),
-                        // @ts-ignore
                         value: card?.quantity?.toString() || '0',
                         OnValueChange: (newValue) => {
-                            Dispatch({ type: 'ADD', payload: { quantity: Number(newValue) - value, name, price } })
+                            Dispatch({
+                                type: 'ADD',
+                                payload: {
+                                    quantity: Number(newValue) - value,
+                                    name,
+                                    price
+                                }
+                            })
 
                             setValue(Number(newValue))
                         }

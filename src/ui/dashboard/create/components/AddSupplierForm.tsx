@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react';
 import { Button } from '../../../../tremorComponents/Button';
 import { createSupplier } from '@/actions/supplierActions';
 import { useFormState } from 'react-dom';
-import { TextInput } from '../../components/InputComponents';
+import { TextInput } from '../../../components/InputComponents';
 import { useToast } from "@/customHooks/useToast"
 import { Toaster } from "@/ui/dashboard/components/Toaster"
 

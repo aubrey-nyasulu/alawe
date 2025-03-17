@@ -94,7 +94,7 @@ export interface Payment extends defs {
 export interface Product extends defs {
     name: string
     type: 'Meat Product' | 'Grocery'
-    price?: number
+    price: number
 }
 
 export interface ProductSold extends defs {

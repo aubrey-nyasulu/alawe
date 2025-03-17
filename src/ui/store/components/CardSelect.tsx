@@ -1,4 +1,10 @@
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/tremorComponents/Select"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
+} from "@/tremorComponents/Select"
 
 export default function CardSelect(
     {
@@ -18,7 +24,8 @@ export default function CardSelect(
             placeholder?: string,
             disabled?: boolean | undefined,
             props?: any,
-        }) {
+        }
+) {
 
     return (
         <Select
@@ -31,6 +38,7 @@ export default function CardSelect(
             <SelectTrigger className="mx-auto">
                 <SelectValue placeholder={placeholder} />
             </SelectTrigger>
+
             <SelectContent>
                 {data.map(value => (
                     <SelectItem key={value} value={value}>

@@ -1,7 +1,7 @@
 import { fetchReports, fetchUsers } from "@/lib/data";
 import { CreateUserCard } from "../create/components/CreateUserCard";
 import ReportsCenterTabs from "./sections/ReportsCenterTabs";
-import FileUploadForm from "@/ui/store/Home/components/FileUploadForm";
+import FileUploadForm from "@/ui/dashboard/reports/compoents/FileUploadForm";
 import useServerSession from "@/customHooks/useServerSession";
 import { User } from "@/types";
 

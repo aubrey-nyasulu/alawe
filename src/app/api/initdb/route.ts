@@ -6,7 +6,6 @@ import sampleData from "@/dev/sampleData";
 import errorHandler from "@/lib/errorHandler";
 import { NextRequest, NextResponse } from "next/server";
 import { Branch, Client, Employee, Item, Product, PurchasedItem, Revenue, TilaweDatabaseEntity } from "@/types";
-import asyncHandler from "@/lib/asyncHandler";
 import connectDB from "@/db/config/connectDB";
 import {
     RevenueModel,
@@ -100,15 +99,10 @@ export async function PUT(req: NextRequest) {
     try {
         connectDB()
 
-        let res = await populateInventory()
+        let res = await populateAdminAnalytics()
+        if (!res) throw new Error('failed to populate Admin Analytics')
 
-        if (res) {
-            return NextResponse.json(res)
-        } else {
-            return NextResponse.json({ message: 'failed' }, { status: 303 })
-        }
-
-        return NextResponse.json('fallback response')
+        return NextResponse.json('successfull')
     } catch (error) {
         errorHandler(error, '', '', '',)
         console.log('error in API text route', error)

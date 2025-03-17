@@ -1,5 +1,5 @@
 import Pagination from '@/ui/dashboard/invoices/components/pagination';
-import Search from '@/ui/dashboard/components/search';
+import Search from '@/ui/components/search';
 import Table from '@/ui/dashboard/inventory/components/InventoryTable';
 import { InvoicesTableSkeleton } from '@/ui/dashboard/components/skeletons';
 import { Suspense } from 'react';

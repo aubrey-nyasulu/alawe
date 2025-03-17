@@ -1,10 +1,12 @@
 "use client"
 
-import { RiMenuLine } from "@remixicon/react"
 import { Dispatch, SetStateAction } from "react"
 
-export default function LandingPageMobileMenuButton({ showMenu, setShowMenu }: { showMenu: boolean, setShowMenu: Dispatch<SetStateAction<boolean>> }) {
+import { RiMenuLine } from "@remixicon/react"
 
+export default function LandingPageMobileMenuButton(
+    { setShowMenu }: { setShowMenu: Dispatch<SetStateAction<boolean>> }
+) {
     return (
         <button
             className=""

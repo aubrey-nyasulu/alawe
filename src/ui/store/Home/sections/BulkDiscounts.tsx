@@ -1,4 +1,5 @@
 import Image from 'next/image';
+
 import sectionImg from '@/../public/store/bulk discounts.png'
 import ClientApply from '../components/Clientapply';
 
@@ -18,8 +19,14 @@ export default function BulkDiscounts() {
                 />
             </div>
             <div className='w-full flex flex-col gap-2'>
-                <h2 className='text-xl md:text-3xl font-extrabold'>Bulk Discounts</h2>
-                <p>We offer discounts for bulk purchases to large stores and organizations. Reach out to our sales team through the website for more details on pricing and terms.</p>
+                <h2 className='text-xl md:text-3xl font-extrabold'>
+                    Bulk Discounts
+                </h2>
+
+                <p>
+                    We offer discounts for bulk purchases to large stores and organizations. Reach out to our sales team through the website for more details on pricing and terms.
+                </p>
+
                 <div className=' space-x-2'>
                     <ClientApply />
                 </div>

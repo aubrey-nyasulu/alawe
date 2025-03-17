@@ -1,7 +1,6 @@
 'use server'
 
 import connectDB from "@/db/config/connectDB"
-import { ProductModel } from "@/db/models"
 import { fetchProducts } from "@/lib/data"
 
 export async function fetchStoreProducts({ category, currentPage, query }: { category?: string, currentPage?: number, query?: string, }) {

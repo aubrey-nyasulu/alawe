@@ -9,7 +9,9 @@ export default function AboutUsSection() {
         >
             <div className='w-full flex flex-col gap-2'>
                 <h2 className='text-xl md:text-3xl font-extrabold'>About Us</h2>
-                <p>We are a family-owned meat processing company dedicated to providing the highest quality, ethically sourced meat products. At Alawe Meat Merchants, we are committed to providing the highest quality halal meat products. Our dedication to excellence begins with sourcing live animals from trusted farms, ensuring that every step of our processing meets strict halal standards.</p>
+                <p>
+                    We are a family-owned meat processing company dedicated to providing the highest quality, ethically sourced meat products. At Alawe Meat Merchants, we are committed to providing the highest quality halal meat products. Our dedication to excellence begins with sourcing live animals from trusted farms, ensuring that every step of our processing meets strict halal standards.
+                </p>
             </div>
 
             <div className='w-full px-0 rounded-3xl overflow-hidden ring-4 ring-primary/20 ring-offset-2'>

@@ -1,5 +1,5 @@
 import { Button } from "@/tremorComponents/Button"
-import { TextInput } from "@/ui/dashboard/components/InputComponents"
+import { TextInput } from "@/ui/components/InputComponents"
 import { SelectComponent } from "@/ui/dashboard/components/SelectComponent"
 import { Client } from "@/types"
 import CreateInvoiceForm from "@/ui/dashboard/create/components/CreateInvoiceForm"

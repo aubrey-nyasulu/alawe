@@ -15,7 +15,7 @@ import {
 import { PageStateContext } from "@/context/PageStateProvider"
 import { useSession } from "next-auth/react"
 import { User } from "@/types"
-import { EmailInput, PasswordInput } from "./InputComponents"
+import { EmailInput, PasswordInput } from "../../components/InputComponents"
 import { Label } from "@/tremorComponents/Label"
 import { updateEmployee } from "@/actions/userActions"
 import { useToast } from "@/customHooks/useToast"

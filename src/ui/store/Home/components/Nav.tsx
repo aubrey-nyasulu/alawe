@@ -1,17 +1,18 @@
 "use client"
 
 import React, { useState } from 'react'
+import Link from 'next/link'
+import Image from 'next/image'
+import { usePathname } from 'next/navigation'
+
+import { RiUser3Line } from '@remixicon/react'
+import { Button } from '@/tremorComponents/Button'
+
 import { LandingPageMobileMenuDrawer } from './LandingPageMobileMenuDrawer'
 import LandingPageMobileMenuButton from './LandingPageMobileMenuButton'
-import Link from 'next/link';
-import { Button } from '@/tremorComponents/Button';
 import logo from '@/../public/logo.png'
-import Image from 'next/image';
-import { CartIcon } from '@/assets/SVGComponents';
-import { usePathname } from 'next/navigation';
-import { cx } from '@/lib/utils';
-import { RiProfileLine, RiUser2Line, RiUser3Line } from '@remixicon/react';
-import Cart from './Cart';
+import { cx } from '@/lib/utils'
+import Cart from '../../components/Cart'
 
 export default function Nav() {
     const [showMenu, setShowMenu] = useState(false)
@@ -33,19 +34,27 @@ export default function Nav() {
                         className='w-full object-cover object-center'
                     />
                 </div>
-                {/* <div className='flex-1 overflow-hidden text-gray-900 dark:text-gray-50 text-wrap'>
-                    <p className='font-[500] hidden md:block text-ellipsis whitespace-nowrap text-sm'>Alawe Meat Merchants</p>
-                </div> */}
             </Link>
 
-            <div className="flex gap-16 items-center md:border md:bg-white p-1 rounded-full">
-                <ul className=' items-center gap-2 hidden md:flex border rounded-full h-full py-2 px-4 '>
-                    <li className={cx('hover:text-primary hover:font-semibold p-2 px-3 flex hover:gap-2 items-center group/li', pathName === '/' && 'text-primary font-semibold ')}>
+            <div
+                className="flex gap-16 items-center md:border md:bg-white p-1 rounded-full"
+            >
+                <ul
+                    className=' items-center gap-2 hidden md:flex border rounded-full h-full py-2 px-4 '
+                >
+                    <li
+                        className={cx('hover:text-primary hover:font-semibold p-2 px-3 flex hover:gap-2 items-center group/li', pathName === '/' && 'text-primary font-semibold ')}
+                    >
                         <div className='w-0 h-0 border-0 group-hover/li:border-4 border-primary border-b-transparent border-r-transparent group-hover/li:rotate-[120deg] group-hover/li:scale-150'></div>
+
                         <Link href={"/"}>Home</Link>
                     </li>
-                    <li className={cx('hover:text-primary hover:font-semibold p-2 px-3 flex gap-2 items-center group/li', pathName === '/products' && 'text-primary font-semibold ')}>
+
+                    <li
+                        className={cx('hover:text-primary hover:font-semibold p-2 px-3 flex gap-2 items-center group/li', pathName === '/products' && 'text-primary font-semibold ')}
+                    >
                         <div className='w-0 h-0 border-0 group-hover/li:border-4 border-primary border-b-transparent border-r-transparent group-hover/li:rotate-[120deg] group-hover/li:scale-150'></div>
+
                         <Link href={"/products"}>Products</Link>
                     </li>
                 </ul>

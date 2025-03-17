@@ -1,7 +1,7 @@
-import '@/styles/global.css'
 import { inter } from '@/assets/fonts'
 import { Metadata } from 'next'
 
+import '@/styles/global.css'
 import { Toaster } from "@/ui/dashboard/components/Toaster"
 import { StoreContextProvider } from '@/context/StoreStateProvider'
 import { PopUp } from '@/ui/dashboard/components/PopUp'
@@ -29,5 +29,5 @@ export default function RootLayout({
         <PopUp />
       </body>
     </html>
-  );
+  )
 }

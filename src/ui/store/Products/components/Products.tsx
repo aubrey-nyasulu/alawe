@@ -1,14 +1,17 @@
 'use client'
 
-import StoreContext from "@/context/StoreStateProvider"
 import { useContext, useEffect } from "react"
-import Card from "../../Home/sections/Card"
+
+import StoreContext from "@/context/StoreStateProvider"
+import Card from "../../components/Card"
 import { ProductsImages } from '@/lib/constants'
 import img_not_available from '@/../public/store/Image_not_available.png'
 import Pagination from "@/ui/dashboard/invoices/components/pagination"
 import ProductsSkeleton from "./ProductsSkeleton"
 
-export default function Products({ currentPage, query }: { currentPage: number, query: string }) {
+export default function Products(
+    { currentPage, query }: { currentPage: number, query: string }
+) {
     const { products, totalPages, currentCategory, updateStoreState } = useContext(StoreContext)
 
     useEffect(() => {
@@ -22,7 +25,7 @@ export default function Products({ currentPage, query }: { currentPage: number, 
                     products.length
                         ? products.map((product, i) => (
                             <Card
-                                key={product + i}
+                                key={product?._id || i}
                                 {...{
                                     // @ts-ignore
                                     image: ProductsImages[product.name] || img_not_available,

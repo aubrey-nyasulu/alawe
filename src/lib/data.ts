@@ -501,32 +501,40 @@ export async function fetchLatestPurchaseTransaction() {
     }
 }
 
-export async function fetchProducts({ category, query, currentPage = 1 }: { category?: string, currentPage?: number, query?: string, }) {
+// its being used
+// todo - should rename to fetch store products
+type FetchProductsReturntype = {
+    products: Product[],
+    categories: { category: string }[],
+    totalPages: number
+}
+export async function fetchProducts({ category, query, currentPage = 1 }: { category?: string, currentPage?: number, query?: string, }): Promise<FetchProductsReturntype> {
     noStore()
 
     const itemsPerPage = 12
 
     const offset = Math.abs(currentPage - 1) * itemsPerPage
 
-    const regex = new RegExp(category || '', 'i')
-    const regex2 = new RegExp(query || '', 'i')
+    const categoryRegex = new RegExp(category || '', 'i')
+    const queryRegex = new RegExp(query || '', 'i')
 
     try {
         connectDB()
+
         let products = await ProductModel.aggregate([
             { $match: { type: 'Meat Product' } },
             {
                 $match: {
                     $or: [
-                        { category: { $regex: regex } },
+                        { category: { $regex: categoryRegex } },
                     ]
                 }
             },
             {
                 $match: {
                     $or: [
-                        { name: { $regex: regex2 } },
-                        { type: { $regex: regex2 } },
+                        { name: { $regex: queryRegex } },
+                        { type: { $regex: queryRegex } },
                     ]
                 }
             },
@@ -557,15 +565,15 @@ export async function fetchProducts({ category, query, currentPage = 1 }: { cate
             {
                 $match: {
                     $or: [
-                        { category: { $regex: regex } },
+                        { category: { $regex: categoryRegex } },
                     ]
                 }
             },
             {
                 $match: {
                     $or: [
-                        { name: { $regex: regex2 } },
-                        { type: { $regex: regex2 } },
+                        { name: { $regex: queryRegex } },
+                        { type: { $regex: queryRegex } },
                     ]
                 }
             },
@@ -583,6 +591,7 @@ export async function fetchProducts({ category, query, currentPage = 1 }: { cate
         return { products, categories, totalPages }
     } catch (error) {
         console.error('Database Error:', error)
+
         throw new Error('Failed to fetch the latest invoices.')
     }
 }

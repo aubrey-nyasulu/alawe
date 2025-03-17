@@ -1,6 +1,6 @@
 "use client"
 
-import { Dispatch, SetStateAction, useContext, useRef, useState } from "react"
+import { Dispatch, SetStateAction, useContext, useRef } from "react"
 
 import { Button } from "@/tremorComponents/Button"
 import {
@@ -13,19 +13,11 @@ import {
     DrawerHeader,
     DrawerTitle,
 } from "@/tremorComponents/Drawer"
-import { EmailInput, PasswordInput, TextInput } from "@/ui/dashboard/components/InputComponents"
-import { Label } from "@/tremorComponents/Label"
+
 import { useToast } from "@/customHooks/useToast"
 import { CartIcon } from "@/assets/SVGComponents"
 import CartContext from "@/context/CartStateProvider"
-import CardSelect from "../sections/CardSelect"
-
-type StateType = [boolean, () => void, () => void, () => void] & {
-    state: boolean
-    open: () => void
-    close: () => void
-    toggle: () => void
-}
+import CardSelect from "./CardSelect"
 
 export function CartDrawer({ showModel, setShowModel }: { showModel: boolean, setShowModel: Dispatch<SetStateAction<boolean>> }) {
     const { Dispatch, cart, totalItems, totalPrice } = useContext(CartContext)
@@ -66,51 +58,58 @@ export function CartDrawer({ showModel, setShowModel }: { showModel: boolean, se
                                     Cart
                                 </div>
                             </DrawerTitle>
-                            {/* <DrawerDescription className="mt-1 text-sm"> */}
-                            {/* </DrawerDescription> */}
+
+                            <DrawerDescription className="mt-1 text-sm hidden">
+                                Drawer description
+                            </DrawerDescription>
                         </DrawerHeader>
+
                         <form action={handleSubmit} className="h-full  flex flex-col justify-between" ref={formRef}>
                             <DrawerBody className="py-0">
                                 <div className="w-full h-full flex gap-4 flex-col justify-between">
                                     <div className="w-full mt-4 space-y-2">
                                         {
-                                            cart.map(item => (
-                                                item.quantity > 0 &&
-                                                <div
-                                                    key={item.name}
-                                                    className="p-2 w-full flex items-center justify-between gap-8  bg-stone-100 rounded-md"
-                                                >
-                                                    <p>
-                                                        {item.name}
-                                                    </p>
+                                            cart.map(item => {
+                                                const data = item?.quantity < 19
+                                                    ? Array.from({ length: 20 }, (_, i) => (i).toString())
+                                                    : Array.from(
+                                                        { length: 20 },
+                                                        (_, i) => {
+                                                            const val = (i + Math.floor(item.quantity / 2)) + 1
 
-                                                    <p>
-                                                        MK{item.price}
-                                                    </p>
+                                                            return (val).toString()
+                                                        }
+                                                    )
 
-                                                    <div className='w-fit'>
-                                                        <CardSelect {...{
-                                                            data: (item?.quantity < 19)
-                                                                ? Array.from({ length: 20 }, (_, i) => (i).toString())
-                                                                : Array.from(
-                                                                    { length: 20 },
-                                                                    (_, i) => {
-                                                                        const val = (i + Math.floor(item.quantity / 2)) + 1
+                                                return (
+                                                    item.quantity > 0 &&
+                                                    <div
+                                                        key={item.name}
+                                                        className="p-2 w-full flex items-center justify-between gap-8  bg-stone-100 rounded-md"
+                                                    >
+                                                        <p>{item.name}</p>
 
-                                                                        return (val).toString()
-                                                                    }
-                                                                ),
-                                                            // @ts-ignore
-                                                            value: item?.quantity?.toString() || '0',
-                                                            OnValueChange: (newValue) => {
-                                                                Dispatch({ type: 'ADD', payload: { quantity: Number(newValue) - item.quantity, name: item.name, price: item.price } })
+                                                        <p> MK{item.price} </p>
 
-                                                                // setValue(Number(newValue))
-                                                            }
-                                                        }} />
+                                                        <div className='w-fit'>
+                                                            <CardSelect {...{
+                                                                data,
+                                                                value: item?.quantity?.toString() || '0',
+                                                                OnValueChange: (newValue) => {
+                                                                    Dispatch(
+                                                                        {
+                                                                            type: 'ADD',
+                                                                            payload: {
+                                                                                quantity: Number(newValue) - item.quantity,
+                                                                                name: item.name, price: item.price
+                                                                            }
+                                                                        })
+                                                                }
+                                                            }} />
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            ))
+                                                )
+                                            })
                                         }
                                     </div>
 
@@ -127,6 +126,7 @@ export function CartDrawer({ showModel, setShowModel }: { showModel: boolean, se
                                     </div>
                                 </div>
                             </DrawerBody>
+
                             <DrawerFooter className="mt-6 gap-2 flex-col-reverse">
                                 <DrawerClose asChild>
                                     <Button
@@ -137,7 +137,7 @@ export function CartDrawer({ showModel, setShowModel }: { showModel: boolean, se
                                     </Button>
                                 </DrawerClose>
 
-                                <Button className="w-full sm:w-fit px-8 py-4 rounded-full" onClick={() => null}>
+                                <Button className="w-full sm:w-fit px-8 py-4 rounded-full" >
                                     Purchase
                                 </Button>
                             </DrawerFooter>

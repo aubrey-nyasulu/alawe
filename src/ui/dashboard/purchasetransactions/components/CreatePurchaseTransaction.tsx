@@ -143,6 +143,7 @@ export default function CreatePurchaseTransaction({ Suppliers, items }: { Suppli
                             ))}
                     </CustomSelect>
                 </div>
+
                 {state.errors?.month && (
                     <p className="mt-2 text-sm text-red-500">
                         {
@@ -150,6 +151,7 @@ export default function CreatePurchaseTransaction({ Suppliers, items }: { Suppli
                         }
                     </p>
                 )}
+
                 <div className="block w-full mt-2">
                     <CustomSelect
                         id="itemId"

@@ -1,5 +1,5 @@
 import Pagination from '@/ui/dashboard/invoices/components/pagination';
-import Search from '@/ui/dashboard/components/search';
+import Search from '@/ui/components/search';
 import Table from '@/ui/dashboard/invoices/components/table';
 import { CreateInvoice } from '@/ui/dashboard/invoices/components/buttons';
 import { InvoicesTableSkeleton } from '@/ui/dashboard/components/skeletons';

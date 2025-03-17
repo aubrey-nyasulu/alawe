@@ -2,7 +2,7 @@
 
 import { Button } from '@/tremorComponents/Button';
 import { FilterIcon } from '@/assets/SVGComponents';
-import Search from '../../components/search';
+import Search from '../../../components/search';
 import { Card } from '@/tremorComponents/Card';
 import { ResetFilters, SelectBranchFilter, SelectYearFilter } from '../../overview/components/OverviewFilters';
 import { useState } from 'react';

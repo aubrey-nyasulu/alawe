@@ -348,7 +348,7 @@ export const CreatUserIcon = ({ color = '#000', width = "1em" }) => (
     </svg>
 )
 
-export const CartIcon = ({ color = '#000', width = "2m", height = '2em' }) => (
+export const CartIcon = ({ color = '#000', width = "2em", height = '2em' }) => (
     <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"

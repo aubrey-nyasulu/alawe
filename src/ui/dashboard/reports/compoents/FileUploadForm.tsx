@@ -6,7 +6,7 @@ import { fetchUsers } from '@/lib/data';
 import { Button } from '@/tremorComponents/Button';
 import { User } from '@/types';
 import CustomSelect from '@/ui/dashboard/components/CustomSelect';
-import { TextInput } from '@/ui/dashboard/components/InputComponents';
+import { TextInput } from '@/ui/components/InputComponents';
 import { useSession } from 'next-auth/react';
 
 import { useEffect, useRef } from 'react';

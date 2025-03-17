@@ -1,18 +1,19 @@
 'use client'
 
-import { fetchStoreProducts } from "@/actions/fetchStoreProductsActions";
-import { Product } from "@/types";
 import { createContext, Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react";
+
+import { Product } from "@/types";
+import { fetchStoreProducts } from "@/actions/fetchStoreProductsActions";
 
 type UpdateStoreStateParams = ({ category?: string, query?: string, currentPage?: number })
 
 type StoreContextTypes = {
     filtersOpen: boolean
     setFiltersOpen: Dispatch<SetStateAction<boolean>>
-    products: any[]
+    products: Product[]
     setProducts: Dispatch<SetStateAction<Product[]>>
     categories: { category: string }[],
-    setCategories: Dispatch<SetStateAction<string[]>>
+    setCategories: Dispatch<SetStateAction<{ category: string }[]>>
     currentCategory: string,
     setCurrentCategory: Dispatch<SetStateAction<string>>
     totalPages: number,
@@ -54,13 +55,13 @@ const initialState: StoreContextTypes = {
 const StoreContext = createContext<StoreContextTypes>(initialState)
 
 export function StoreContextProvider({ children }: { children: ReactNode }) {
-    const [filtersOpen, setFiltersOpen] = useState(false)
-    const [products, setProducts] = useState<any[]>([])
-    const [categories, setCategories] = useState<any[]>([])
+    const [products, setProducts] = useState<Product[]>([])
+    const [categories, setCategories] = useState<{ category: string }[]>([])
     const [currentCategory, setCurrentCategory] = useState('')
     const [totalPages, setTotalPages] = useState(0)
     const [query, setQuery] = useState('')
     const [autoFillData, setAutoFillData] = useState({ email: '', password: '' })
+    const [filtersOpen, setFiltersOpen] = useState(false)
 
     const updateStoreState = async ({ category, query, currentPage }: { category?: string, query?: string, currentPage?: number }) => {
         const { products, categories, totalPages } = await fetchStoreProducts({ category, query, currentPage })

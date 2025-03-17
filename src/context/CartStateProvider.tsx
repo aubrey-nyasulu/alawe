@@ -8,7 +8,6 @@ export type cartItemType = {
     quantity: number
 }
 
-
 const REDUCER_ACTIONS = {
     ADD: 'ADD',
     REMOVE: 'REMOVE',
@@ -123,7 +122,6 @@ type CartContextProviderPropTypes = {
 }
 
 export function CartContextProvider({ children }: CartContextProviderPropTypes) {
-
     return (
         <CartContext.Provider value={useCartContext(initCartState)}>
             {children}

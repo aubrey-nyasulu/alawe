@@ -17,5 +17,5 @@ export default function StoreAi() {
                 strategy="afterInteractive"  // Loads the script after the page becomes interactive
             />
         </>
-    );
+    )
 }

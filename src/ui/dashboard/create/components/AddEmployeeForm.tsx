@@ -6,7 +6,7 @@ import { Button } from '@/tremorComponents/Button';
 import { createEmployee } from '@/actions/employeeActions';
 import { useFormState } from 'react-dom';
 import { Branch, Employee, } from '@/types';
-import { EmailInput, TextInput } from '@/ui/dashboard/components/InputComponents';
+import { EmailInput, TextInput } from '@/ui/components/InputComponents';
 import { FetchSalariesReturnType } from '@/lib/dbdirect';
 import { useToast } from "@/customHooks/useToast"
 import { Toaster } from "@/ui/dashboard/components/Toaster"

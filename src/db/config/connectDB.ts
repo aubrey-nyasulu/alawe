@@ -7,17 +7,15 @@ const connectDB = async () => {
 
     const URI = process.env.MONGO_URI
 
-    console.log({ URI })
-
     if (!URI) throw new Error('Invalid or missing connection string')
 
     try {
-        const res = await mongoose.connect(URI, {
+        await mongoose.connect(URI, {
             // useNewUrlParser: true,
             // useUnifiedTopology: true,
         })
 
-        console.log('MongoDB Connected', { res: res.Connection.name })
+        console.log('MongoDB Connected')
     } catch (error) {
         console.log('failed to connect to mongodb:', error)
     }
