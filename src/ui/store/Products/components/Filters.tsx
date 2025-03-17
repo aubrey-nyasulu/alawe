@@ -11,7 +11,7 @@ export default function Filters({ currentPage, query }: { currentPage: number, q
     const { categories, currentCategory, setCurrentCategory, filtersOpen, updateStoreState } = useContext(StoreContext)
 
     return (
-        <div className={cx("w-screen h-fit md:w-fit overflow-x-auto md:overflow-x-hidden z-30 mb-4 sticky top-32 ")}>
+        <div className={cx("w-screen h-fit md:w-fit overflow-x-auto md:overflow-x-hidden z-30 mb-4 sticky top-40 md:top-32 ")}>
             <div
                 className={
                     cx(

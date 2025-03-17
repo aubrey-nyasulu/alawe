@@ -11,12 +11,12 @@ export default function Cart() {
 
     const { totalItems } = useContext(CartContext)
 
+    // remove opacity of cahtbot to prevent it appearing over cart drawer
     useEffect(() => {
         if (!window) return
 
         const element = document.querySelector('.bpFab') as HTMLDivElement
 
-        // todo - test if this is necessary
         if (element) {
             if (showModel) {
                 element.style.opacity = '0'
