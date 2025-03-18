@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
 import sectionImg from '@/../public/store/bulk discounts.png'
-import ClientApply from '../components/Clientapply';
+import ClientApplicationHandler from '../components/ClientApplicationHandler';
 
 export default function BulkDiscounts() {
     return (
@@ -28,7 +28,7 @@ export default function BulkDiscounts() {
                 </p>
 
                 <div className=' space-x-2'>
-                    <ClientApply />
+                    <ClientApplicationHandler />
                 </div>
             </div>
         </section>

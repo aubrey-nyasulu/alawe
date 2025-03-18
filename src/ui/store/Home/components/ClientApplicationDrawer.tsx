@@ -17,7 +17,7 @@ import {
 import { EmailInput, TextInput } from "@/ui/components/InputComponents"
 import { useToast } from "@/customHooks/useToast"
 
-export function ClientApplyDrawer({ showModel, setShowModel }: { showModel: boolean, setShowModel: Dispatch<SetStateAction<boolean>> }) {
+export function ClientApplicationDrawer({ showModel, setShowModel }: { showModel: boolean, setShowModel: Dispatch<SetStateAction<boolean>> }) {
     const { toast } = useToast()
 
     const formRef = useRef<HTMLFormElement>(null)

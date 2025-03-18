@@ -7,7 +7,6 @@ import { Session } from "next-auth"
 import { getTempEmployees } from "@/actions/employeeActions"
 import Pusher from 'pusher-js'
 import { useSearchParams } from "next/navigation"
-import { cookies } from "next/headers"
 
 type PageState = {
     theme: 'light' | 'dark' | 'system',
@@ -56,7 +55,6 @@ export default function PageStateProvider({ session, children }: PageStateProvid
     const [editInvoiceModalShow, setEditInvoiceModalShow] = useState<{ open: boolean, id: string }>({ open: false, id: '' })
     const [showMenu, setShowMenu] = useState<boolean>(false)
     const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('system')
-    const [notificationFilter, setNotificationFilter] = useState('All')
 
     const user = session?.user as User
 
@@ -122,22 +120,20 @@ export default function PageStateProvider({ session, children }: PageStateProvid
     }, [])
 
     useEffect(() => {
+        if (!user._id) return
+
         // Initialize Pusher
-        Pusher.logToConsole
         const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY || '', {
             cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER || '',
         })
-        console.log({ pusher })
 
         // Subscribe to the notifications channel
         const channel = pusher.subscribe('notifications-channel')
-        console.log({ channel })
 
         // Listen for 'new-notification' events
         channel.bind('new-notification', async (data: { message: string }) => {
-            console.log('subscribed')
             //   setNotifications((prev) => ([...prev, data.message])
-            let res = await updateNotifications()
+            await updateNotifications()
         })
 
         // Cleanup on component unmount

@@ -3,9 +3,9 @@
 import { useState } from "react"
 
 import { Button } from "@/tremorComponents/Button"
-import { ClientApplyDrawer } from "./ClientApplyDrawer"
+import { ClientApplicationDrawer } from "./ClientApplicationDrawer"
 
-export default function ClientApply() {
+export default function ClientApplicationHandler() {
     const [showModel, setShowModel] = useState(false)
 
     return (
@@ -17,7 +17,7 @@ export default function ClientApply() {
                 Become a Client
             </Button>
 
-            <ClientApplyDrawer {...{ showModel, setShowModel }} />
+            <ClientApplicationDrawer {...{ showModel, setShowModel }} />
         </>
     )
 }
