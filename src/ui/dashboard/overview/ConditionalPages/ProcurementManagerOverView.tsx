@@ -1,22 +1,17 @@
 
-import { CardsSkeleton } from '@/ui/dashboard/components/skeletons';
+import { CardsSkeleton } from '@/ui/dashboard/components/skeletons'
 
-import { Suspense } from 'react';
-import { OverviewBarChart } from '@/ui/dashboard/overview/components/OverviewBarChart';
-import { ProgressCards } from '@/ui/dashboard/overview/components/ProgressCards';
-import { Card } from '@/tremorComponents/Card';
-import { SelectComponent } from '@/ui/dashboard/components/SelectComponent';
-import { fetchAdminAnalytics, fetchCardData, fetchCities, fetchProcurementManagerAnalytics, fetchShopManagerAnalytics } from '@/lib/data';
-import { fetchRevenue } from '@/lib/data';
-import { Revenue } from '@/types';
-import { formatCurrency } from '@/lib/utils';
-import { fetchBranches } from '@/lib/dbdirect';
-import { AdminTrackerChart } from '../components/AdminTrackerChart';
-import SuppliersTable from '../../suppliers/components/table';
-import LatestInvoicesTable from '../components/LatestInvoicesTable';
-import TopSuppliersTable from '../components/TopSuppliersTable';
-import { ResetFilters, SelectYearFilter } from '../components/OverviewFilters';
-import TopItemsTable from '../components/TopItemsTable';
+import { Suspense } from 'react'
+
+import { Card } from '@/tremorComponents/Card'
+
+import { ProgressCards } from '@/ui/dashboard/overview/components/ProgressCards'
+import { fetchCities, fetchProcurementManagerAnalytics } from '@/lib/data'
+import { formatCurrency } from '@/lib/utils'
+import { fetchBranches } from '@/lib/dbdirect'
+import TopSuppliersTable from '../components/TopSuppliersTable'
+import { ResetFilters, SelectYearFilter } from '../components/OverviewFilters'
+import TopItemsTable from '../components/TopItemsTable'
 
 export default async function ProcurementManagerOverView({
     searchParams,
@@ -25,7 +20,7 @@ export default async function ProcurementManagerOverView({
         quert?: '',
         branch_id?: string,
         year?: string
-    };
+    }
 }) {
     const year = searchParams?.year || '2024'
 
@@ -65,39 +60,28 @@ export default async function ProcurementManagerOverView({
                 <Card className="flex gap-2 md:gap-12 items-center justify-between md:justify-start p-4 px-4 md:px-8 sticky top-0 z-40">
                     <div className="max-w-40">
                         <SelectYearFilter {...{
-                            data: [
-                                {
-                                    label: '2024',
-                                    value: '2024'
-                                },
-                                {
-                                    label: '2023',
-                                    value: '2023'
-                                },
-                                {
-                                    label: '2022',
-                                    value: '2022'
-                                },
-                                {
-                                    label: '2021',
-                                    value: '2021'
-                                },
-                                {
-                                    label: '2020',
-                                    value: '2020'
-                                },
-                            ],
+                            data: Array.from({ length: 5 }, (_, i) => i)
+                                .map(i => (
+                                    {
+                                        label: 2020 + i + '',
+                                        value: 2020 + i + ''
+                                    }
+                                )),
                             defaultValue: year
                         }} />
                     </div>
+
                     <ResetFilters />
                 </Card>
+
                 <p className='p-6 pb-0 font-semibold'>Expenditures</p>
+
                 <div className="flex gap-4 mt-4">
                     <Suspense fallback={<CardsSkeleton />}>
                         <ProgressCards {...{ data: cardData }} />
                     </Suspense>
                 </div>
+
                 <div className="w-full ">
                     <div className='flex gap-4 flex-col md:flex-row items-start w-full '>
                         <div className='md:flex-[3] w-full'>
@@ -105,6 +89,7 @@ export default async function ProcurementManagerOverView({
                                 <TopItemsTable {...{ currentPage: 1, query: '', title: 'Top Items', topItems }} />
                             </Suspense>
                         </div>
+
                         <div className='md:flex-[2] w-full'>
                             <Suspense fallback={<CardsSkeleton />}>
                                 <TopSuppliersTable {...{ title: "Top Suppliers", topSuppliers }} />

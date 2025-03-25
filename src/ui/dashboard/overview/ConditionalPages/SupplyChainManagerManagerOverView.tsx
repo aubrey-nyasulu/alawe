@@ -52,8 +52,7 @@ export default async function SupplyChainManagerManagerOverView({
     ))
 
     let branches: any[] = await fetchBranches()
-    const branch = branches.find(branch => branch._id === searchParams?.branch_id)?.address || branches[0].address
-    console.log({ branch })
+
     branches = branches.map(branch => {
         if (branch.city === 'Lilongwe') {
             return {
@@ -61,52 +60,39 @@ export default async function SupplyChainManagerManagerOverView({
                 value: branch._id
             }
         }
-    }
-    )
+    })
 
     return (
         <main className='container max-w-[1120px]'>
             <div className='px-2 md:px-4 py-4'>
                 <Card className="flex gap-2 md:gap-12  items-center justify-start p-4 px-8  sticky top-0 z-40">
                     <SelectYearFilter {...{
-                        data: [
-                            {
-                                label: '2024',
-                                value: '2024'
-                            },
-                            {
-                                label: '2023',
-                                value: '2023'
-                            },
-                            {
-                                label: '2022',
-                                value: '2022'
-                            },
-                            {
-                                label: '2021',
-                                value: '2021'
-                            },
-                            {
-                                label: '2020',
-                                value: '2020'
-                            },
-                        ],
+                        data: Array.from({ length: 5 }, (_, i) => i)
+                            .map(i => (
+                                {
+                                    label: 2020 + i + '',
+                                    value: 2020 + i + ''
+                                }
+                            )),
                         defaultValue: searchParams?.year || "2024"
                     }} />
+
                     <ResetFilters />
-                    {/* <SelectBranchFilter {...{ data: branches }} /> */}
                 </Card>
+
                 <div className="flex gap-4 mt-4">
                     <Suspense fallback={<CardsSkeleton />}>
                         <ProgressCards {...{ data: cardData }} />
                     </Suspense>
                 </div>
+
                 <Card className='mt-4'>
-                    <p className='text-gray-900 dark:text-gray-50 pb-12'>Orders Fullfilment Rates</p>
+                    <p className='text-gray-900 dark:text-gray-50 pb-12'>
+                        Orders Fullfilment Rates
+                    </p>
+
                     <Suspense fallback={<CardsSkeleton />}>
                         <StackedBarChart {...{ ordersFullfilmentRates }} />
-                        {/* <OverviewBarChart {...{ chartdata: data }} /> */}
-                        {/* <InventoryTable {...{ query: '', branch: '', currentPage: 1, canEdit: false }} /> */}
                     </Suspense>
                 </Card>
             </div>

@@ -13,8 +13,6 @@ export default async function AdminOverview({
     searchParams,
 }: {
     searchParams?: {
-        quert?: '',
-        branch_id?: string,
         year?: string
     }
 }) {
@@ -59,39 +57,30 @@ export default async function AdminOverview({
             <div className='px-2 md:px-4 py-4'>
                 <Card className="flex gap-12 items-center justify-start p-4 px-8  sticky top-0 z-40">
                     <SelectYearFilter {...{
-                        data: [
-                            {
-                                label: '2024',
-                                value: '2024'
-                            },
-                            {
-                                label: '2023',
-                                value: '2023'
-                            },
-                            {
-                                label: '2022',
-                                value: '2022'
-                            },
-                            {
-                                label: '2021',
-                                value: '2021'
-                            },
-                            {
-                                label: '2020',
-                                value: '2020'
-                            },
-                        ],
+                        data: Array.from({ length: 5 }, (_, i) => i)
+                            .map(i => (
+                                {
+                                    label: 2020 + i + '',
+                                    value: 2020 + i + ''
+                                }
+                            )),
                         defaultValue: searchParams?.year || "2024"
                     }} />
+
                     <ResetFilters />
                 </Card>
+
                 <div className="flex gap-4 mt-4">
                     <Suspense fallback={<CardsSkeleton />}>
                         <ProgressCards {...{ data: cardData }} />
                     </Suspense>
                 </div>
+
                 <Card className='mt-4'>
-                    <p className='text-gray-900 dark:text-gray-50'>Operation Cost</p>
+                    <p className='text-gray-900 dark:text-gray-50'>
+                        Operation Cost
+                    </p>
+
                     <Suspense fallback={<CardsSkeleton />}>
                         <AdminBarChart {...{ chartdata: chartdata }} />
                     </Suspense>
