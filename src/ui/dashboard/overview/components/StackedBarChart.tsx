@@ -97,8 +97,6 @@ const Tooltip = ({ payload, active, label }: TooltipProps) => {
 export function StackedBarChart({ ordersFullfilmentRates }: { ordersFullfilmentRates: DataEntry[] }) {
     const formattedArray = formatteArray(ordersFullfilmentRates)
 
-    console.log({ formattedArray })
-
     return (
         <div>
             <BarChart

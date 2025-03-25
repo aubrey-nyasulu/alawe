@@ -2,8 +2,10 @@
 import { CardsSkeleton } from '@/ui/dashboard/components/skeletons'
 
 import { Suspense } from 'react'
-import { ProgressCards } from '@/ui/dashboard/overview/components/ProgressCards'
+
 import { Card } from '@/tremorComponents/Card'
+
+import { ProgressCards } from '@/ui/dashboard/overview/components/ProgressCards'
 import { fetchCities, fetchOrdersAnalytics, fetchSupplyChainManagerAnalytics } from '@/lib/data'
 import { fetchBranches } from '@/lib/dbdirect'
 import { ResetFilters, SelectYearFilter } from '../components/OverviewFilters'
@@ -40,7 +42,6 @@ export default async function SupplyChainManagerManagerOverView({
             percentValue: Number((const_of_goods_sold * 100 / avg_inventory).toFixed(0))
         }
     ]
-
 
     let cities = await fetchCities()
     cities = cities.map(city => (

@@ -85,7 +85,7 @@ export async function fetchLatestInvoices(): Promise<FetchLatestInvoicesReturnTy
         throw new Error('Failed to fetch the latest invoices.')
     }
 }
-
+//is used
 export async function fetchBranchCardData() {
     noStore()
 
@@ -230,7 +230,7 @@ export async function fetchCardData({ year, city }: { city?: string, year: strin
     }
 }
 
-// used
+// is used
 export async function fetchCities() {
     noStore()
 
@@ -1373,8 +1373,8 @@ interface FilterOptions {
     city?: string
 }
 
+// is used 
 export type MonthlyRevenueByCity = { totalRevenue: number, city: string, month: string }
-//  used 
 export async function getMonthlyRevenueByCity(filters: FilterOptions): Promise<MonthlyRevenueByCity[]> {
     const { year, city } = filters
 

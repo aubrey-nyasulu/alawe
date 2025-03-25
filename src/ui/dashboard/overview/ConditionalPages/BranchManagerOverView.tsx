@@ -2,9 +2,11 @@
 import { CardsSkeleton } from '@/ui/dashboard/components/skeletons'
 
 import { Suspense } from 'react'
-import { ProgressCards } from '@/ui/dashboard/overview/components/ProgressCards'
+
 import { Card } from '@/tremorComponents/Card'
-import { fetchBranchCardData, fetchCities, fetchRevenue, fetchShopManagerAnalytics, getMonthlyRevenueByCity, fetchCardData } from '@/lib/data'
+
+import { ProgressCards } from '@/ui/dashboard/overview/components/ProgressCards'
+import { fetchBranchCardData, fetchCities, getMonthlyRevenueByCity, fetchCardData } from '@/lib/data'
 import { fetchBranches } from '@/lib/dbdirect'
 import { OverviewBarChart } from '../components/OverviewBarChart'
 import { generateChartData } from './CEOOverview'
@@ -19,53 +21,54 @@ export default async function BranchManagerOverView({
         year?: string
     }
 }) {
-    // return <p>Admin Overview</p>
-    let { totalInvoices, totalSalesTransactions } = await fetchShopManagerAnalytics()
-
     const year = searchParams?.year || '2024'
     const city = 'Lilongwe'
-    const revenue = await getMonthlyRevenueByCity({ city: "Lilongwe", year: Number(year) })
-    const data = generateChartData(revenue)
 
-    let data3 = await fetchBranchCardData()
-    const cardData = [
-        {
-            cardTitle: "Invoices Collected",
-            percentValue: data3.paidPercentage,
-            numalator: data3.totalPaidInvoices,
-            denominator: data3.total
-        },
-        {
-            cardTitle: "Invoices Pending",
-            percentValue: data3.pendingPercentage,
-            numalator: data3.totalPendingInvoices,
-            denominator: data3.total,
-            invert: true
-        },
-    ]
+    const revenue = await getMonthlyRevenueByCity({
+        city: "Lilongwe",
+        year: Number(year)
+    })
 
-    let data2 = await fetchCardData({ year, city })
-    const cardData2 = [
+    const chartdata = generateChartData(revenue)
+
+    let cardData = await fetchCardData({ year, city })
+
+    const progressCardData = [
         {
             cardTitle: "Budget",
-            denominator: formatCurrency(data2?.budget)
+            denominator: formatCurrency(cardData?.budget)
         },
         {
             cardTitle: "Expenditure",
-            denominator: formatCurrency(data2?.expenditure)
+            denominator: formatCurrency(cardData?.expenditure)
         },
         {
             cardTitle: "Revenue",
-            denominator: formatCurrency(data2?.revenue)
+            denominator: formatCurrency(cardData?.revenue)
         },
         {
             cardTitle: "Profit Margin",
-            percentValue: Number((((data2.revenue - data2.expenditure) / data2.revenue) * 100).toFixed(1)),
+            percentValue: Number((((cardData.revenue - cardData.expenditure) / cardData.revenue) * 100).toFixed(1)),
             fair: true
         },
     ]
 
-
+    let branchCardData = await fetchBranchCardData()
+    const progressCard2Data = [
+        {
+            cardTitle: "Invoices Collected",
+            percentValue: branchCardData.paidPercentage,
+            numalator: branchCardData.totalPaidInvoices,
+            denominator: branchCardData.total
+        },
+        {
+            cardTitle: "Invoices Pending",
+            percentValue: branchCardData.pendingPercentage,
+            numalator: branchCardData.totalPendingInvoices,
+            denominator: branchCardData.total,
+            invert: true
+        },
+    ]
 
     let cities = await fetchCities()
     cities = cities.map(city => (
@@ -89,49 +92,34 @@ export default async function BranchManagerOverView({
                 <Card className="flex gap-2 md:gap-12 items-center justify-start p-4 px-2 md:px-8 sticky top-0 z-40">
                     <SelectCityFilter {...{ data: [{ label: "Lilongwe", value: 'Lilongwe' }], defaultValue: 'Lilongwe', disabled: true }} />
                     <SelectYearFilter {...{
-                        data: [
-                            {
-                                label: '2024',
-                                value: '2024'
-                            },
-                            {
-                                label: '2023',
-                                value: '2023'
-                            },
-                            {
-                                label: '2022',
-                                value: '2022'
-                            },
-                            {
-                                label: '2021',
-                                value: '2021'
-                            },
-                            {
-                                label: '2020',
-                                value: '2020'
-                            },
-                        ],
-                        defaultValue: searchParams?.year || "2024"
+                        data: Array.from({ length: 5 }, (_, i) => i)
+                            .map(i => (
+                                {
+                                    label: 2020 + i + '',
+                                    value: 2020 + i + ''
+                                }
+                            )),
+                        defaultValue: year
                     }} />
+
                     <ResetFilters />
-                    {/* <SelectBranchFilter {...{ data: branches }} /> */}
                 </Card>
                 <div className="mt-4 w-full">
                     <Suspense fallback={<CardsSkeleton />}>
-                        <ProgressCards {...{ data: cardData2 }} />
+                        <ProgressCards {...{ data: progressCardData }} />
                     </Suspense>
                 </div>
 
                 <Card className='mt-4'>
                     <p className='text-gray-900 dark:text-gray-50'>Revenue</p>
                     <Suspense fallback={<CardsSkeleton />}>
-                        <OverviewBarChart {...{ chartdata: data }} />
+                        <OverviewBarChart {...{ chartdata }} />
                     </Suspense>
                 </Card>
 
                 <div className="flex gap-4 mt-4">
                     <Suspense fallback={<CardsSkeleton />}>
-                        <ProgressCards {...{ data: cardData }} />
+                        <ProgressCards {...{ data: progressCard2Data }} />
                     </Suspense>
                 </div>
             </div>

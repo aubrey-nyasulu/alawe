@@ -51,28 +51,13 @@ export default async function CEOOverview({
                     }} />
 
                     <SelectYearFilter {...{
-                        data: [
-                            {
-                                label: '2024',
-                                value: '2024'
-                            },
-                            {
-                                label: '2023',
-                                value: '2023'
-                            },
-                            {
-                                label: '2022',
-                                value: '2022'
-                            },
-                            {
-                                label: '2021',
-                                value: '2021'
-                            },
-                            {
-                                label: '2020',
-                                value: '2020'
-                            },
-                        ],
+                        data: Array.from({ length: 5 }, (_, i) => i)
+                            .map(i => (
+                                {
+                                    label: 2020 + i + '',
+                                    value: 2020 + i + ''
+                                }
+                            )),
                         defaultValue: searchParams?.year || "2024"
                     }} />
 
@@ -128,12 +113,13 @@ export const generateChartData = (monthlyRevenuByCity: MonthlyRevenueByCity[]): 
 
     const orderedMonthlyRevenuByCity = monthlyRevenuByCity.sort((a, b) => a.month > b.month ? 1 : 0)
 
-    let numberOfCities: any[] | any = monthlyRevenuByCity.map(rev => rev.city)
+    let numberOfCities: any = monthlyRevenuByCity.map(rev => rev.city)
     numberOfCities = new Set(numberOfCities)
     numberOfCities = numberOfCities.size
 
     for (let month of months) {
         let index = orderedMonthlyRevenuByCity.findIndex(rev => rev.month === month)
+
         while (index >= 0) {
             const [city1Data, city2Data, city3Data] = orderedMonthlyRevenuByCity.splice(index, numberOfCities)
             let revenue: any = { date: "", }
