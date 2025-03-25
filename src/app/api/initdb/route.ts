@@ -590,14 +590,13 @@ async function populatePayments() {
         const paymentsToInsert = []
 
         for (let payment of payments) {
-
-            const { amount, payments } = payment
+            const { amount } = payment
 
             const client_id = await randomID(clients)
             const invoice_id = await randomID(invoices)
             const payment_method_id = await randomID(paymentModels)
 
-            const newPayment = { amount, payments, client_id, invoice_id, payment_method_id }
+            const newPayment = { amount, client_id, invoice_id, payment_method_id }
 
             paymentsToInsert.push(newPayment)
         }

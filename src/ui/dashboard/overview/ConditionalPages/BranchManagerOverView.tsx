@@ -1,17 +1,15 @@
 
-import { CardsSkeleton } from '@/ui/dashboard/components/skeletons';
+import { CardsSkeleton } from '@/ui/dashboard/components/skeletons'
 
-import { Suspense } from 'react';
-import { ProgressCards } from '@/ui/dashboard/overview/components/ProgressCards';
-import { Card } from '@/tremorComponents/Card';
-import { SelectComponent } from '@/ui/dashboard/components/SelectComponent';
-import { fetchCardData, fetchCities, fetchRevenue, fetchShopManagerAnalytics, getMonthlyRevenueByCity, someFecth } from '@/lib/data';
-import { fetchBranches } from '@/lib/dbdirect';
-import { AdminTrackerChart } from '../components/AdminTrackerChart';
-import { OverviewBarChart } from '../components/OverviewBarChart';
-import { transformData } from './CEOOverview';
-import { ResetFilters, SelectCityFilter, SelectYearFilter } from '../components/OverviewFilters';
-import { formatCurrency } from '@/lib/utils';
+import { Suspense } from 'react'
+import { ProgressCards } from '@/ui/dashboard/overview/components/ProgressCards'
+import { Card } from '@/tremorComponents/Card'
+import { fetchBranchCardData, fetchCities, fetchRevenue, fetchShopManagerAnalytics, getMonthlyRevenueByCity, fetchCardData } from '@/lib/data'
+import { fetchBranches } from '@/lib/dbdirect'
+import { OverviewBarChart } from '../components/OverviewBarChart'
+import { generateChartData } from './CEOOverview'
+import { ResetFilters, SelectCityFilter, SelectYearFilter } from '../components/OverviewFilters'
+import { formatCurrency } from '@/lib/utils'
 
 export default async function BranchManagerOverView({
     searchParams,
@@ -19,7 +17,7 @@ export default async function BranchManagerOverView({
     searchParams?: {
         city?: string,
         year?: string
-    };
+    }
 }) {
     // return <p>Admin Overview</p>
     let { totalInvoices, totalSalesTransactions } = await fetchShopManagerAnalytics()
@@ -27,9 +25,9 @@ export default async function BranchManagerOverView({
     const year = searchParams?.year || '2024'
     const city = 'Lilongwe'
     const revenue = await getMonthlyRevenueByCity({ city: "Lilongwe", year: Number(year) })
-    const data = transformData(revenue)
+    const data = generateChartData(revenue)
 
-    let data3 = await fetchCardData()
+    let data3 = await fetchBranchCardData()
     const cardData = [
         {
             cardTitle: "Invoices Collected",
@@ -46,7 +44,7 @@ export default async function BranchManagerOverView({
         },
     ]
 
-    let data2 = await someFecth({ year, city })
+    let data2 = await fetchCardData({ year, city })
     const cardData2 = [
         {
             cardTitle: "Budget",

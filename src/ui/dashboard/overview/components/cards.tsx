@@ -1,8 +1,6 @@
 
-import { CoinsIcons, GraphTimeSeries, TotalIcon, TimeGraph, ClockIcon } from '@/assets/SVGComponents';
-import { fetchCardData } from '@/lib/data';
-import { lusitana } from '@/assets/fonts';
-import clsx from 'clsx';
+import { CoinsIcons, TotalIcon, TimeGraph, ClockIcon } from '@/assets/SVGComponents'
+import { fetchBranchCardData } from '@/lib/data'
 
 export default async function CardWrapper() {
   const {
@@ -10,7 +8,7 @@ export default async function CardWrapper() {
     numberOfCustomers,
     totalPaidInvoices,
     totalPendingInvoices,
-  } = await fetchCardData();
+  } = await fetchBranchCardData();
 
   return (
     <>

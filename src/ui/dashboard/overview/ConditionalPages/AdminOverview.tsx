@@ -1,19 +1,13 @@
 
-import { CardsSkeleton } from '@/ui/dashboard/components/skeletons';
+import { CardsSkeleton } from '@/ui/dashboard/components/skeletons'
 
-import { Suspense } from 'react';
-import { OverviewBarChart } from '@/ui/dashboard/overview/components/OverviewBarChart';
-import { ProgressCards } from '@/ui/dashboard/overview/components/ProgressCards';
-import { Card } from '@/tremorComponents/Card';
-import { SelectComponent } from '@/ui/dashboard/components/SelectComponent';
-import { fetchAdminAnalytics, fetchCardData, fetchCities } from '@/lib/data';
-import { fetchRevenue } from '@/lib/data';
-import { Revenue } from '@/types';
-import { barChartFormatCurrency, formatCurrency } from '@/lib/utils';
-import { fetchBranches } from '@/lib/dbdirect';
-import { AdminTrackerChart } from '../components/AdminTrackerChart';
-import { AdminBarChart } from '../components/AdminBarChart';
-import { SelectYearFilter, ResetFilters } from '../components/OverviewFilters';
+import { Suspense } from 'react'
+import { ProgressCards } from '@/ui/dashboard/overview/components/ProgressCards'
+import { Card } from '@/tremorComponents/Card'
+import { fetchAdminAnalytics, fetchCities } from '@/lib/data'
+import { fetchBranches } from '@/lib/dbdirect'
+import { AdminBarChart } from '../components/AdminBarChart'
+import { SelectYearFilter, ResetFilters } from '../components/OverviewFilters'
 
 export default async function AdminOverview({
     searchParams,
@@ -22,7 +16,7 @@ export default async function AdminOverview({
         quert?: '',
         branch_id?: string,
         year?: string
-    };
+    }
 }) {
     const year = searchParams?.year || '2024'
 

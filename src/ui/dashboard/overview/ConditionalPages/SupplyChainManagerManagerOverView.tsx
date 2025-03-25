@@ -1,19 +1,14 @@
 
-import { CardsSkeleton } from '@/ui/dashboard/components/skeletons';
+import { CardsSkeleton } from '@/ui/dashboard/components/skeletons'
 
-import { Suspense } from 'react';
-import { ProgressCards } from '@/ui/dashboard/overview/components/ProgressCards';
-import { Card } from '@/tremorComponents/Card';
-import { SelectComponent } from '@/ui/dashboard/components/SelectComponent';
-import { fetchCardData, fetchCities, fetchOrdersAnalytics, fetchRevenue, fetchShopManagerAnalytics, fetchSupplyChainManagerAnalytics, getMonthlyRevenueByCity, supplyChainCards } from '@/lib/data';
-import { fetchBranches } from '@/lib/dbdirect';
-import { AdminTrackerChart } from '../components/AdminTrackerChart';
-import { OverviewBarChart } from '../components/OverviewBarChart';
-import { transformData } from './CEOOverview';
-import { ResetFilters, SelectBranchFilter, SelectCityFilter, SelectYearFilter } from '../components/OverviewFilters';
-import InventoryTable from '../../inventory/components/InventoryTable';
-import { decimalToRatio, formatCurrency } from '@/lib/utils';
-import { StackedBarChart } from '../components/StackedBarChart';
+import { Suspense } from 'react'
+import { ProgressCards } from '@/ui/dashboard/overview/components/ProgressCards'
+import { Card } from '@/tremorComponents/Card'
+import { fetchCities, fetchOrdersAnalytics, fetchSupplyChainManagerAnalytics } from '@/lib/data'
+import { fetchBranches } from '@/lib/dbdirect'
+import { ResetFilters, SelectYearFilter } from '../components/OverviewFilters'
+import { decimalToRatio, formatCurrency } from '@/lib/utils'
+import { StackedBarChart } from '../components/StackedBarChart'
 
 export default async function SupplyChainManagerManagerOverView({
     searchParams,
@@ -22,7 +17,7 @@ export default async function SupplyChainManagerManagerOverView({
         quert?: '',
         branch_id?: string,
         year?: string
-    };
+    }
 }) {
     const year = searchParams?.year || '2024'
 

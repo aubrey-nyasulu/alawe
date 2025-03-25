@@ -86,65 +86,66 @@ export async function fetchLatestInvoices(): Promise<FetchLatestInvoicesReturnTy
     }
 }
 
-// export async function fetchCardData() {
-//     noStore()
+export async function fetchBranchCardData() {
+    noStore()
 
-//     try {
-//         connectDB()
+    try {
+        connectDB()
 
-//         const invoiceCountPromise = InvoiceModel.countDocuments()
+        const invoiceCountPromise = InvoiceModel.countDocuments()
 
-//         const clientCountPromise = ClientModel.countDocuments()
+        const clientCountPromise = ClientModel.countDocuments()
 
-//         const inventoryStatusPromise: Promise<{ paid: number, pending: number, total: number }> =
-//             (async () => {
-//                 let totalMeatProducts: Invoice[] | number = await InvoiceModel.find().where('status').equals('paid')
+        const inventoryStatusPromise: Promise<{ paid: number, pending: number, total: number }> =
+            (async () => {
+                let totalMeatProducts: Invoice[] | number = await InvoiceModel.find().where('status').equals('paid')
 
-//                 let totalGroceries: Invoice[] | number = await InvoiceModel.find().where('status').equals('pending')
+                let totalGroceries: Invoice[] | number = await InvoiceModel.find().where('status').equals('pending')
 
-//                 totalMeatProducts = totalMeatProducts.reduce((sum: number, invoice: Invoice) => {
-//                     const amount = Number(invoice.amount)
-//                     return sum + amount
-//                 }, 0)
+                totalMeatProducts = totalMeatProducts.reduce((sum: number, invoice: Invoice) => {
+                    const amount = Number(invoice.amount)
+                    return sum + amount
+                }, 0)
 
-//                 totalGroceries = totalGroceries.reduce((sum: number, invoice: Invoice) => {
-//                     const amount = Number(invoice.amount)
-//                     return sum + amount
-//                 }, 0)
+                totalGroceries = totalGroceries.reduce((sum: number, invoice: Invoice) => {
+                    const amount = Number(invoice.amount)
+                    return sum + amount
+                }, 0)
 
-//                 return { paid: totalMeatProducts, pending: totalGroceries, total: totalMeatProducts + totalGroceries }
-//             })()
+                return { paid: totalMeatProducts, pending: totalGroceries, total: totalMeatProducts + totalGroceries }
+            })()
 
-//         const data = await Promise.all([
-//             invoiceCountPromise,
-//             clientCountPromise,
-//             inventoryStatusPromise,
-//         ])
+        const data = await Promise.all([
+            invoiceCountPromise,
+            clientCountPromise,
+            inventoryStatusPromise,
+        ])
 
-//         const numberOfInvoices = Number(data[0] ?? '0')
-//         const numberOfCustomers = Number(data[1] ?? '0')
-//         const totalPaidInvoices = formatCurrency(data[2].paid ?? '0')
-//         const totalPendingInvoices = formatCurrency(data[2].pending ?? '0')
-//         const total = formatCurrency(data[2].total ?? '0')
+        const numberOfInvoices = Number(data[0] ?? '0')
+        const numberOfCustomers = Number(data[1] ?? '0')
+        const totalPaidInvoices = formatCurrency(data[2].paid ?? '0')
+        const totalPendingInvoices = formatCurrency(data[2].pending ?? '0')
+        const total = formatCurrency(data[2].total ?? '0')
 
-//         const paidPercentage = Math.floor((data[2].paid * 100) / data[2].total)
-//         const pendingPercentage = Math.ceil((data[2].pending * 100) / data[2].total)
+        const paidPercentage = Math.floor((data[2].paid * 100) / data[2].total)
+        const pendingPercentage = Math.ceil((data[2].pending * 100) / data[2].total)
 
-//         return {
-//             numberOfCustomers,
-//             numberOfInvoices,
-//             totalPaidInvoices,
-//             totalPendingInvoices,
-//             total,
-//             paidPercentage,
-//             pendingPercentage
-//         }
-//     } catch (error) {
-//         console.error('Database Error:', error)
-//         throw new Error('Failed to fetch card data.')
-//     }
-// }
+        return {
+            numberOfCustomers,
+            numberOfInvoices,
+            totalPaidInvoices,
+            totalPendingInvoices,
+            total,
+            paidPercentage,
+            pendingPercentage
+        }
+    } catch (error) {
+        console.error('Database Error:', error)
+        throw new Error('Failed to fetch card data.')
+    }
+}
 
+// is used
 export async function fetchCardData({ year, city }: { city?: string, year: string }) {
     noStore()
 
@@ -1372,9 +1373,9 @@ interface FilterOptions {
     city?: string
 }
 
-export type MonthlyRevenuByMonth = { totalRevenue: number, city: string, month: string }
+export type MonthlyRevenueByCity = { totalRevenue: number, city: string, month: string }
 //  used 
-export async function getMonthlyRevenueByCity(filters: FilterOptions): Promise<MonthlyRevenuByMonth[]> {
+export async function getMonthlyRevenueByCity(filters: FilterOptions): Promise<MonthlyRevenueByCity[]> {
     const { year, city } = filters
 
     try {

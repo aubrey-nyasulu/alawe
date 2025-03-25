@@ -93,6 +93,7 @@ export interface Product extends defaults {
     name: string
     type: 'Meat Product' | 'Grocery'
     price: number
+    category?: string
 }
 
 export interface ProductSold extends defaults {
