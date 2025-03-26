@@ -8,8 +8,8 @@ import { PopUp } from '@/ui/dashboard/components/PopUp'
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | Alawe Dashboard',
-    default: 'Alawe Dashboard',
+    template: '%s | Alawe',
+    default: 'Alawe',
   },
   description: 'Database for tilawe meat merchants',
 };

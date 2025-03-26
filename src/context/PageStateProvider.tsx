@@ -1,12 +1,13 @@
 "use client"
 
-import { Employee, Notification, User } from "@/types"
-import { createContext, Dispatch, ReactNode, SetStateAction, useEffect, useState } from "react"
-import { getNotifications } from "@/actions/notificationsActions"
+import { createContext, Dispatch, SetStateAction, useEffect, useState } from "react"
 import { Session } from "next-auth"
-import { getTempEmployees } from "@/actions/employeeActions"
 import Pusher from 'pusher-js'
 import { useSearchParams } from "next/navigation"
+
+import { Employee, Notification, User } from "@/types"
+import { getNotifications } from "@/actions/notificationsActions"
+import { getTempEmployees } from "@/actions/employeeActions"
 
 type PageState = {
     theme: 'light' | 'dark' | 'system',
@@ -170,11 +171,13 @@ export default function PageStateProvider({ session, children }: PageStateProvid
     // Function to apply system theme
     const applySystemTheme = () => {
         const systemDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+
         if (systemDarkMode) {
             document.documentElement.classList.add('dark')
         } else {
             document.documentElement.classList.remove('dark')
         }
+
         localStorage.setItem('theme', 'system')
     }
 
@@ -187,12 +190,15 @@ export default function PageStateProvider({ session, children }: PageStateProvid
     // Listen for system theme changes (for system option)
     useEffect(() => {
         const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+
         const handleChange = () => {
             if (theme === 'system') {
                 applySystemTheme()
             }
         }
+
         mediaQuery.addEventListener('change', handleChange)
+
         return () => mediaQuery.removeEventListener('change', handleChange)
     }, [theme])
 
@@ -219,27 +225,3 @@ export default function PageStateProvider({ session, children }: PageStateProvid
         </PageStateContext.Provider>
     )
 }
-
-
-
-
-
-
-
-// useEffect(() => {
-//     const eventSource = new EventSource('/api/realtime/notifications/dynamicSlug')
-
-//     eventSource.onmessage = (event) => {
-//         const data = JSON.parse(event.data)
-//         if (data?.fullDocument) {
-//             const { _id, userId, message, type, target } = data.fullDocument
-//             console.log('Real-time data:', { _id, userId, message, type, target })
-
-//             setNotifications([...notifications, { _id, userId, message, type, target }])
-//         }
-//     }
-
-//     return () => {
-//         eventSource.close()
-//     }
-// }, [])

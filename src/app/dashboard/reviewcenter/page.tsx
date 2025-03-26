@@ -1,13 +1,13 @@
-import { Metadata } from 'next';
+import { Metadata } from 'next'
 
-import ReviewCenterPage from '@/ui/dashboard/reviewcenter/ReviewCenterPage';
+import ReviewCenterPage from '@/ui/dashboard/reviewcenter/ReviewCenterPage'
 
 export const metadata: Metadata = {
-    title: 'Invoices',
-};
+    title: 'Reviews',
+}
 
 export default async function Create() {
     return (
         <ReviewCenterPage />
-    );
+    )
 }

@@ -1,5 +1,3 @@
-// import DashboardSkeleton from '@/pages/dashboard/components/skeletons';
-
 export default function Loading() {
     return <div className="absolute top-[50%] left-[50%] md:left-[40%] -translate-x-[50%] -translate-y-[50%]">
         <div className="flex-col gap-4 w-full flex items-center justify-center">

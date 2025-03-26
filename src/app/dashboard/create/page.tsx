@@ -1,13 +1,13 @@
-import { Metadata } from 'next';
+import { Metadata } from 'next'
 
-import CreatePage from '@/ui/dashboard/create/CreatePage';
+import CreatePage from '@/ui/dashboard/create/CreatePage'
 
 export const metadata: Metadata = {
-    title: 'Invoices',
-};
+    title: 'Create',
+}
 
 export default async function Create() {
     return (
         <CreatePage />
-    );
+    )
 }

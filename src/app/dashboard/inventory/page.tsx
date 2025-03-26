@@ -1,9 +1,9 @@
-import InventoryPage from '@/ui/dashboard/inventory/InventoryPage';
-import { Metadata } from 'next';
+import InventoryPage from '@/ui/dashboard/inventory/InventoryPage'
+import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-    title: 'Invoices',
-};
+    title: 'Inventory',
+}
 
 export default async function Inventory({
     searchParams,
@@ -12,7 +12,7 @@ export default async function Inventory({
         query?: string,
         branch_id?: string,
         page?: string,
-    };
+    }
 }) {
     return (
         <InventoryPage {...{ searchParams }} />

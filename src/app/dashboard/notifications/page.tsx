@@ -1,7 +1,11 @@
+import { Metadata } from "next"
 
 import { NotificationsRadioCardGroup } from "@/ui/dashboard/notifications/NotificationsRadioCardGroup"
 import Notifications from "./Notifications"
 
+export const metadata: Metadata = {
+    title: 'Notifications',
+}
 
 export default function NotificationsCenter({
     searchParams,
@@ -9,9 +13,8 @@ export default function NotificationsCenter({
     searchParams?: {
         notifications?: string,
         page?: string,
-    };
+    }
 }) {
-
 
     return (
         <main className="w-full p-4 space-y-2 text-gray-900 dark:text-gray-50">

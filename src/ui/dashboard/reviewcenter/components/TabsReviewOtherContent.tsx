@@ -9,10 +9,6 @@ export default function TabsReviewOtherContent() {
 
     const { reviewOther } = useContext(PageStateContext)
 
-    useEffect(() => {
-        // console.log({ reviewOther })
-    }, [])
-
     return (
         <div className='space-y-6'>
             {
